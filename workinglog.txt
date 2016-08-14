@@ -1,0 +1,3 @@
+Augest 14th
+       Build new ionic app
+       try to learn git, webpack, angular etc
