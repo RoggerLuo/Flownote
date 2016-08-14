@@ -1,5 +1,5 @@
-angular.module('starter.services', [])
-
+var angular= require('angular');
+var starterService=angular.module('starter.services', [])
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
 
@@ -48,3 +48,5 @@ angular.module('starter.services', [])
     }
   };
 });
+
+module.exports=starterService;

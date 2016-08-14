@@ -1,4 +1,6 @@
-angular.module('starter.controllers', [])
+var angular= require('angular');
+
+var controller=angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope) {})
 
@@ -26,3 +28,5 @@ angular.module('starter.controllers', [])
     enableFriends: true
   };
 });
+
+module.exports=controller;
