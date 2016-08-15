@@ -6,11 +6,20 @@ module.exports = {
     },
     module :{
         loaders :[
+            // {
+            //     test :/\.coffee$/,
+            //     loader :"coffee",
+            //     excelude :/node_modules/
+            // },
+            { 
+                test: /\.css$/, 
+                loader: "style!css" 
+            },
             {
-                test :/\.coffee$/,
-                loader :"coffee",
-                excelude :/node_modules/,
-            }
+                   test   : /\.woff|\.woff2|\.svg|.eot|\.ttf/,
+                   loader : 'url?prefix=font/&limit=10000'
+            },
+            { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}
         ]
     }
 };
