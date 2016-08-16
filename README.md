@@ -14,13 +14,11 @@ window.addEventListener("touchstart", function(e){
 });
 ```  
 
-***
 angular获取DOM元素
 ``` javascript
 var element=angular.element(document.querySelector('.keyboard-attach'))[0];
 ```  
 
-***
 就说之前为什么controller只能激活一次，好烦
 With the new view caching in Ionic, Controllers are only called
 when they are recreated or on app start, instead of every page change.
@@ -31,7 +29,6 @@ $scope.$on('$ionicView.enter', function(e) {
 });
 ```  
 
-***
 监听键盘
 ``` javascript
 // 监听键盘事件
@@ -48,15 +45,12 @@ function keyboardShowHandler(e){
 cordova.plugins.Keyboard.close();
 ```  
 
-***
 '$ionicView.beforeEnter'和'$ionicView.beforeLeave'事件
 在进入之前赋值，离开之前还原  
 
-***
 ui-router不能连续嵌套两个abstact路由
 直接把<ion-nav-view>标签换成html代码就可以了  
 
-***
 >directive里面的link是什么？？？？  
 >是这样调用根作用域里面的变量的？：  $root.hideTabs，下一步仔细看看directive  
 >什么时候在directive里面用watch?  
