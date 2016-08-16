@@ -48,8 +48,8 @@ cordova.plugins.Keyboard.close();
 
 
 >directive里面的link是什么？？？？
-是这样调用根作用域里面的变量的？：  $root.hideTabs，下一步仔细看看directive
-什么时候在directive里面用watch?
-以后晚上要提早留出时间总结今天的学习成果
+>是这样调用根作用域里面的变量的？：  $root.hideTabs，下一步仔细看看directive
+>什么时候在directive里面用watch?
+>以后晚上要提早留出时间总结今天的学习成果
 
 
