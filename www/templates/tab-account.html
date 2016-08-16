@@ -1,9 +1,26 @@
-<ion-view view-title="Account">
-  <ion-content>
-    <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-toggle>
-    </ion-list>
-  </ion-content>
+<ion-view view-title="InputArea">
+    <ion-nav-buttons side="secondary">
+        <button class="button" ng-click="doSomething()">
+        button
+        </button>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-list>
+            <ion-toggle  ng-model="settings.enableFriends">
+                Enable Friendsddabbcbdd123dddd
+            </ion-toggle>
+            <label class="item-input">
+                <textarea 
+                    placeholder="Comments" 
+                    style="
+                        font-size:16px;
+                        border:0px;
+                        height:350px;
+                        line-height: 1.75;
+                        "
+                    ng-model="item.content"
+                ></textarea>
+            </label>
+        </ion-list>
+    </ion-content>
 </ion-view>
