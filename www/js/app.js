@@ -5,7 +5,9 @@ require("../lib/ionic/js/ionic.bundle.js");
 // require("../cordova.js");
 
 require('./controllers.js');
+require('./directives.js');
 require('./services.js');
+
 var angular= require('angular');
 // Ionic Starter App
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -13,7 +15,7 @@ var angular= require('angular');
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-var app=angular.module('flownote', ['ionic', 'starter.controllers', 'starter.services'])
+var app=angular.module('flownote', ['ionic', 'starter.controllers','starter.services','directives'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -29,6 +31,12 @@ var app=angular.module('flownote', ['ionic', 'starter.controllers', 'starter.ser
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    //全局禁止touch之后的click事件
+    window.addEventListener("touchstart", function(e){
+        e.preventDefault();
+    });
+
   });
 })
 
@@ -44,7 +52,7 @@ var app=angular.module('flownote', ['ionic', 'starter.controllers', 'starter.ser
     .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/tabs.html'
+    templateUrl: 'templates/tabs.html',
   })
 
   // Each tab has its own nav history stack:

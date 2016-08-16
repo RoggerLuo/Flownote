@@ -52,6 +52,8 @@
 
 	__webpack_require__(13);
 	__webpack_require__(16);
+	__webpack_require__(17);
+
 	var angular= __webpack_require__(14);
 	// Ionic Starter App
 	// angular.module is a global place for creating, registering and retrieving Angular modules
@@ -59,7 +61,7 @@
 	// the 2nd parameter is an array of 'requires'
 	// 'starter.services' is found in services.js
 	// 'starter.controllers' is found in controllers.js
-	var app=angular.module('flownote', ['ionic', 'starter.controllers', 'starter.services'])
+	var app=angular.module('flownote', ['ionic', 'starter.controllers','starter.services','directives'])
 
 	.run(function($ionicPlatform) {
 	  $ionicPlatform.ready(function() {
@@ -75,6 +77,12 @@
 	      // org.apache.cordova.statusbar required
 	      StatusBar.styleDefault();
 	    }
+
+	    //全局禁止touch之后的click事件
+	    window.addEventListener("touchstart", function(e){
+	        e.preventDefault();
+	    });
+
 	  });
 	})
 
@@ -90,7 +98,7 @@
 	    .state('tab', {
 	    url: '/tab',
 	    abstract: true,
-	    templateUrl: 'templates/tabs.html'
+	    templateUrl: 'templates/tabs.html',
 	  })
 
 	  // Each tab has its own nav history stack:
@@ -68141,6 +68149,7 @@
 
 	var controller=angular.module('starter.controllers', [])
 
+
 	.controller('DashCtrl', function($scope) {})
 
 	.controller('ChatsCtrl', function($scope, Chats) {
@@ -68163,21 +68172,28 @@
 	})
 
 	.controller('AccountCtrl', function($scope) {
-	    //为了避免延迟触发的click事件  //阻止点击到textarea上
-	    var element=angular.element(document.querySelector('.keyboard-attach'))[0];
-	    element.addEventListener("touchstart", function(e){
-	        e.preventDefault();
-	    })
-
+	    // 监听键盘事件
 	    window.addEventListener('native.keyboardshow', keyboardShowHandler);
 	    window.addEventListener('native.keyboardhide', keyboardHideHandler);
-
+	    $scope.show=true;
 	    function keyboardHideHandler(e){
 	        $scope.show=false;
 	    }
 	    function keyboardShowHandler(e){
 	        $scope.show=true;
 	    }
+
+	    
+	    //关键盘
+	    cordova.plugins.Keyboard.close();
+
+	    
+
+	    //为了避免延迟触发的click事件  //阻止点击到textarea上
+	    // var element=angular.element(document.querySelector('.keyboard-attach'))[0];
+	    // element.addEventListener("touchstart", function(e){
+	    //     e.preventDefault();
+	    // });
 
 	    $scope.settings = {
 	        enableFriends: true
@@ -68186,7 +68202,8 @@
 	    $scope.stopPro = function($event){
 	        cordova.plugins.Keyboard.close();
 	    };
-	    
+	    // angular.element(document.querySelector('textarea'))[0].focus();
+
 	});
 
 	module.exports=controller;
@@ -99974,6 +99991,33 @@
 
 /***/ },
 /* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular= __webpack_require__(14);
+
+	var module = angular.module('directives', []);
+	module.directive('hideTabs', function($rootScope) {
+	    return {
+	        restrict: 'A',
+	        link: function(scope, element, attributes) {
+	            scope.$on('$ionicView.beforeEnter', function() {
+	                scope.$watch(attributes.hideTabs, function(value){
+	                    $rootScope.hideTabs = value;
+	                });
+	            });
+
+	            scope.$on('$ionicView.beforeLeave', function() {
+	                $rootScope.hideTabs = false;
+	            });
+	        }
+	    };
+	});
+
+
+	module.exports=module;
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular= __webpack_require__(14);
