@@ -1,0 +1,37 @@
+<ion-view view-title="Article">
+    <ion-content>
+<!--         <ion-refresher
+            refreshing-icon="ion-loading-b"
+            pulling-text="下拉刷新..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+ -->
+
+        <ion-list>
+        <!-- item-avatar -->
+            <ion-item ng-click="openModal(pool['item'+article])" class="item-remove-animate  item-icon-right" ng-repeat="article in articles" type="item-text-wrap" >
+<!--                 <div style="display: inline-block;
+                    position: absolute;
+                    left: 0;"
+                >
+                    <button class="button {{pool['item'+article].buttonStyle}}" style="margin: 0 0 0 10px;padding:0;">
+                        {{pool['item'+article].date_and_time | switchReminder}}
+                    </button>
+                </div>
+ -->
+
+                <h2>{{pool['item'+article].content}}</h2>
+                <p>{{pool['item'+article].content.slice(10)}}</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+                <ion-option-button class="button-assertive" ng-click="remove(chat)">
+                    Delete
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+        <ion-infinite-scroll
+            on-infinite="loadMore()"
+            distance="1%"
+            ng-if="moreDataCanBeLoaded()">
+        </ion-infinite-scroll>
+    </ion-content> 
+</ion-view>

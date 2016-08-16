@@ -65,6 +65,7 @@
 	  $ionicPlatform.ready(function() {
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 	    // for form inputs)
+
 	    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
 	      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 	      cordova.plugins.Keyboard.disableScroll(true);
@@ -68162,9 +68163,30 @@
 	})
 
 	.controller('AccountCtrl', function($scope) {
-	  $scope.settings = {
-	    enableFriends: true
-	  };
+	    //为了避免延迟触发的click事件  //阻止点击到textarea上
+	    var element=angular.element(document.querySelector('.keyboard-attach'))[0];
+	    element.addEventListener("touchstart", function(e){
+	        e.preventDefault();
+	    })
+
+	    window.addEventListener('native.keyboardshow', keyboardShowHandler);
+	    window.addEventListener('native.keyboardhide', keyboardHideHandler);
+
+	    function keyboardHideHandler(e){
+	        $scope.show=false;
+	    }
+	    function keyboardShowHandler(e){
+	        $scope.show=true;
+	    }
+
+	    $scope.settings = {
+	        enableFriends: true
+	    };
+
+	    $scope.stopPro = function($event){
+	        cordova.plugins.Keyboard.close();
+	    };
+	    
 	});
 
 	module.exports=controller;
