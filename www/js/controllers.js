@@ -17,10 +17,10 @@ var controller=angular.module('starter.controllers', [])
         cordova.plugins.Keyboard.close();//关键盘
     };
     $scope.show=true;
-});
+})
 
 
-.controller('DashCtrl', function($scope) {})
+.controller('DashCtrl', function($scope){})
 
 .controller('ChatsCtrl', function($scope, Chats) {
   $scope.chats = Chats.all();

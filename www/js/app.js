@@ -61,11 +61,43 @@ var app=angular.module('flownote', ['ionic', 'starter.controllers','starter.serv
     url: '/dash',
     views: {
       'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
+        templateUrl: 'thread/bricks.html',
         controller: 'DashCtrl'
       }
     }
   })
+  .state('tab.tabs', {
+    url: '/tabs',
+    views: {
+      'tab-dash': {
+        templateUrl: 'thread/tabs.html',
+        controller: 'DashCtrl',
+      }
+    }
+  })
+  .state('tab.tabs.common', {
+    url: '/common',
+    views: {
+      'common': {
+        templateUrl: 'thread/dash.html',
+        // controller: 'DashCtrl'
+      }
+    }
+  })
+  .state('tab.tabs.hover', {
+    url: '/hover',
+    views: {
+      'hover': {
+        templateUrl: 'templates/tab-chats.html',
+        controller: 'ChatsCtrl',
+
+      }
+    }
+  })
+
+
+
+
 
   .state('tab.chats', {
       url: '/chats',
@@ -100,4 +132,3 @@ var app=angular.module('flownote', ['ionic', 'starter.controllers','starter.serv
   $urlRouterProvider.otherwise('/tab/dash');
 
 });
-module.exports = app;

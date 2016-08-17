@@ -32,7 +32,10 @@
   ],
   "main": "gulpfile.js",
   "scripts": {
-    "test": "startnote"
+    "test": "startnote",
+    "start": "webpack-dev-server --inline --hot",
+    "build": "webpack --display-error-details",
+    "watch": "webpack --progress --colors --watch"
   },
   "repository": {
     "type": "git",

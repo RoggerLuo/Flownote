@@ -1,16 +1,25 @@
 <ion-view view-title="List">
-    <ion-nav-bar class="bar-stable">
-        <ion-nav-buttons side="primary">
+    <!-- <ion-nav-bar class="bar-stable"> -->
+        
+
+        <!-- <ion-nav-buttons side="primary">
             <a href="#/tab/thread" class="button button-icon icon ion-navicon"></a>
         </ion-nav-buttons>
 
         <ion-nav-buttons side="secondary">
           <button class="button button-clear icon ion-android-add"  ng-click="doSomething()"></button>
-        </ion-nav-buttons>
+        </ion-nav-buttons> -->
 
-    </ion-nav-bar>
+        
+    <!-- </ion-nav-bar> -->
 
     <ion-content class="padding">
+        <a href="#/tab/tabs/hover"  class="button  button-large button-dark" style="line-height:1.75;margin:3px 8px;" >
+            thread.test
+            <br>
+            20 14 3
+        </a>
+
         <a href="#/article-category/plan/{{thread.thread_id}}" ng-class="{'button-outline':!thread.stuff}"  ng-repeat="thread in threads"  class="button  button-large {{thread.color}}" style="line-height:1.75;margin:3px 8px;" >
             {{thread.text}}
             <br>
