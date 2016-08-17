@@ -1,8 +1,3 @@
-####Augest 14th
-Build new ionic app : try to learn git, webpack, angular, markdown etc
-
-####Augest 15th 
-git pull, fetch, checkout and branch command
 
 ####Augest 16th
 
@@ -57,4 +52,10 @@ ui-router不能连续嵌套两个abstact路由
 >什么时候在directive里面用watch?  
 >以后晚上要提早留出时间总结今天的学习成果  
 
+
+####Augest 15th 
+git pull, fetch, checkout and branch command
+
+####Augest 14th
+Build new ionic app : try to learn git, webpack, angular, markdown etc
 
