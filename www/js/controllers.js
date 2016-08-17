@@ -1,6 +1,24 @@
-var angular= require('angular');
-
 var controller=angular.module('starter.controllers', [])
+/*
+  不用加载angular ionicbundle里面就有了
+  主要是这个controller和tpl
+*/
+.controller('AccountCtrl', function($scope) {
+    // 监听键盘事件
+    window.addEventListener('native.keyboardshow', keyboardShowHandler);
+    window.addEventListener('native.keyboardhide', keyboardHideHandler);
+    function keyboardHideHandler(e){
+        $scope.show=false;
+    }
+    function keyboardShowHandler(e){
+        $scope.show=true;
+    }
+    $scope.stopPro = function($event){
+        cordova.plugins.Keyboard.close();//关键盘
+    };
+    $scope.show=true;
+});
+
 
 .controller('DashCtrl', function($scope) {})
 
@@ -15,28 +33,5 @@ var controller=angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope) {
-    // 监听键盘事件
-    window.addEventListener('native.keyboardshow', keyboardShowHandler);
-    window.addEventListener('native.keyboardhide', keyboardHideHandler);
-    $scope.show=true;
-    function keyboardHideHandler(e){
-        $scope.show=false;
-    }
-    function keyboardShowHandler(e){
-        $scope.show=true;
-    }
-
-    //关键盘
-    cordova.plugins.Keyboard.close();
-    
-    $scope.settings = {
-        enableFriends: true
-    };
-
-    $scope.stopPro = function($event){
-        cordova.plugins.Keyboard.close();
-    };
-});
 
 module.exports=controller;
