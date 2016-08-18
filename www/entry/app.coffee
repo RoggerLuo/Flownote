@@ -6,8 +6,8 @@ require "../lib/ionic/js/ionic.bundle.js"
 module.exports = angular.module 'app', [
     'ionic', 
     require('./router.coffee').name, #名字当作依赖，顺便加载
-    require('../starter/controllers.coffee').name,
-    require('../thread/controllers.coffee').name,
+    require('../thread/thread.coffee').name,
+    require('../starter/starter.coffee').name,
     #require('../starter/starter').name
 ]
 

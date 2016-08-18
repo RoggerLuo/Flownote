@@ -1,9 +1,12 @@
-#require './controllers'
 require 'angular-resource'
-require './services.coffee'
+#require './controllers'
+#require './services.coffee'
 
-threadModule = angular.module 'thread', ['ngResource']
-threadModule.run (ThreadsHandler)->
+module.exports = angular.module 'thread', [
+    'ngResource',
+    require('./controllers.coffee').name,
+    ]
+
+.run (ThreadsHandler)->
     ThreadsHandler()
 
-module.exports = threadModule

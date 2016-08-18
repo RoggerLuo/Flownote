@@ -1,4 +1,4 @@
-module.exports = angular.module('starter.controller',[])
+module.exports = angular.module('thread.controller',[])
 .controller 'bricksCtrl',($scope,GlobalThread)->
     $scope.bricks=GlobalThread.bricks;
     
