@@ -33,5 +33,5 @@ var controller=angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-
-module.exports=controller;
+module.exports=testv;
+// module.exports=controller;

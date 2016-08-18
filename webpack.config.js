@@ -1,16 +1,16 @@
 module.exports = {
-    entry : './www/js/app.js',
+    entry : './www/entry/app.coffee',
     output :{
         path :'./www/build',
         filename :"bundle.js"
     },
     module :{
         loaders :[
-            // {
-            //     test :/\.coffee$/,
-            //     loader :"coffee",
-            //     excelude :/node_modules/
-            // },
+            {
+                test :/\.coffee$/,
+                loader :"coffee",
+                excelude :/node_modules/
+            },
             { 
                 test: /\.css$/, 
                 loader: "style!css",

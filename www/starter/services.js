@@ -1,6 +1,6 @@
-var angular= require('angular');
-var starterService=angular.module('starter.services', [])
-.factory('Chats', function() {
+var module= require('./starter-module.js');
+
+module.factory('Chats', function() {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
@@ -49,4 +49,3 @@ var starterService=angular.module('starter.services', [])
   };
 });
 
-module.exports=starterService;
