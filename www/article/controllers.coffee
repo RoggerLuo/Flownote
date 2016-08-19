@@ -1,7 +1,7 @@
 module.exports = angular.module('article.controller',[])
-# .controller 'threadtabs',($scope,GlobalVar)-> 
-#     console.log '进入threadtabs'
-    # $scope.thread_id = GlobalVar.thread_id
+
+.controller 'calendarCtrl',($scope,GetArticles,GlobalVar)->
+    true 
 
 .controller 'planCtrl',($scope,GetArticles,GlobalVar)-> 
     $scope.$on '$ionicView.enter', (e)->
@@ -11,6 +11,11 @@ module.exports = angular.module('article.controller',[])
 .controller 'hoverCtrl',($scope,GetArticles,GlobalVar)-> 
     $scope.$on '$ionicView.enter', (e)->
         GetArticles(GlobalVar.thread_id,2).then (res)->
+            $scope.articles=res.data
+
+.controller 'commonCtrl',($scope,GetArticles,GlobalVar)-> 
+    $scope.$on '$ionicView.enter', (e)->
+        GetArticles(GlobalVar.thread_id,0).then (res)->
             $scope.articles=res.data
 
 .filter 'interpretTimestamp', ->

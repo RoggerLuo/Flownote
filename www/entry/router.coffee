@@ -7,14 +7,12 @@ module.exports = angular.module('app.router',[])
           url: '/tab'
           abstract: true
           templateUrl: 'starter/tabs.html'
-        
       .state 'tab.thread', 
           url: '/thread'
           views: 
               'tab-thread': 
                   templateUrl: 'thread/bricks.html'
                   controller: 'bricksCtrl'
-      
       .state 'tab.threadtabs', 
           url: '/threadtabs'
           abstract: true
@@ -22,9 +20,6 @@ module.exports = angular.module('app.router',[])
           views: 
               'tab-thread': 
                   templateUrl: 'thread/threadtabs.html'
-
-                  # controller: 'threadtabs'
-
       .state 'tab.threadtabs.plan', 
           url: '/plan'
           cache:false
@@ -32,7 +27,6 @@ module.exports = angular.module('app.router',[])
               'plan': 
                   templateUrl: 'article/plan.html'
                   controller:'planCtrl'
-                   
       .state 'tab.threadtabs.hover', 
           url: '/hover'
           cache:false
@@ -40,41 +34,29 @@ module.exports = angular.module('app.router',[])
               'hover': 
                   templateUrl: 'article/hover.html'
                   controller: 'hoverCtrl'
-
-
-
-
-
-
+      .state 'tab.threadtabs.common', 
+          url: '/common'
+          cache:false
+          views: 
+              'common': 
+                  templateUrl: 'article/common.html'
+                  controller: 'commonCtrl'
       .state 'tab.setting', 
           url: '/setting'
           views: 
               'setting': 
                   templateUrl: 'setting/setting.html'
                   controller: 'settingCtrl'
-  
-      .state('tab.thread-editor', {
-          url: '/threadeditor',
+      .state 'tab.thread-editor', 
+          url: '/threadeditor'
           views: 
               'setting': 
-                  templateUrl: 'setting/thread-list.html',
+                  templateUrl: 'setting/thread-list.html'
                   controller: 'threadEditor'
-      })
-
-
-
-      .state 'tab.chats', 
-          url: '/chats'
+      .state 'tab.calendar', 
+          url: '/calendar'
           views: 
-              'tab-chats': 
-                  templateUrl: 'templates/tab-chats.html'
-                  controller: 'ChatsCtrl'
-      
-      .state 'tab.chat-detail', 
-          url: '/chats/:chatId'
-          views: 
-              'tab-chats': 
-                  templateUrl: 'templates/chat-detail.html'
-                  controller: 'ChatDetailCtrl'
-
+              'calendar': 
+                  templateUrl: 'starter/calendar.html'
+                  controller: 'calendarCtrl'
   $urlRouterProvider.otherwise '/tab/thread'
