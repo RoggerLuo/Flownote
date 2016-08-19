@@ -22,7 +22,7 @@
             <ion-item ng-repeat="thread in bricks"  ng-click="openModal(thread)" class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" >
                 <img ng-src="{{chat.face}}">
                 <h2>{{thread.thread_text}}</h2>
-                <p>{{thread.thread_id}}</p>
+                <p>{{thread.thread_id|switchReminder}}&nbsp;{{thread.thread_id|interpretTimestamp}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
                 <!--<ion-option-button class="button-calm"
                                    ng-click="openPopover($event)">

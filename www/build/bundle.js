@@ -50,7 +50,7 @@
 
 	__webpack_require__(12);
 
-	module.exports = angular.module('app', ['ionic', __webpack_require__(13).name, __webpack_require__(14).name, __webpack_require__(15).name, __webpack_require__(20).name]);
+	module.exports = angular.module('app', ['ionic', __webpack_require__(13).name, __webpack_require__(14).name, __webpack_require__(15).name, __webpack_require__(20).name, __webpack_require__(23).name]);
 
 
 /***/ },
@@ -68064,26 +68064,29 @@
 	    }
 	  }).state('tab.threadtabs', {
 	    url: '/threadtabs',
+	    abstract: true,
+	    cache: false,
 	    views: {
 	      'tab-thread': {
-	        templateUrl: 'thread/threadtabs.html',
-	        controller: 'test'
+	        templateUrl: 'thread/threadtabs.html'
 	      }
 	    }
 	  }).state('tab.threadtabs.plan', {
 	    url: '/plan',
+	    cache: false,
 	    views: {
 	      'plan': {
-	        templateUrl: 'thread/plan.html',
+	        templateUrl: 'article/plan.html',
 	        controller: 'planCtrl'
 	      }
 	    }
 	  }).state('tab.threadtabs.hover', {
 	    url: '/hover',
+	    cache: false,
 	    views: {
 	      'hover': {
-	        templateUrl: 'templates/tab-chats.html',
-	        controller: 'test'
+	        templateUrl: 'article/hover.html',
+	        controller: 'hoverCtrl'
 	      }
 	    }
 	  }).state('tab.setting', {
@@ -68149,7 +68152,7 @@
 
 	__webpack_require__(16);
 
-	module.exports = angular.module('thread', ['ngResource', __webpack_require__(18).name, __webpack_require__(19).name]);
+	module.exports = angular.module('article', ['ngResource', __webpack_require__(18).name, __webpack_require__(19).name]);
 
 
 /***/ },
@@ -69033,9 +69036,295 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = angular.module('thread.controller', []).controller('planCtrl', function() {
-	  return true;
-	}).controller('bricksCtrl', function($scope, ThreadsHandler) {
+	module.exports = angular.module('article.controller', []).controller('planCtrl', function($scope, GetArticles, GlobalVar) {
+	  return $scope.$on('$ionicView.enter', function(e) {
+	    return GetArticles(GlobalVar.thread_id, 1).then(function(res) {
+	      return $scope.articles = res.data;
+	    });
+	  });
+	}).controller('hoverCtrl', function($scope, GetArticles, GlobalVar) {
+	  return $scope.$on('$ionicView.enter', function(e) {
+	    return GetArticles(GlobalVar.thread_id, 2).then(function(res) {
+	      return $scope.articles = res.data;
+	    });
+	  });
+	}).filter('interpretTimestamp', function() {
+	  return function(input) {
+	    if (input < 1008122669) {
+	      input = 1451577600;
+	    }
+	    return new Date(input * 1000).toLocaleDateString();
+	  };
+	}).filter('switchReminder', function() {
+	  return function(input) {
+	    var days, hours, output, phase, timeStr, time_distance;
+	    input = input || '';
+	    output = '';
+	    timeStr = input;
+	    time_distance = (Date.parse(new Date()) - timeStr) / 1000 / 60 / 60 / 24;
+	    hours = new Date(timeStr).getHours();
+	    days = '';
+	    phase = '';
+	    if (new Date().toLocaleDateString() !== new Date(timeStr).toLocaleDateString()) {
+	      if (time_distance > 2) {
+	        if (time_distance > 3) {
+	          if (time_distance > 4) {
+	            if (time_distance > 5) {
+	              if (time_distance > 6) {
+	                if (time_distance > 7) {
+	                  if (time_distance > 14) {
+	                    if (time_distance > 21) {
+	                      if (time_distance > 31) {
+	                        days = '很久前';
+	                      } else {
+	                        days = '3周前';
+	                      }
+	                    } else {
+	                      days = '2周前';
+	                    }
+	                  } else {
+	                    days = '1周前';
+	                  }
+	                } else {
+	                  days = '6天前';
+	                }
+	              } else {
+	                days = '5天前';
+	              }
+	            } else {
+	              days = '4天前';
+	            }
+	          } else {
+	            days = '3天前';
+	          }
+	        } else {
+	          days = '前天';
+	        }
+	      } else {
+	        days = '昨天';
+	      }
+	    } else {
+	      days = '今天';
+	    }
+	    if (hours >= 1) {
+	      if (hours >= 6) {
+	        if (hours >= 8) {
+	          if (hours >= 11) {
+	            if (hours >= 14) {
+	              if (hours >= 18) {
+	                if (hours >= 23) {
+	                  phase = '深夜';
+	                } else {
+	                  phase = '晚上';
+	                }
+	              } else {
+	                phase = '下午';
+	              }
+	            } else {
+	              phase = '中午';
+	            }
+	          } else {
+	            phase = '上午';
+	          }
+	        } else {
+	          phase = '清晨';
+	        }
+	      } else {
+	        phase = '凌晨';
+	      }
+	    } else {
+	      phase = '凌晨1点前后';
+	    }
+	    output = days;
+	    return output;
+	  };
+	});
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = angular.module('article.services', []).factory('GetArticles', function(Resource) {
+	  return function(thread, type, day, week) {
+	    if (thread == null) {
+	      thread = '';
+	    }
+	    if (type == null) {
+	      type = '';
+	    }
+	    if (day == null) {
+	      day = '';
+	    }
+	    if (week == null) {
+	      week = '';
+	    }
+	    return Resource.query({
+	      method: 'get_item',
+	      thread_id: thread,
+	      type: type,
+	      day: day,
+	      week: week
+	    }).$promise;
+	  };
+	}).factory('CreateArticle', function(Resource) {
+	  var execute;
+	  execute = function(content) {
+	    var date_and_time, item, item_id, promise;
+	    date_and_time = Date.parse(new Date()) / 1000;
+	    item = {
+	      content: content,
+	      date_and_time: date_and_time,
+	      item_id: date_and_time.toString(),
+	      remind_time: '0',
+	      remind_text: '',
+	      type: '0',
+	      type2: '0',
+	      thread_id: '0'
+	    };
+	    item_id = item.item_id;
+	    content = item.content;
+	    date_and_time = item.date_and_time;
+	    promise = Resource.query({
+	      method: 'item_create',
+	      content: content,
+	      item_id: item_id,
+	      date_and_time: date_and_time
+	    }).$promise;
+	    return promise.then(function(res) {
+	      return console.log('CreateArticle成功');
+	    }, function(res) {
+	      return console.log('CreateArticle失败');
+	    });
+	  };
+	  return execute;
+	}).factory('DeleteArticle', function(Resource) {
+	  var execute;
+	  execute = function(item_id) {
+	    var promise;
+	    item_id = item_id.toString();
+	    promise = Resource.query({
+	      method: 'item_delete',
+	      item_id: item_id
+	    }).$promise;
+	    return promise.then(function(res) {
+	      return console.log('CreateArticle成功');
+	    }, function(res) {
+	      return console.log('CreateArticle失败');
+	    });
+	  };
+	  return execute;
+	}).factory('SaveArticle', function(Resource) {
+	  var execute;
+	  execute = function(content, item_id) {
+	    var promise;
+	    item_id = item_id.toString();
+	    promise = Resource.query({
+	      method: 'item_saveContent',
+	      content: content,
+	      item_id: item_id
+	    }).$promise;
+	    return promise.then(function(res) {
+	      return console.log('SaveArticle成功');
+	    }, function(res) {
+	      return console.log('SaveArticle失败');
+	    });
+	  };
+	  return execute;
+	}).factory('SetRelation', function(Resource) {
+	  var execute;
+	  execute = function(item_id, thread_id) {
+	    var promise;
+	    item_id = item_id.toString();
+	    thread_id = thread_id.toString();
+	    promise = Resource.query({
+	      method: 'item_to_thread',
+	      thread_id: thread_id,
+	      item_id: item_id
+	    }).$promise;
+	    return promise.then(function(res) {
+	      return console.log('SetRelation成功');
+	    }, function(res) {
+	      return console.log('SetRelation失败');
+	    });
+	  };
+	  return execute;
+	}).factory('SetType', function(Resource) {
+	  var execute;
+	  execute = function(item_id, type) {
+	    var promise;
+	    item_id = item_id.toString();
+	    promise = Resource.query({
+	      method: 'change_type',
+	      item_id: item_id,
+	      type: type
+	    }).$promise;
+	    return promise.then(function(res) {
+	      return console.log('SetRelation成功');
+	    }, function(res) {
+	      return console.log('SetRelation失败');
+	    });
+	  };
+	  return execute;
+	}).factory('Reclock', function(Resource) {
+	  var execute;
+	  execute = function(item_obj) {
+	    var item_id, promise, seconds;
+	    item_id = item_obj.item_id.toString();
+	    seconds = item_obj.remind_time - item_obj.date_and_time;
+	    item_obj.date_and_time = Date.parse(new Date()) / 1000;
+	    item_obj.remind_time = item_obj.date_and_time + seconds;
+	    promise = Resource.query({
+	      method: 'refresh_timer',
+	      item_id: item_id
+	    }).$promise;
+	    return promise.then(function(res) {
+	      return console.log('Reclock成功');
+	    }, function(res) {
+	      return console.log('Reclock失败');
+	    });
+	  };
+	  return execute;
+	}).factory('SetClock', function(Resource) {
+	  var execute;
+	  execute = function(item_obj, seconds) {
+	    var item_id, promise, words;
+	    item_id = item_obj.item_id;
+	    item_obj.remind_time = (item_obj.date_and_time - 0) + (seconds - 0);
+	    words = item_obj.remind_text;
+	    promise = Resource.query({
+	      method: 'set_timer',
+	      item_id: item_id,
+	      seconds: seconds,
+	      words: words
+	    }).$promise;
+	    return promise.then(function(res) {
+	      return console.log('SetClock成功');
+	    }, function(res) {
+	      return console.log('SetClock失败');
+	    });
+	  };
+	  return execute;
+	});
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(16);
+
+	module.exports = angular.module('thread', ['ngResource', __webpack_require__(21).name, __webpack_require__(22).name]);
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	module.exports = angular.module('thread.controller', []).controller('bricksCtrl', function($scope, ThreadsHandler, GlobalVar) {
+	  $scope.assign = function(thread_id) {
+	    return GlobalVar.thread_id = thread_id;
+	  };
 	  return ThreadsHandler(function(data) {
 	    return $scope.bricks = data;
 	  });
@@ -69043,22 +69332,25 @@
 	  return true;
 	}).controller('settingCtrl', function($scope) {
 	  return true;
-	}).controller('threadEditor', function($scope, GlobalThread, $ionicModal, CreateThread, ModifyThread, ThreadDelete) {
-	  $scope.bricks = GlobalThread.bricks;
+	}).controller('threadEditor', function($scope, ThreadsHandler, $ionicModal, CreateThread, ModifyThread, ThreadDelete) {
+	  ThreadsHandler(function(data) {
+	    return $scope.bricks = data;
+	  });
 	  $scope.viewCtrl = {
 	    showReorder: false
 	  };
 	  $scope.moveItem = function(thread, fromIndex, toIndex) {
-	    var brick, i, len, ref, result;
+	    var brick, i, len, ref, result, results;
 	    $scope.bricks.splice(fromIndex, 1);
 	    $scope.bricks.splice(toIndex, 0, thread);
 	    result = [];
 	    ref = $scope.bricks;
+	    results = [];
 	    for (i = 0, len = ref.length; i < len; i++) {
 	      brick = ref[i];
-	      result.unshift(brick.thread_id);
+	      results.push(result.unshift(brick.thread_id));
 	    }
-	    return window.localStorage.setItem("all_threads_list", JSON.stringify(result));
+	    return results;
 	  };
 	  $scope.originalData = {};
 	  $scope.editData = {
@@ -69114,7 +69406,7 @@
 	  };
 	  return $scope.remove = function(thread) {
 	    var r;
-	    r = confirm("请先清空分类下的文章,确定要删除" + thread.text + "?");
+	    r = confirm("请先清空分类下的文章,确定要删除" + thread.thread_text + "?");
 	    if (r) {
 	      $scope.bricks.splice($scope.bricks.indexOf(thread), 1);
 	      return ThreadDelete(thread);
@@ -69124,99 +69416,34 @@
 
 
 /***/ },
-/* 19 */
+/* 22 */
 /***/ function(module, exports) {
 
-	module.exports = angular.module('thread.services', []).factory('GlobalThread', function() {
-	  return {};
-	}).factory('Resource', function($resource) {
-	  return $resource('http://alice0115.applinzi.com/index.php/ngflow/:method', {
-	    method: '@method'
-	  }, {
-	    query: {
-	      method: 'JSONP',
-	      params: {
-	        callback: 'JSON_CALLBACK'
-	      },
-	      isArray: false
-	    }
-	  });
-	}).factory('GetThreadsFromStorage', function() {
+	module.exports = angular.module('thread.services', []).factory('ThreadsHandler', function(Resource, GlobalVar) {
 	  var execute;
-	  execute = function() {
-	    var all_threads_list, getSubstance, i, item, newArray, storage;
-	    storage = window.localStorage;
-	    all_threads_list = JSON.parse(storage.getItem('all_threads_list'));
-	    getSubstance = function(item) {
-	      return JSON.parse(storage.getItem('thread' + item));
-	    };
-	    newArray = (function() {
-	      var j, len, results;
-	      results = [];
-	      for (i = j = 0, len = all_threads_list.length; j < len; i = ++j) {
-	        item = all_threads_list[i];
-	        results.push(getSubstance(item));
-	      }
-	      return results;
-	    })();
-	    return newArray;
-	  };
-	  return execute;
-	}).factory('ThreadsHandler', function(Resource, GlobalThread, GetThreadsFromStorage) {
-	  var execute, storage, storeThread;
-	  storage = window.localStorage;
-	  storeThread = function(data) {
-	    var list, thread, thread_obj;
-	    list = [];
-	    thread = {
-	      thread_text: 'Roger',
-	      color: 'button-stable',
-	      stuff: false,
-	      item_list: [],
-	      thread_id: 0,
-	      item_number: 0,
-	      father_id: 0
-	    };
-	    thread_obj = JSON.stringify(thread);
-	    storage.setItem("thread0", thread_obj);
-	    list.push('0');
-
-	    /*resolve data */
-	    data.forEach(function(element, index, arra) {
-	      var newThread;
-	      if (!storage.getItem("thread" + element.thread_id)) {
-	        newThread = {
-	          thread_id: element.thread_id,
-	          stuff: element.stuff,
-	          thread_text: element.thread_text,
-	          color: element.color
-	        };
-	        storage.setItem("thread" + element.thread_id, JSON.stringify(newThread));
-	        return list.push(element.thread_id);
-	      }
-	    });
-	    return storage.setItem("all_threads_list", JSON.stringify(list));
-	  };
 	  execute = function(callback) {
 	    var promise;
-	    promise = Resource.query({
-	      method: 'download_thread'
-	    }).$promise;
-	    return promise.then(function(res) {
-	      GlobalThread.bricks = res.data;
-	      GlobalThread.bricks.reverse();
-	      GlobalThread.bricks.unshift({
-	        thread_text: 'Roger',
-	        color: 'button-stable',
-	        stuff: false,
-	        item_list: [],
-	        thread_id: 0,
-	        item_number: 0,
-	        father_id: 0
+	    if (GlobalVar.bricks != null) {
+	      return callback(GlobalVar.bricks);
+	    } else {
+	      promise = Resource.query({
+	        method: 'download_thread'
+	      }).$promise;
+	      return promise.then(function(res) {
+	        GlobalVar.bricks = res.data;
+	        GlobalVar.bricks.reverse();
+	        GlobalVar.bricks.unshift({
+	          thread_text: 'Roger',
+	          color: 'button-stable',
+	          stuff: false,
+	          item_list: [],
+	          thread_id: 0,
+	          item_number: 0,
+	          father_id: 0
+	        });
+	        return callback(GlobalVar.bricks);
 	      });
-	      callback(GlobalThread.bricks);
-	      return storeThread(res.data);
-	    });
+	    }
 	  };
 	  return execute;
 	}).factory('CreateThread', function(Resource) {
@@ -69302,28 +69529,18 @@
 	    });
 	  };
 	  return execute;
-	}).factory('RemoveFunc', function() {
-	  var removeFunc;
-	  removeFunc = function(val) {
-	    var index;
-	    index = this.indexOf(val);
-	    if (index > -1) {
-	      return this.splice(index, 1);
-	    }
-	  };
-	  return removeFunc;
 	});
 
 
 /***/ },
-/* 20 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = angular.module('starter', [__webpack_require__(21).name]);
+	module.exports = angular.module('starter', [__webpack_require__(24).name, __webpack_require__(25).name]);
 
 
 /***/ },
-/* 21 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = angular.module('starter.controller', []).controller('editorCtrl', function($scope) {
@@ -69349,6 +69566,39 @@
 	  };
 	}).controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
 	  return $scope.chat = Chats.get($stateParams.chatId);
+	});
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	module.exports = angular.module('start.services', []).factory('GlobalVar', function() {
+	  return {
+	    thread_id: 0
+	  };
+	}).factory('Resource', function($resource) {
+	  return $resource('http://alice0115.applinzi.com/index.php/ngflow/:method', {
+	    method: '@method'
+	  }, {
+	    query: {
+	      method: 'JSONP',
+	      params: {
+	        callback: 'JSON_CALLBACK'
+	      },
+	      isArray: false
+	    }
+	  });
+	}).factory('RemoveFunc', function() {
+	  var removeFunc;
+	  removeFunc = function(val) {
+	    var index;
+	    index = this.indexOf(val);
+	    if (index > -1) {
+	      return this.splice(index, 1);
+	    }
+	  };
+	  return removeFunc;
 	});
 
 

@@ -13,6 +13,13 @@ module.exports = angular.module('article.controller',[])
         GetArticles(GlobalVar.thread_id,2).then (res)->
             $scope.articles=res.data
 
+.filter 'interpretTimestamp', ->
+    (input)->
+        if input < 1008122669
+            input = 1451577600
+        new Date(input*1000).toLocaleDateString()
+
+
 .filter 'switchReminder', ->
     (input)->
         input = input || ''
