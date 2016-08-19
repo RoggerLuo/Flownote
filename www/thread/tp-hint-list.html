@@ -1,0 +1,29 @@
+<ion-view view-title="Article">
+    <ion-content>
+        <ion-list>
+            <ion-item ng-click="openModal(pool['item'+article])"  class="item-remove-animate item-avatar item-icon-right" ng-repeat="article in articles" type="item-text-wrap" >
+                <div style="display: inline-block;
+                    position: absolute;
+                    left: 0;"
+                >
+                    <button class="button {{pool['item'+article].buttonStyle}}" 
+                        style="
+                            margin: 0px 0 0 8px;
+                            padding: 8px 0px;
+                    ">
+                        {{(pool['item'+article].decimal*100).toFixed(1)+'%'}}
+                    </button>
+                </div>
+                <h2>{{pool['item'+article].content}}</h2>
+                <p>{{pool['item'+article].content.slice(20)||"&nbsp;"}}</p>
+                <p>{{pool['item'+article].content.slice(40)||"&nbsp;"}}</p>
+
+                <i class="icon ion-chevron-right icon-accessory"></i>
+
+                <ion-option-button class="button-assertive" ng-click="remove(chat)">
+                    Delete
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+  </ion-content>
+</ion-view>

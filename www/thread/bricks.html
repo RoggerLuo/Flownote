@@ -1,0 +1,30 @@
+<ion-view view-title="List">
+    <!-- <ion-nav-bar class="bar-stable"> -->
+        
+
+        <!-- <ion-nav-buttons side="primary">
+            <a href="#/tab/thread" class="button button-icon icon ion-navicon"></a>
+        </ion-nav-buttons>
+
+        <ion-nav-buttons side="secondary">
+          <button class="button button-clear icon ion-android-add"  ng-click="doSomething()"></button>
+        </ion-nav-buttons> -->
+
+        
+    <!-- </ion-nav-bar> -->
+
+    <ion-content class="padding">
+        <a href="#/tab/threadtabs/common" 
+            ng-class="{'button-outline':!brick.stuff}"  
+            ng-repeat="brick in bricks"  
+            class="button  button-large {{brick.color}}" 
+            style="line-height:1.75;margin:3px 4px;" 
+            >
+            
+            {{brick.thread_text}}
+            <br>
+            20 14 3
+        </a>
+    </ion-content>
+</ion-view>
+<!-- href="#/tab/thread/{{thread.thread_id}}/plan" -->

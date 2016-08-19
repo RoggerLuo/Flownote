@@ -1,9 +1,110 @@
-<ion-view view-title="Account">
-  <ion-content>
-    <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-toggle>
-    </ion-list>
-  </ion-content>
+<ion-view view-title="InputArea"  hide-tabs="true" >
+<!-- hide-nav-bar="true" -->
+    <ion-nav-buttons side="secondary">
+        <button class="button" ng-click="doSomething()">
+        button
+        </button>
+    </ion-nav-buttons>
+    <div style="overflow:scroll;height:100%;">
+
+    <div style="height:63px;width:100%;"></div>
+        <!-- <label class="item-input"> -->
+        <!--                     padding-top: 43px;
+ -->
+            <textarea 
+                placeholder="一看就没更新" 
+                style="
+                    width:100%;
+                    font-size:16px;
+                    border:0px;
+                    height:100%;
+                    line-height: 1.75;
+                    background-color: gold;"
+            ></textarea>                
+        <!-- </label> -->
+
+    </div>
+    <div>
+    <div 
+        ng-show="show"
+        keyboard-attach ng-click="stopPro($event)" 
+        class="keyboard-attach"
+        style="
+            position:fixed;right:0px;bottom:0px;
+            height:30px;width:30px;line-height: 30px;
+            z-index: 99999;
+            text-align: center;
+        ">
+        <i class="icon ion-checkmark"></i>
+        </div>
+    </div>    
+
+    <!-- 
+        background-color:red;
+
+    <ion-footer-bar 
+        align-title="right" 
+        keyboard-attach 
+        class="bar-light" 
+        style="
+            background-color: rgba(255, 255, 255, 0);
+            border: 0;
+            "
+        >
+
+        <h1 class="title icon ion-checkmark"></h1>
+    </ion-footer-bar> -->
 </ion-view>
+
+<!-- 
+style="
+    font-size:16px;
+    border:0px;
+    height:450px;
+    line-height: 1.75;
+    background-color: gold;
+    "
+ng-model="item.content"
+
+
+<ion-content>
+    <ion-list>
+        <ion-toggle  ng-model="settings.enableFriends">
+            Enable Friendsddabbcbdd123dddd
+        </ion-toggle>
+        <label class="item-input">
+            <textarea 
+                placeholder="一看就没更新" 
+            ></textarea>                
+        </label>
+
+    </ion-list>
+</ion-content>
+
+
+
+<ion-content>
+        <ion-toggle  ng-model="settings.enableFriends">
+            Enable Friendsddabbcbdd123dddd
+        </ion-toggle>
+        <ion-toggle  ng-model="settings.enableFriends">
+            Enable Friendsddabbcbdd123dddd
+        </ion-toggle>
+        <ion-toggle  ng-model="settings.enableFriends">
+            Enable Friendsddabbcbdd123dddd
+        </ion-toggle>
+
+        <label class="item-input">
+            <textarea 
+                placeholder="一看就没更新" 
+                style="
+                    font-size:16px;
+                    border:0px;
+                    height:450px;
+                    line-height: 1.75;
+                    background-color: gold;"
+            ></textarea>                
+        </label>
+</ion-content>
+
+ -->

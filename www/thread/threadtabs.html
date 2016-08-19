@@ -1,0 +1,30 @@
+<!-- 不能用ion-nav-view 不知道为什么，官方没有说还是我自己没有看到 -->
+<!-- 所有的ionic javascript控件 是使用angular directive写的，可以自己去看源代码 -->
+
+     <!-- <ion-nav-bar class="bar-stable"> -->
+<!--         <ion-nav-buttons side="primary">
+             <a href="#/tab/dash" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
+        </ion-nav-buttons> -->
+
+     <!-- </ion-nav-bar> -->
+
+    
+ <ion-tabs class="tabs-striped tabs-icon-left tabs-top tabs-background-light tabs-color-dark ">
+
+      <ion-tab title="计划" href="#/tab/threadtabs/common" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline">
+            <ion-nav-view name="common"></ion-nav-view>
+      </ion-tab>
+
+      <ion-tab title="暗示" href="#/tab/threadtabs/hover" icon-on="ion-ios-clock" icon-off="ion-ios-clock-outline">
+            <ion-nav-view name="hover"></ion-nav-view>
+      </ion-tab>
+
+      <ion-tab title="演绎" href="#/article-category/deduce" icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline">
+          <ion-nav-view name="article-deduce">
+          ddd<br>ddd<br>ddd<br>ddd<br>ddd<br>ddd<br>ddd<br>
+          </ion-nav-view>
+      </ion-tab>
+
+    </ion-tabs>
+    <!--  每次路由出问题都是ion带js的html控件出了问题  -->
+ 
