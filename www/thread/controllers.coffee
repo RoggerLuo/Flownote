@@ -1,8 +1,9 @@
 module.exports = angular.module('thread.controller',[])
 
-
 .controller 'bricksCtrl',($scope,ThreadsHandler,GlobalVar)->
-    GlobalVar.thread_id = $scope.thread_id
+    $scope.assign=(thread_id)->
+        GlobalVar.thread_id = thread_id
+
     ThreadsHandler (data)->
         $scope.bricks=data
 

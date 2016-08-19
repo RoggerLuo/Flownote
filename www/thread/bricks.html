@@ -12,10 +12,9 @@
     <ion-content class="padding">
         <a 
             ng-repeat="brick in bricks"  
-            href="#/tab/threadtabs/plan" 
-            ng-click="thread_id=brick.thread_id"
+            href="#/tab/threadtabs/plan"            
             ng-class="{'button-outline':!brick.stuff}"  
-            
+            ng-click="assign(brick.thread_id)"
             class="button  button-large {{brick.color}}" 
             style="line-height:1.75;margin:3px 4px;" 
             >

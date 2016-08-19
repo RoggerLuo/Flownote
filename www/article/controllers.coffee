@@ -1,27 +1,17 @@
 module.exports = angular.module('article.controller',[])
-.controller 'threadtabs',($scope,GlobalVar)-> 
-    console.log '进入threadtabs'
-    $scope.thread_id = GlobalVar.thread_id
+# .controller 'threadtabs',($scope,GlobalVar)-> 
+#     console.log '进入threadtabs'
+    # $scope.thread_id = GlobalVar.thread_id
 
-.controller 'articleListCtrl',($scope,GetArticles,$stateParams,GlobalVar)-> 
-    console.log '进入articleListCtrl'+$stateParams.type+$stateParams.thread_id
-    # console.log 'plan:'+$stateParams.thread_id
-    # GlobalVar.thread_id=$stateParams.thread_id
-    # GetArticles($stateParams.thread_id,1).then (res)->
-        # $scope.articles=res.data
+.controller 'planCtrl',($scope,GetArticles,GlobalVar)-> 
+    $scope.$on '$ionicView.enter', (e)->
+        GetArticles(GlobalVar.thread_id,1).then (res)->
+            $scope.articles=res.data
 
-
-.controller 'planCtrl',($scope,GetArticles,$stateParams,GlobalVar)-> 
-    console.log '进入planCtrl GlobalVar'+GlobalVar.thread_id
-    # console.log 'plan:'+$stateParams.thread_id
-    GlobalVar.thread_id=$stateParams.thread_id
-    GetArticles($stateParams.thread_id,1).then (res)->
-        $scope.articles=res.data
-
-.controller 'hoverCtrl',($scope,GetArticles,$stateParams,GlobalVar)-> 
-    console.log '进入hoverCtrl GlobalVar:'+GlobalVar.thread_id
-    GetArticles(GlobalVar.thread_id,2).then (res)->
-        $scope.articles=res.data
+.controller 'hoverCtrl',($scope,GetArticles,GlobalVar)-> 
+    $scope.$on '$ionicView.enter', (e)->
+        GetArticles(GlobalVar.thread_id,2).then (res)->
+            $scope.articles=res.data
 
 .filter 'switchReminder', ->
     (input)->

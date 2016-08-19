@@ -17,13 +17,17 @@ module.exports = angular.module('app.router',[])
       
       .state 'tab.threadtabs', 
           url: '/threadtabs'
+          abstract: true
+          cache:false
           views: 
               'tab-thread': 
                   templateUrl: 'thread/threadtabs.html'
-                  controller: 'threadtabs'
+
+                  # controller: 'threadtabs'
 
       .state 'tab.threadtabs.plan', 
           url: '/plan'
+          cache:false
           views: 
               'plan': 
                   templateUrl: 'article/plan.html'
@@ -31,6 +35,7 @@ module.exports = angular.module('app.router',[])
                    
       .state 'tab.threadtabs.hover', 
           url: '/hover'
+          cache:false
           views: 
               'hover': 
                   templateUrl: 'article/hover.html'
