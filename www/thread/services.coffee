@@ -131,7 +131,6 @@ module.exports=angular.module 'thread.services',[]
         promise = Resource.query({method:'thread_create',thread_id:thread_id,thread_text:thread_text,color:color,stuff:stuff}).$promise
         
         promise.then((res)->
-            alert('test成功')
             console.log "添加thread成功"
             #应该弹出一个footer
         ,(res)->

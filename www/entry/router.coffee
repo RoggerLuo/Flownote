@@ -64,7 +64,7 @@ module.exports = angular.module('app.router',[])
           url: '/threadeditor',
           views: 
               'setting': 
-                  templateUrl: 'setting/thread-editor.html',
+                  templateUrl: 'setting/thread-list.html',
                   controller: 'threadEditor'
       })
 

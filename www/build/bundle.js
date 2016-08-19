@@ -68113,7 +68113,7 @@
 	    url: '/threadeditor',
 	    views: {
 	      'setting': {
-	        templateUrl: 'setting/thread-editor.html',
+	        templateUrl: 'setting/thread-list.html',
 	        controller: 'threadEditor'
 	      }
 	    }
@@ -69244,7 +69244,6 @@
 	      stuff: stuff
 	    }).$promise;
 	    promise.then(function(res) {
-	      alert('test成功');
 	      return console.log("添加thread成功");
 	    }, function(res) {
 	      return console.log("添加失败");
