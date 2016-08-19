@@ -13,14 +13,14 @@ module.exports = angular.module('app.router',[])
           views: 
               'tab-thread': 
                   templateUrl: 'thread/bricks.html'
-                  # controller: 'bricksCtrl'
+                  controller: 'bricksCtrl'
       
       .state 'tab.threadtabs', 
           url: '/threadtabs'
           views: 
               'tab-thread': 
                   templateUrl: 'thread/threadtabs.html'
-                  controller: 'DashCtrl'
+                  controller: 'test'
       
       .state 'tab.threadtabs.common', 
           url: '/common'
@@ -33,7 +33,7 @@ module.exports = angular.module('app.router',[])
           views: 
               'hover': 
                   templateUrl: 'templates/tab-chats.html'
-                  controller: 'ChatsCtrl'
+                  controller: 'test'
 
 
 
@@ -53,11 +53,19 @@ module.exports = angular.module('app.router',[])
                   templateUrl: 'templates/chat-detail.html'
                   controller: 'ChatDetailCtrl'
 
-      .state 'tab.account', 
-          url: '/account'
+      .state 'tab.setting', 
+          url: '/setting'
           views: 
-              'tab-account': 
-                  templateUrl: 'templates/tab-account.html'
-                  controller: 'AccountCtrl'
+              'setting': 
+                  templateUrl: 'setting/setting.html'
+                  controller: 'settingCtrl'
   
+      .state('tab.thread-editor', {
+          url: '/threadeditor',
+          views: 
+              'setting': 
+                  templateUrl: 'setting/thread-editor.html',
+                  controller: 'threadEditor'
+      })
+
   $urlRouterProvider.otherwise '/tab/thread'

@@ -14,14 +14,14 @@
     <!-- </ion-nav-bar> -->
 
     <ion-content class="padding">
-        <a href="#/tab/threadtabs/hover"  class="button  button-large button-dark" style="line-height:1.75;margin:3px 8px;" >
-            thread.test
-            <br>
-            20 14 3
-        </a>
-
-        <a href="#/article-category/plan/{{brick.thread_id}}" ng-class="{'button-outline':!brick.stuff}"  ng-repeat="brick in bricks"  class="button  button-large {{brick.color}}" style="line-height:1.75;margin:3px 8px;" >
-            {{brick.text}}
+        <a href="#/tab/threadtabs/common" 
+            ng-class="{'button-outline':!brick.stuff}"  
+            ng-repeat="brick in bricks"  
+            class="button  button-large {{brick.color}}" 
+            style="line-height:1.75;margin:3px 4px;" 
+            >
+            
+            {{brick.thread_text}}
             <br>
             20 14 3
         </a>
