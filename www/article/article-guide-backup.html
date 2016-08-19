@@ -1,0 +1,55 @@
+<ion-view view-title="Article">
+    <ion-nav-bar class="bar-stable">
+        <ion-nav-buttons side="primary">
+            <a href="#/tab/account" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
+        </ion-nav-buttons>
+
+        <ion-nav-buttons side="secondary">
+            <button class="button button-clear" ng-click="newArticle()">
+                <i class="icon ion-android-add"></i>
+                <!-- Add -->
+            </button>
+        </ion-nav-buttons>
+
+    </ion-nav-bar>
+
+    <!-- 用button标签icon就会显示在中间位置，用a标签 icon就会靠下一点显示 -->
+
+
+    <ion-content>
+        <ion-list show-reorder="data.showReorder">
+            <div class="item item-divider">
+                计划
+            </div>
+            <div class="item item-divider">
+                演绎
+            </div>
+            <div class="item item-divider">
+                提醒
+            </div>
+
+            <ion-item ng-click="openModal(thread)" class="item-remove-animate item-avatar item-icon-right" ng-repeat="thread in threads" type="item-text-wrap" >
+                
+                <img ng-src="{{chat.face}}">
+                <h2>{{thread.thread_id}}</h2>
+                <p>{{thread.text}}</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+                
+                <!-- ng-click="share(thread)" -->
+
+                <ion-option-button class="button-calm"
+                                   ng-click="openPopover($event)">
+                  &nbsp;&nbsp;Edit&nbsp;&nbsp;
+                </ion-option-button>
+
+                <ion-option-button class="button-assertive" ng-click="remove(thread)">
+                   Delete
+                </ion-option-button>
+
+                <ion-reorder-button class="ion-navicon" on-reorder="moveItem(thread, $fromIndex, $toIndex)"></ion-reorder-button>
+
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>
+

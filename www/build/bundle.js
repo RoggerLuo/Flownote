@@ -68070,11 +68070,12 @@
 	        controller: 'test'
 	      }
 	    }
-	  }).state('tab.threadtabs.common', {
-	    url: '/common',
+	  }).state('tab.threadtabs.plan', {
+	    url: '/plan',
 	    views: {
-	      'common': {
-	        templateUrl: 'thread/dash.html'
+	      'plan': {
+	        templateUrl: 'thread/plan.html',
+	        controller: 'planCtrl'
 	      }
 	    }
 	  }).state('tab.threadtabs.hover', {
@@ -68083,22 +68084,6 @@
 	      'hover': {
 	        templateUrl: 'templates/tab-chats.html',
 	        controller: 'test'
-	      }
-	    }
-	  }).state('tab.chats', {
-	    url: '/chats',
-	    views: {
-	      'tab-chats': {
-	        templateUrl: 'templates/tab-chats.html',
-	        controller: 'ChatsCtrl'
-	      }
-	    }
-	  }).state('tab.chat-detail', {
-	    url: '/chats/:chatId',
-	    views: {
-	      'tab-chats': {
-	        templateUrl: 'templates/chat-detail.html',
-	        controller: 'ChatDetailCtrl'
 	      }
 	    }
 	  }).state('tab.setting', {
@@ -68115,6 +68100,22 @@
 	      'setting': {
 	        templateUrl: 'setting/thread-list.html',
 	        controller: 'threadEditor'
+	      }
+	    }
+	  }).state('tab.chats', {
+	    url: '/chats',
+	    views: {
+	      'tab-chats': {
+	        templateUrl: 'templates/tab-chats.html',
+	        controller: 'ChatsCtrl'
+	      }
+	    }
+	  }).state('tab.chat-detail', {
+	    url: '/chats/:chatId',
+	    views: {
+	      'tab-chats': {
+	        templateUrl: 'templates/chat-detail.html',
+	        controller: 'ChatDetailCtrl'
 	      }
 	    }
 	  });
@@ -69032,7 +69033,9 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = angular.module('thread.controller', []).controller('bricksCtrl', function($scope, ThreadsHandler) {
+	module.exports = angular.module('thread.controller', []).controller('planCtrl', function() {
+	  return true;
+	}).controller('bricksCtrl', function($scope, ThreadsHandler) {
 	  return ThreadsHandler(function(data) {
 	    return $scope.bricks = data;
 	  });

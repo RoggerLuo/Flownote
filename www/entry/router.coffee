@@ -20,22 +20,41 @@ module.exports = angular.module('app.router',[])
           views: 
               'tab-thread': 
                   templateUrl: 'thread/threadtabs.html'
-                  controller: 'test'
-      
-      .state 'tab.threadtabs.common', 
-          url: '/common'
+                  controller: 'threadtabs'
+
+      .state 'tab.threadtabs.plan', 
+          url: '/plan'
           views: 
-              'common': 
-                   templateUrl: 'thread/dash.html'
+              'plan': 
+                  templateUrl: 'article/plan.html'
+                  controller:'planCtrl'
                    
       .state 'tab.threadtabs.hover', 
           url: '/hover'
           views: 
               'hover': 
-                  templateUrl: 'templates/tab-chats.html'
-                  controller: 'test'
+                  templateUrl: 'article/hover.html'
+                  controller: 'hoverCtrl'
 
 
+
+
+
+
+      .state 'tab.setting', 
+          url: '/setting'
+          views: 
+              'setting': 
+                  templateUrl: 'setting/setting.html'
+                  controller: 'settingCtrl'
+  
+      .state('tab.thread-editor', {
+          url: '/threadeditor',
+          views: 
+              'setting': 
+                  templateUrl: 'setting/thread-list.html',
+                  controller: 'threadEditor'
+      })
 
 
 
@@ -52,20 +71,5 @@ module.exports = angular.module('app.router',[])
               'tab-chats': 
                   templateUrl: 'templates/chat-detail.html'
                   controller: 'ChatDetailCtrl'
-
-      .state 'tab.setting', 
-          url: '/setting'
-          views: 
-              'setting': 
-                  templateUrl: 'setting/setting.html'
-                  controller: 'settingCtrl'
-  
-      .state('tab.thread-editor', {
-          url: '/threadeditor',
-          views: 
-              'setting': 
-                  templateUrl: 'setting/thread-list.html',
-                  controller: 'threadEditor'
-      })
 
   $urlRouterProvider.otherwise '/tab/thread'

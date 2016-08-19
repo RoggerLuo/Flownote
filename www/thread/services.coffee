@@ -53,8 +53,6 @@ module.exports=angular.module 'thread.services',[]
             thread_id:0
             item_number:0
             father_id:0
-
-
         thread_obj=JSON.stringify(thread)
         storage.setItem "thread0",thread_obj
         list.push '0'
@@ -73,7 +71,6 @@ module.exports=angular.module 'thread.services',[]
                 list.push(element.thread_id);
 
         storage.setItem "all_threads_list",JSON.stringify list
-
 
     execute = (callback)->
         # 貌似一用storage就坏事

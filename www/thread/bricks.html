@@ -1,7 +1,5 @@
 <ion-view view-title="List">
     <!-- <ion-nav-bar class="bar-stable"> -->
-        
-
         <!-- <ion-nav-buttons side="primary">
             <a href="#/tab/thread" class="button button-icon icon ion-navicon"></a>
         </ion-nav-buttons>
@@ -9,14 +7,15 @@
         <ion-nav-buttons side="secondary">
           <button class="button button-clear icon ion-android-add"  ng-click="doSomething()"></button>
         </ion-nav-buttons> -->
-
-        
     <!-- </ion-nav-bar> -->
 
     <ion-content class="padding">
-        <a href="#/tab/threadtabs/common" 
-            ng-class="{'button-outline':!brick.stuff}"  
+        <a 
             ng-repeat="brick in bricks"  
+            href="#/tab/threadtabs/plan" 
+            ng-click="thread_id=brick.thread_id"
+            ng-class="{'button-outline':!brick.stuff}"  
+            
             class="button  button-large {{brick.color}}" 
             style="line-height:1.75;margin:3px 4px;" 
             >

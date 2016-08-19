@@ -1,5 +1,8 @@
 module.exports = angular.module('thread.controller',[])
-.controller 'bricksCtrl',($scope,ThreadsHandler)->
+
+
+.controller 'bricksCtrl',($scope,ThreadsHandler,GlobalVar)->
+    GlobalVar.thread_id = $scope.thread_id
     ThreadsHandler (data)->
         $scope.bricks=data
 
@@ -93,5 +96,4 @@ module.exports = angular.module('thread.controller',[])
     # .controller('threadEdit',function($scope,instance,Get_threads,Get_items_by_type_and_thread,$ionicModal,Operation_handler){
     #     在angular开发中angular controller never 包含DOM元素（html/css），在controller需要一个简单的POJO（plain object javascript object），与view完全的隔离（交互angularjs框架的职责
     #     不建议将class放入controller scope之上，scope需要保持纯洁行，scope上的只能是数据和行为
-
 
