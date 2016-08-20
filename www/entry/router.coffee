@@ -53,10 +53,35 @@ module.exports = angular.module('app.router',[])
               'setting': 
                   templateUrl: 'setting/thread-list.html'
                   controller: 'threadEditor'
-      .state 'tab.calendar', 
-          url: '/calendar'
+      
+      .state 'tab.calendarDay', 
+          url: '/calendarDay/:week'
+          cache:false
           views: 
               'calendar': 
-                  templateUrl: 'starter/calendar.html'
-                  controller: 'calendarCtrl'
-  $urlRouterProvider.otherwise '/tab/thread'
+                  templateUrl: 'starter/calendarDay.html'
+                  controller: 'calendarDay'
+      .state 'tab.calendarWeek', 
+          cache:false
+          url: '/calendarweek/:month'
+          views: 
+              'calendar': 
+                  templateUrl: 'starter/calendar-week.html'
+                  controller: 'calendarWeek'
+      .state 'tab.calendarMonth', 
+          cache:false
+          url: '/calendarmonth'
+          views: 
+              'calendar': 
+                  templateUrl: 'starter/calendar-month.html'
+                  controller: 'calendarMonth'
+
+      .state 'tab.articlelist', 
+          url: '/articlelist/:week'
+          cache:false
+          views: 
+              'calendar': 
+                  templateUrl: 'starter/calendarDay.html'
+                  controller: 'calendarDay'
+
+  $urlRouterProvider.otherwise '/tab/calendarDay/'

@@ -1,7 +1,5 @@
 module.exports = angular.module('article.controller',[])
 
-.controller 'calendarCtrl',($scope,GetArticles,GlobalVar)->
-    true 
 
 .controller 'planCtrl',($scope,GetArticles,GlobalVar)-> 
     $scope.$on '$ionicView.enter', (e)->

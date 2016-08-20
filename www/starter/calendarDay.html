@@ -1,0 +1,27 @@
+<ion-view view-title="Day">
+    <ion-nav-buttons >
+        <button ng-click="redirect('tab/calendarweek/')" class="button button-icon icon ion-ios-arrow-back">&nbsp;Week</button>
+        <button ng-click="redirect('tab/calendarDay/')" class="button button-icon">Today</button>
+    </ion-nav-buttons>
+
+    <ion-nav-buttons side="secondary">
+        <button ng-click="redirect('tab/calendarDay/')" class="button button-icon icon ion-android-add"></button>
+    </ion-nav-buttons>
+    <ion-content > <!-- class="padding" -->
+        <a 
+            ng-repeat="day in days"  
+            href="#/tab/threadtabs/plan"            
+            class="button button-full button-large button-dark " 
+            style="line-height:1.75;margin:3px 3px;" 
+            >
+
+            summary text
+            
+            <br>
+
+            {{day.dateInChinese}}
+        </a>
+
+
+    </ion-content>
+</ion-view>
