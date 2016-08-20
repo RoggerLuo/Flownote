@@ -19,7 +19,6 @@
         var myyear = date.getFullYear(); 
         var mymonth = date.getMonth()+1; 
         var myweekday = date.getDate(); 
-
         if(mymonth < 10){ 
             mymonth = "0" + mymonth; 
         } 
@@ -70,8 +69,15 @@
     } 
 
     //获得一周
-    var wholeWeek = function (now) { 
+    var wholeWeek = function (text) {
+        var now = new Date(text);
         var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+        
+        // 把周日为第一天变成周一为第一天
+        if (nowDayOfWeek == 0){nowDayOfWeek = 6}else if (nowDayOfWeek == 6){nowDayOfWeek = 0}
+        
+        // nowDayOfWeek+=1;
+        
         var nowDay = now.getDate(); //当前日 
         var nowMonth = now.getMonth(); //当前月 
         var nowYear = now.getYear(); //当前年 
@@ -79,9 +85,9 @@
         var result = [];
         for(var i=0;i<7;i++){
             result.push({
-                date:formatDate(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i + 1)),
-                dateInChinese:formatChinese(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i + 1))+' 周'+(i+1)
-                });
+                date:formatDate(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i )),
+                dateInChinese:formatChinese(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i ))+' 周'+(i+1)
+            });
         }
         return result;
     }
@@ -102,6 +108,9 @@
     var getCertainWeekStartDate = function (text) { 
         var now = new Date(text); //当前日期 
         var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+        // 把周日为第一天变成周一为第一天
+        if (nowDayOfWeek == 0){nowDayOfWeek = 6}else if (nowDayOfWeek == 6){nowDayOfWeek = 0}
+
         var nowDay = now.getDate(); //当前日 
         var nowMonth = now.getMonth(); //当前月 
         var nowYear = now.getYear(); //当前年 
@@ -200,6 +209,21 @@
         var finalDate = new Date(nowYear, nowMonth, nowDay  + addNum); 
         return formatDate(finalDate); 
     }
+    var getNowDate = function(){
+        var today = new Date();
+        var myday = today.getDate();
+        var mymonth = today.getMonth() + 1;
+        var myyear = today.getYear();
+        myyear += (myyear < 2000) ? 1900 : 0; 
+
+        if(mymonth < 10){ 
+            mymonth = "0" + mymonth; 
+        } 
+        if(myday < 10){ 
+            myday = "0" + myday; 
+        } 
+        return myyear + "-" + mymonth + "-" + myday ;
+    }
     module.exports={
         getYearWeek:getYearWeek,
         wholeWeek:wholeWeek,
@@ -215,5 +239,6 @@
         getCertainWeekStartDate:getCertainWeekStartDate,
         getCertainWeekEndDate:getCertainWeekEndDate,
         dateAdd:dateAdd,
+        getNowDate:getNowDate,
     };
 

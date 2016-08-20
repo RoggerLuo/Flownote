@@ -52,17 +52,19 @@ module.exports = angular.module('starter.controller',[])
     timer = require './timerParser.js'     
     # 处理参数
     if $stateParams.week==''
-        now = new Date() #当前日期         
+        now = timer.getNowDate()#当前日期,传入时间会错，有时候浏览器的时区不对
     else
         now = new Date($stateParams.week) #传入这个星期的第一天    
-
-    $scope.days = timer.wholeWeek(now).filter (el)->
-        Date.parse(new Date()) >= Date.parse(new Date(el.date))
+    
+    weekArr = timer.wholeWeek(now).filter (el)-> #统一传入text
+        Date.parse(now) >= Date.parse(new Date(el.date))
     .reverse()
+    $scope.days = weekArr
     $scope.redirect = (addr)->
         $location.path addr
     
     #article
+
     weekStart = timer.getCertainWeekStartDate(now) #把这个上传 取这周的区间
     GetArticles(week:weekStart).then (res)->
         $scope.articles=res.data
