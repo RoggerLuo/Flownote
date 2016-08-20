@@ -3,7 +3,6 @@
         <ion-nav-buttons side="primary">
             <a href="#/tab/setting" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
         </ion-nav-buttons>
-
         <ion-nav-buttons side="secondary">
             <button class="button " ng-click=" viewCtrl.showReorder = !viewCtrl.showReorder"><!-- showDelete = false; -->
                 <i class="icon ion-arrow-swap"></i><!-- Reorder -->
@@ -13,16 +12,17 @@
                 <i class="icon ion-plus"></i>
             </button>
         </ion-nav-buttons>
-
     </ion-nav-bar>
-
-
     <ion-content>
         <ion-list show-reorder="viewCtrl.showReorder" >
+          
             <ion-item ng-repeat="thread in bricks"  ng-click="openModal(thread)" class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" >
-                <img ng-src="{{chat.face}}">
+                <img ng-src="img/thread-avatar.png"
+                    class="button {{thread.color}}" 
+                    ng-class="{'button-outline':!thread.stuff}"
+                >
                 <h2>{{thread.thread_text}}</h2>
-                <p>{{thread.thread_id}}</p>
+                <p>{{thread.thread_id|switchReminder}}&nbsp;{{thread.thread_id|interpretTimestamp}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
                 <!--<ion-option-button class="button-calm"
                                    ng-click="openPopover($event)">
@@ -31,9 +31,7 @@
                 <ion-option-button class="button-assertive" ng-click="remove(thread)">
                    Delete
                 </ion-option-button>
-
                 <ion-reorder-button class="ion-navicon" on-reorder="moveItem(thread, $fromIndex, $toIndex)"></ion-reorder-button>
-
             </ion-item>
         </ion-list>
     </ion-content>

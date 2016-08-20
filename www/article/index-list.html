@@ -1,0 +1,19 @@
+<ion-view view-title="Article">
+    <ion-nav-buttons side="secondary">
+        <!-- 用button标签icon就会显示在中间位置，用a标签 icon就会靠下一点显示 -->
+        <button class="button button-clear icon ion-android-add" ng-click="new()"></button>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="article in articles" type="item-text-wrap" href="#/editor/{{article.item_id}}">
+                <img ng-src="{{chat.face}}">
+                <h2>{{article.item_id}}</h2>
+                <p>{{article.content}}</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+                <ion-option-button class="button-assertive" ng-click="remove(chat)">
+                   Delete
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

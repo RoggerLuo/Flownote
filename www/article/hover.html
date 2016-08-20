@@ -1,0 +1,41 @@
+<ion-view view-title="Hover Article">
+    <!-- <ion-nav-bar class="bar-stable"> -->
+        <ion-nav-buttons side="primary">
+             <a href="#/tab/thread" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
+        </ion-nav-buttons>
+    <!-- </ion-nav-bar> -->
+    
+    <ion-content>
+        <ion-list>
+            <ion-item 
+                ng-repeat="article in articles"
+                ng-click="openModal(article)"  
+                class="item-remove-animate item-avatar item-icon-right"  
+                type="item-text-wrap" 
+                >
+                
+                <div style="display: inline-block;
+                    position: absolute;
+                    left: 0;"
+                >
+                    <button class="button {{article.buttonStyle}}" 
+                        style="
+                            margin: 0px 0 0 8px;
+                            padding: 8px 0px;
+                    ">
+                        {{(article.decimal*100).toFixed(1)+'%'}}
+                    </button>
+                </div>
+                <h2>{{article.content}}</h2>
+                <p>{{article.content.slice(20)||"&nbsp;"}}</p>
+                <p>{{article.content.slice(40)||"&nbsp;"}}</p>
+
+                <i class="icon ion-chevron-right icon-accessory"></i>
+
+                <ion-option-button class="button-assertive" ng-click="remove(chat)">
+                    Delete
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+  </ion-content>
+</ion-view>
