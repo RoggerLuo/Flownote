@@ -1,5 +1,7 @@
 module.exports = angular.module('starter.controller',[])
 
+.controller 'articleList',($scope)->
+    'dd'
 .controller 'calendarMonth',($scope,GetArticles,GlobalVar,$location,$ionicHistory)->
     $ionicHistory.nextViewOptions disableBack: true
 
@@ -47,22 +49,26 @@ module.exports = angular.module('starter.controller',[])
 
 .controller 'calendarDay',($scope,GetArticles,GlobalVar,$stateParams,$location,$ionicHistory)->
     $ionicHistory.nextViewOptions disableBack: true
-
     timer = require './timerParser.js'     
-
     # 处理参数
     if $stateParams.week==''
         now = new Date() #当前日期         
-        data = timer.wholeWeek(now).filter (el)->
-            Date.parse(now) >= Date.parse(new Date(el.date))
-        $scope.days = data.reverse()
-
     else
-        now = new Date($stateParams.week) #传入这个星期的第一天
-        $scope.days = timer.wholeWeek(now).reverse()
+        now = new Date($stateParams.week) #传入这个星期的第一天    
 
+    $scope.days = timer.wholeWeek(now).filter (el)->
+        Date.parse(new Date()) >= Date.parse(new Date(el.date))
+    .reverse()
     $scope.redirect = (addr)->
         $location.path addr
+    
+    #article
+    weekStart = timer.getCertainWeekStartDate(now) #把这个上传 取这周的区间
+    GetArticles(week:weekStart).then (res)->
+        $scope.articles=res.data
+        console.log 'index get_item成功'
+    ,(res)->
+        console.log 'index get_item失败'
 
 .controller 'editorCtrl', ($scope)->
     #监听键盘事件

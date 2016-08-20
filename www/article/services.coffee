@@ -1,6 +1,18 @@
 module.exports=angular.module 'article.services',[]
 .factory 'GetArticles',(Resource)->
-    (thread = '', type = '' , day='', week='')->
+    (data)->
+        thread = ''
+        type = '' 
+        day=''
+        week=''
+        if data.thread?
+            thread = data.thread
+        if data.type?
+            type = data.type
+        if data.day?
+            day = data.day
+        if data.week?
+            week = data.week
         Resource.query({method:'get_item',thread_id:thread,type:type,day:day,week:week}).$promise
     #     promise.then (res)->
     #         console.log 'get_item成功'

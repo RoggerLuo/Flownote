@@ -81,7 +81,7 @@ module.exports = angular.module('app.router',[])
           cache:false
           views: 
               'calendar': 
-                  templateUrl: 'starter/calendarDay.html'
-                  controller: 'calendarDay'
+                  templateUrl: 'starter/article-list.html'
+                  controller: 'articleList'
 
   $urlRouterProvider.otherwise '/tab/calendarDay/'
