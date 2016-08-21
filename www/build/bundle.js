@@ -68184,11 +68184,8 @@
 	      cordova.plugins.Keyboard.disableScroll(true);
 	    }
 	    if (window.StatusBar) {
-	      StatusBar.styleDefault();
+	      return StatusBar.styleDefault();
 	    }
-	    return window.addEventListener("touchstart", function(e) {
-	      return e.preventDefault();
-	    });
 	  });
 	});
 
@@ -69104,7 +69101,7 @@
 /* 19 */
 /***/ function(module, exports) {
 
-	module.exports = angular.module('article.controller', []).controller('planCtrl', function($scope, GetArticles, GlobalVar, $ionicLoading, DeleteArticle, RemoveFunc, EditorModal) {
+	module.exports = angular.module('article.controller', []).controller('planCtrl', function($scope, GetArticles, GlobalVar, $ionicLoading, EditorModal) {
 	  $scope.$on('$ionicView.enter', function(e) {
 	    $ionicLoading.show({
 	      template: 'Loading...'
@@ -69117,16 +69114,8 @@
 	      return $ionicLoading.hide();
 	    });
 	  });
-	  EditorModal($scope);
-	  return $scope.remove = function(article) {
-	    var r;
-	    r = confirm("确定要删除" + article.content.slice(0, 10) + "?");
-	    if (r) {
-	      DeleteArticle(article.item_id);
-	      return RemoveFunc.call($scope.articles, article);
-	    }
-	  };
-	}).controller('commonCtrl', function($scope, GetArticles, GlobalVar, $ionicLoading, DeleteArticle, RemoveFunc, EditorModal) {
+	  return EditorModal($scope);
+	}).controller('commonCtrl', function($scope, GetArticles, GlobalVar, $ionicLoading, EditorModal) {
 	  $scope.$on('$ionicView.enter', function(e) {
 	    $ionicLoading.show({
 	      template: 'Loading...'
@@ -69139,16 +69128,8 @@
 	      return $ionicLoading.hide();
 	    });
 	  });
-	  EditorModal($scope);
-	  return $scope.remove = function(article) {
-	    var r;
-	    r = confirm("确定要删除" + article.content.slice(0, 10) + "?");
-	    if (r) {
-	      DeleteArticle(article.item_id);
-	      return RemoveFunc.call($scope.articles, article);
-	    }
-	  };
-	}).controller('hoverCtrl', function($scope, GetArticles, GlobalVar, addDecimal, $location, $ionicLoading, DeleteArticle, RemoveFunc, EditorModal) {
+	  return EditorModal($scope);
+	}).controller('hoverCtrl', function($scope, GetArticles, GlobalVar, addDecimal, $location, $ionicLoading, EditorModal) {
 	  $scope.$on('$ionicView.enter', function(e) {
 	    $ionicLoading.show({
 	      template: 'Loading...'
@@ -69166,15 +69147,7 @@
 	      return $ionicLoading.hide();
 	    });
 	  });
-	  EditorModal($scope);
-	  return $scope.remove = function(article) {
-	    var r;
-	    r = confirm("确定要删除" + article.content.slice(0, 10) + "?");
-	    if (r) {
-	      DeleteArticle(article.item_id);
-	      return RemoveFunc.call($scope.articles, article);
-	    }
-	  };
+	  return EditorModal($scope);
 	}).filter('TimestampToHour', function() {
 	  return function(input) {
 	    var now;
@@ -69294,9 +69267,11 @@
 /* 20 */
 /***/ function(module, exports) {
 
-	module.exports = angular.module('article.services', []).factory('EditorModal', function($ionicModal) {
+	module.exports = angular.module('article.services', []).factory('EditorModal', function($ionicModal, RemoveFunc, SaveArticle, DeleteArticle) {
 	  var execute;
 	  return execute = function($scope) {
+	    var originContent;
+	    originContent = '';
 	    $ionicModal.fromTemplateUrl('article/editor-modal.html', {
 	      scope: $scope,
 	      animation: 'slide-in-up'
@@ -69304,17 +69279,38 @@
 	      return $scope.modal = modal;
 	    });
 	    $scope.openModal = function(article) {
+	      var element;
 	      $scope.modal.show();
-	      return $scope.article = article;
+	      $scope.article = article;
+	      $scope.show = true;
+	      originContent = $scope.article.content;
+	      element = document.querySelector('.keyboard-attach');
+	      return element.addEventListener("touchstart", function(e) {
+	        return e.preventDefault();
+	      });
 	    };
 	    $scope.closeModal = function() {
+	      if ($scope.article.content !== originContent) {
+	        SaveArticle($scope.article.content, $scope.article.item_id);
+	      }
 	      return $scope.modal.hide();
 	    };
 	    $scope.$on('$destroy', function() {
 	      return $scope.modal.remove();
 	    });
 	    $scope.$on('modal.hidden', function() {});
-	    return $scope.$on('modal.removed', function() {});
+	    $scope.$on('modal.removed', function() {});
+	    $scope.remove = function(article) {
+	      var r;
+	      r = confirm("确定要删除" + article.content.slice(0, 10) + "?");
+	      if (r) {
+	        DeleteArticle(article.item_id);
+	        return RemoveFunc.call($scope.articles, article);
+	      }
+	    };
+	    return $scope.stopPro = function($event) {
+	      return cordova.plugins.Keyboard.close();
+	    };
 	  };
 	}).factory('addDecimal', function() {
 	  var execute, storage;
@@ -69407,9 +69403,9 @@
 	      item_id: item_id
 	    }).$promise;
 	    return promise.then(function(res) {
-	      return console.log('CreateArticle成功');
+	      return console.log('DeleteArticle成功');
 	    }, function(res) {
-	      return console.log('CreateArticle失败');
+	      return console.log('DeleteArticle失败');
 	    });
 	  };
 	  return execute;
@@ -69741,7 +69737,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = angular.module('starter.controller', []).controller('newCtrl', function($scope, CreateArticle) {
-	  var article, keyboardHideHandler, keyboardShowHandler;
+	  var article, element, keyboardHideHandler, keyboardShowHandler;
+	  element = document.querySelector('.keyboard-attach');
+	  element.addEventListener("touchstart", function(e) {
+	    return e.preventDefault();
+	  });
 	  window.addEventListener('native.keyboardshow', keyboardShowHandler);
 	  window.addEventListener('native.keyboardhide', keyboardHideHandler);
 	  keyboardHideHandler = function(e) {
@@ -69769,7 +69769,11 @@
 	    }
 	  });
 	}).controller('editorCtrl', function($scope, GlobalVar, SaveArticle) {
-	  var keyboardHideHandler, keyboardShowHandler, originContent;
+	  var element, keyboardHideHandler, keyboardShowHandler, originContent;
+	  element = document.querySelector('.keyboard-attach');
+	  element.addEventListener("touchstart", function(e) {
+	    return e.preventDefault();
+	  });
 	  window.addEventListener('native.keyboardshow', keyboardShowHandler);
 	  window.addEventListener('native.keyboardhide', keyboardHideHandler);
 	  keyboardHideHandler = function(e) {
@@ -69818,7 +69822,7 @@
 	      return RemoveFunc.call($scope.articles, article);
 	    }
 	  };
-	}).controller('calendarDay', function($scope, GetArticles, GlobalVar, $stateParams, $location, $ionicHistory) {
+	}).controller('calendarDay', function($scope, GetArticles, GlobalVar, $stateParams, $location, $ionicHistory, DeleteArticle, RemoveFunc) {
 	  var now, timer, weekArr, weekStart, weekstart;
 	  timer = __webpack_require__(26);
 	  now = timer.getNowDate();
@@ -69843,6 +69847,14 @@
 	  $scope.redirectWithArticle = function(article) {
 	    GlobalVar.article = article;
 	    return $location.path('tab/editor');
+	  };
+	  $scope.remove = function(article) {
+	    var r;
+	    r = confirm("确定要删除" + article.content.slice(0, 10) + "?");
+	    if (r) {
+	      DeleteArticle(article.item_id);
+	      return RemoveFunc.call($scope.articles, article);
+	    }
 	  };
 	  weekStart = timer.getCertainWeekStartDate(now);
 	  return GetArticles({

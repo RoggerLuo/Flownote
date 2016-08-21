@@ -1,5 +1,8 @@
 module.exports = angular.module('starter.controller',[])
 .controller 'newCtrl', ($scope,CreateArticle)-> # 增 
+    element=document.querySelector('.keyboard-attach')
+    element.addEventListener "touchstart", (e)->
+        e.preventDefault()
     window.addEventListener('native.keyboardshow', keyboardShowHandler)
     window.addEventListener('native.keyboardhide', keyboardHideHandler)
     keyboardHideHandler = (e)->
@@ -23,6 +26,9 @@ module.exports = angular.module('starter.controller',[])
             CreateArticle(article.content)
 
 .controller 'editorCtrl', ($scope,GlobalVar,SaveArticle)-> # 改 
+    element=document.querySelector('.keyboard-attach')
+    element.addEventListener "touchstart", (e)->
+        e.preventDefault()
     window.addEventListener('native.keyboardshow', keyboardShowHandler)
     window.addEventListener('native.keyboardhide', keyboardHideHandler)
     keyboardHideHandler = (e)->
@@ -34,7 +40,6 @@ module.exports = angular.module('starter.controller',[])
     $scope.show = true
     $scope.article = GlobalVar.article
     originContent = $scope.article.content
-    
     $scope.$on "$ionicView.beforeLeave", (event, data)-> #为了后退的时候能够保存
         if $scope.article.content isnt originContent
             SaveArticle($scope.article.content,$scope.article.item_id)
@@ -60,7 +65,7 @@ module.exports = angular.module('starter.controller',[])
             DeleteArticle(article.item_id)
             RemoveFunc.call $scope.articles,article
 
-.controller 'calendarDay',($scope,GetArticles,GlobalVar,$stateParams,$location,$ionicHistory)->
+.controller 'calendarDay',($scope,GetArticles,GlobalVar,$stateParams,$location,$ionicHistory,DeleteArticle,RemoveFunc)->
     timer = require './timerParser.js'     
     now = timer.getNowDate() #当前时间yyyy-mm-dd, 传入当前时间会错，有时候时区不对，统一传入不带小时的日期
     # 处理参数
@@ -81,6 +86,11 @@ module.exports = angular.module('starter.controller',[])
     $scope.redirectWithArticle = (article)->
         GlobalVar.article = article
         $location.path 'tab/editor'
+    $scope.remove = (article)-> # 删
+        r = confirm "确定要删除"+article.content.slice(0,10)+"?"
+        if r
+            DeleteArticle(article.item_id)
+            RemoveFunc.call $scope.articles,article
 
     #article
     weekStart = timer.getCertainWeekStartDate(now) #获取这周起始日期 

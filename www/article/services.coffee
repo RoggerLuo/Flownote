@@ -1,6 +1,6 @@
 module.exports=angular.module 'article.services',[]
 
-.factory 'EditorModal',($ionicModal,RemoveFunc,SaveArticle)->
+.factory 'EditorModal',($ionicModal,RemoveFunc,SaveArticle,DeleteArticle)->
     execute = ($scope)->
         # /* ionicModal */
         originContent = ''
@@ -16,6 +16,10 @@ module.exports=angular.module 'article.services',[]
             $scope.article = article
             $scope.show = true
             originContent = $scope.article.content        
+            
+            element=document.querySelector('.keyboard-attach')
+            element.addEventListener "touchstart", (e)->
+                e.preventDefault()
 
         $scope.closeModal = ->
             if $scope.article.content isnt originContent
@@ -31,7 +35,7 @@ module.exports=angular.module 'article.services',[]
         $scope.$on 'modal.removed', ->
             # Execute action
         $scope.remove = (article)-> # 删
-            r = confirm "确定要删除"+$scope.article.content.slice(0,10)+"?"
+            r = confirm "确定要删除"+article.content.slice(0,10)+"?"
             if r
                 DeleteArticle(article.item_id)
                 RemoveFunc.call $scope.articles,article        
@@ -104,9 +108,9 @@ module.exports=angular.module 'article.services',[]
         item_id=item_id.toString()#转换成字符串
         promise = Resource.query({method:'item_delete',item_id:item_id}).$promise
         promise.then (res)->
-            console.log 'CreateArticle成功'
+            console.log 'DeleteArticle成功'
         ,(res)->
-            console.log 'CreateArticle失败'
+            console.log 'DeleteArticle失败'
     execute
                
 .factory 'SaveArticle',(Resource)->

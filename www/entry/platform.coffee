@@ -9,5 +9,5 @@ module.exports=angular.module 'app.platform',[]
             StatusBar.styleDefault()
 
         #全局禁止touch之后的click事件
-        window.addEventListener "touchstart", (e)->
-            e.preventDefault()
+        # window.addEventListener "touchstart", (e)->
+        #     e.preventDefault()
