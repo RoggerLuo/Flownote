@@ -3,19 +3,45 @@ module.exports = angular.module('article.controller',[])
 .controller 'planCtrl',($scope,GetArticles,GlobalVar,$ionicLoading)-> 
     $scope.$on '$ionicView.enter', (e)->
         $ionicLoading.show template: 'Loading...'
-        GetArticles(GlobalVar.thread_id,1).then (res)->
+        GetArticles({thread:GlobalVar.thread_id,type:1}).then (res)->
             $scope.articles=res.data
             $ionicLoading.hide()
+
+    $scope.remove = (article)-> # 删
+        r = confirm "确定要删除"+article.content.slice(0,10)+"?"
+        if r
+            DeleteArticle(article.item_id)
+            RemoveFunc.call $scope.articles,article
+
+.controller 'commonCtrl',($scope,GetArticles,GlobalVar,$ionicLoading)-> 
+    
+    $scope.$on '$ionicView.enter', (e)->
+        $ionicLoading.show template: 'Loading...'
+        GetArticles({thread:GlobalVar.thread_id,type:0}).then (res)->
+            $scope.articles=res.data
+            $ionicLoading.hide()
+    $scope.remove = (article)-> # 删
+        r = confirm "确定要删除"+article.content.slice(0,10)+"?"
+        if r
+            DeleteArticle(article.item_id)
+            RemoveFunc.call $scope.articles,article
+
 
 .controller 'hoverCtrl',($scope,GetArticles,GlobalVar,addDecimal,$location,$ionicModal,$ionicLoading)-> 
     $scope.$on '$ionicView.enter', (e)->
         $ionicLoading.show template: 'Loading...'
-        GetArticles(GlobalVar.thread_id,2).then (res)->
+        GetArticles({thread:GlobalVar.thread_id,type:2}).then (res)->
             data = addDecimal res.data
             data.sort (a,b)->
                 -(a["decimal"] - b["decimal"])
             $scope.articles = data
             $ionicLoading.hide()
+
+    $scope.remove = (article)-> # 删
+        r = confirm "确定要删除"+article.content.slice(0,10)+"?"
+        if r
+            DeleteArticle(article.item_id)
+            RemoveFunc.call $scope.articles,article
 
     # /* ionicModal */
     $ionicModal.fromTemplateUrl 'article/editor-modal.html', {
@@ -40,10 +66,6 @@ module.exports = angular.module('article.controller',[])
     $scope.$on 'modal.removed', ->
         # Execute action
 
-.controller 'commonCtrl',($scope,GetArticles,GlobalVar)-> 
-    $scope.$on '$ionicView.enter', (e)->
-        GetArticles(GlobalVar.thread_id,0).then (res)->
-            $scope.articles=res.data
 
 .filter 'TimestampToHour', ->
     (input)->
