@@ -1,5 +1,44 @@
 module.exports=angular.module 'article.services',[]
-.factory 'addDecimal',()->
+
+.factory 'EditorModal',($ionicModal,RemoveFunc,SaveArticle)->
+    execute = ($scope)->
+        # /* ionicModal */
+        originContent = ''
+        $ionicModal.fromTemplateUrl 'article/editor-modal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }
+        .then (modal) ->
+            $scope.modal = modal
+        
+        $scope.openModal = (article) ->
+            $scope.modal.show()
+            $scope.article = article
+            $scope.show = true
+            originContent = $scope.article.content        
+
+        $scope.closeModal = ->
+            if $scope.article.content isnt originContent
+                SaveArticle($scope.article.content,$scope.article.item_id)
+            $scope.modal.hide()
+        # Cleanup the modal when we're done with it!
+        $scope.$on '$destroy', ->
+            $scope.modal.remove()
+        # Execute action on hide modal
+        $scope.$on 'modal.hidden', ->
+            # Execute action
+        # Execute action on remove modal
+        $scope.$on 'modal.removed', ->
+            # Execute action
+        $scope.remove = (article)-> # 删
+            r = confirm "确定要删除"+$scope.article.content.slice(0,10)+"?"
+            if r
+                DeleteArticle(article.item_id)
+                RemoveFunc.call $scope.articles,article        
+        $scope.stopPro = ($event)->
+            cordova.plugins.Keyboard.close()
+
+.factory 'addDecimal',->
     storage = window.localStorage 
     execute = (data)->
         data.forEach (el,index,arr)->

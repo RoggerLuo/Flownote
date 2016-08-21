@@ -1,33 +1,21 @@
 module.exports = angular.module('article.controller',[])
-
-.controller 'planCtrl',($scope,GetArticles,GlobalVar,$ionicLoading)-> 
+.controller 'planCtrl',($scope,GetArticles,GlobalVar,$ionicLoading,EditorModal)->
     $scope.$on '$ionicView.enter', (e)->
         $ionicLoading.show template: 'Loading...'
         GetArticles({thread:GlobalVar.thread_id,type:1}).then (res)->
             $scope.articles=res.data
-            $ionicLoading.hide()
+            $ionicLoading.hide()    
+    EditorModal $scope #用modal，封装了公共函数
 
-    $scope.remove = (article)-> # 删
-        r = confirm "确定要删除"+article.content.slice(0,10)+"?"
-        if r
-            DeleteArticle(article.item_id)
-            RemoveFunc.call $scope.articles,article
-
-.controller 'commonCtrl',($scope,GetArticles,GlobalVar,$ionicLoading)-> 
-    
+.controller 'commonCtrl',($scope,GetArticles,GlobalVar,$ionicLoading,EditorModal)->    
     $scope.$on '$ionicView.enter', (e)->
         $ionicLoading.show template: 'Loading...'
         GetArticles({thread:GlobalVar.thread_id,type:0}).then (res)->
             $scope.articles=res.data
             $ionicLoading.hide()
-    $scope.remove = (article)-> # 删
-        r = confirm "确定要删除"+article.content.slice(0,10)+"?"
-        if r
-            DeleteArticle(article.item_id)
-            RemoveFunc.call $scope.articles,article
+    EditorModal $scope
 
-
-.controller 'hoverCtrl',($scope,GetArticles,GlobalVar,addDecimal,$location,$ionicModal,$ionicLoading)-> 
+.controller 'hoverCtrl',($scope,GetArticles,GlobalVar,addDecimal,$location,$ionicLoading,EditorModal)->
     $scope.$on '$ionicView.enter', (e)->
         $ionicLoading.show template: 'Loading...'
         GetArticles({thread:GlobalVar.thread_id,type:2}).then (res)->
@@ -36,35 +24,7 @@ module.exports = angular.module('article.controller',[])
                 -(a["decimal"] - b["decimal"])
             $scope.articles = data
             $ionicLoading.hide()
-
-    $scope.remove = (article)-> # 删
-        r = confirm "确定要删除"+article.content.slice(0,10)+"?"
-        if r
-            DeleteArticle(article.item_id)
-            RemoveFunc.call $scope.articles,article
-
-    # /* ionicModal */
-    $ionicModal.fromTemplateUrl 'article/editor-modal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }
-    .then (modal) ->
-        $scope.modal = modal
-    
-    $scope.openModal = (article) ->
-        $scope.modal.show()
-        $scope.article = article
-    $scope.closeModal = ->
-        $scope.modal.hide()
-    # Cleanup the modal when we're done with it!
-    $scope.$on '$destroy', ->
-        $scope.modal.remove()
-    # Execute action on hide modal
-    $scope.$on 'modal.hidden', ->
-        # Execute action
-    # Execute action on remove modal
-    $scope.$on 'modal.removed', ->
-        # Execute action
+    EditorModal $scope
 
 
 .filter 'TimestampToHour', ->

@@ -69104,7 +69104,7 @@
 /* 19 */
 /***/ function(module, exports) {
 
-	module.exports = angular.module('article.controller', []).controller('planCtrl', function($scope, GetArticles, GlobalVar, $ionicLoading) {
+	module.exports = angular.module('article.controller', []).controller('planCtrl', function($scope, GetArticles, GlobalVar, $ionicLoading, DeleteArticle, RemoveFunc, EditorModal) {
 	  $scope.$on('$ionicView.enter', function(e) {
 	    $ionicLoading.show({
 	      template: 'Loading...'
@@ -69117,6 +69117,7 @@
 	      return $ionicLoading.hide();
 	    });
 	  });
+	  EditorModal($scope);
 	  return $scope.remove = function(article) {
 	    var r;
 	    r = confirm("确定要删除" + article.content.slice(0, 10) + "?");
@@ -69125,7 +69126,7 @@
 	      return RemoveFunc.call($scope.articles, article);
 	    }
 	  };
-	}).controller('commonCtrl', function($scope, GetArticles, GlobalVar, $ionicLoading) {
+	}).controller('commonCtrl', function($scope, GetArticles, GlobalVar, $ionicLoading, DeleteArticle, RemoveFunc, EditorModal) {
 	  $scope.$on('$ionicView.enter', function(e) {
 	    $ionicLoading.show({
 	      template: 'Loading...'
@@ -69138,6 +69139,7 @@
 	      return $ionicLoading.hide();
 	    });
 	  });
+	  EditorModal($scope);
 	  return $scope.remove = function(article) {
 	    var r;
 	    r = confirm("确定要删除" + article.content.slice(0, 10) + "?");
@@ -69146,7 +69148,7 @@
 	      return RemoveFunc.call($scope.articles, article);
 	    }
 	  };
-	}).controller('hoverCtrl', function($scope, GetArticles, GlobalVar, addDecimal, $location, $ionicModal, $ionicLoading) {
+	}).controller('hoverCtrl', function($scope, GetArticles, GlobalVar, addDecimal, $location, $ionicLoading, DeleteArticle, RemoveFunc, EditorModal) {
 	  $scope.$on('$ionicView.enter', function(e) {
 	    $ionicLoading.show({
 	      template: 'Loading...'
@@ -69164,7 +69166,8 @@
 	      return $ionicLoading.hide();
 	    });
 	  });
-	  $scope.remove = function(article) {
+	  EditorModal($scope);
+	  return $scope.remove = function(article) {
 	    var r;
 	    r = confirm("确定要删除" + article.content.slice(0, 10) + "?");
 	    if (r) {
@@ -69172,24 +69175,6 @@
 	      return RemoveFunc.call($scope.articles, article);
 	    }
 	  };
-	  $ionicModal.fromTemplateUrl('article/editor-modal.html', {
-	    scope: $scope,
-	    animation: 'slide-in-up'
-	  }).then(function(modal) {
-	    return $scope.modal = modal;
-	  });
-	  $scope.openModal = function(article) {
-	    $scope.modal.show();
-	    return $scope.article = article;
-	  };
-	  $scope.closeModal = function() {
-	    return $scope.modal.hide();
-	  };
-	  $scope.$on('$destroy', function() {
-	    return $scope.modal.remove();
-	  });
-	  $scope.$on('modal.hidden', function() {});
-	  return $scope.$on('modal.removed', function() {});
 	}).filter('TimestampToHour', function() {
 	  return function(input) {
 	    var now;
@@ -69309,7 +69294,29 @@
 /* 20 */
 /***/ function(module, exports) {
 
-	module.exports = angular.module('article.services', []).factory('addDecimal', function() {
+	module.exports = angular.module('article.services', []).factory('EditorModal', function($ionicModal) {
+	  var execute;
+	  return execute = function($scope) {
+	    $ionicModal.fromTemplateUrl('article/editor-modal.html', {
+	      scope: $scope,
+	      animation: 'slide-in-up'
+	    }).then(function(modal) {
+	      return $scope.modal = modal;
+	    });
+	    $scope.openModal = function(article) {
+	      $scope.modal.show();
+	      return $scope.article = article;
+	    };
+	    $scope.closeModal = function() {
+	      return $scope.modal.hide();
+	    };
+	    $scope.$on('$destroy', function() {
+	      return $scope.modal.remove();
+	    });
+	    $scope.$on('modal.hidden', function() {});
+	    return $scope.$on('modal.removed', function() {});
+	  };
+	}).factory('addDecimal', function() {
 	  var execute, storage;
 	  storage = window.localStorage;
 	  execute = function(data) {
