@@ -16,6 +16,12 @@ module.exports = angular.module('article.controller',[])
         GetArticles(GlobalVar.thread_id,0).then (res)->
             $scope.articles=res.data
 
+.filter 'TimestampToHour', ->
+    (input)->
+        if input < 1008122669
+            input = 1451577600
+        now = new Date(input*1000)
+        now.getHours() + ':' + now.getMinutes() 
 .filter 'interpretTimestamp', ->
     (input)->
         if input < 1008122669

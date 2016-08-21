@@ -4,26 +4,29 @@
              <a href="#/tab/thread" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
         </ion-nav-buttons>-->    
     <!-- </ion-nav-bar> -->
-    
+    <ion-nav-buttons side="secondary">
+        <button ng-click="redirectWithHistory('tab/new')" class="button button-icon icon ion-android-add"></button>
+    </ion-nav-buttons>
+
     <ion-content>
         <ion-list>
             <label class="item item-input">
                 <textarea placeholder="Make A Summary~" rows="5" style="font-size:17px;line-height:1.25;"></textarea>
             </label>
-            <ion-item ng-click="openModal(article)" class="item-remove-animate item-avatar item-icon-right" ng-repeat="article in articles" type="item-text-wrap" >
+            <ion-item ng-click="redirect(article)" class="item-remove-animate item-avatar item-icon-right" ng-repeat="article in articles" type="item-text-wrap" >
                 <div style="display: inline-block;
                     position: absolute;
                     left: 0;"
                 >
                     <button class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:0;">
-                        {{article.date_and_time | switchReminder}}
+                        {{article.date_and_time|TimestampToHour}}
                     </button>
                 </div>
 
                 <h2>{{article.content}}</h2>
                 <p>{{article.content.slice(20)}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
-                <ion-option-button class="button-assertive" ng-click="remove(chat)">
+                <ion-option-button class="button-assertive" ng-click="remove(article)">
                     Delete
                 </ion-option-button>
             </ion-item>
@@ -35,4 +38,5 @@
         </ion-infinite-scroll>
 
     </ion-content> 
+
 </ion-view>
