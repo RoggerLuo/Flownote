@@ -19,7 +19,6 @@
         var myyear = date.getFullYear(); 
         var mymonth = date.getMonth()+1; 
         var myweekday = date.getDate(); 
-
         if(mymonth < 10){ 
             mymonth = "0" + mymonth; 
         } 
@@ -28,20 +27,26 @@
         } 
         return (myyear + "-" + mymonth + "-" + myweekday); 
     } 
-    var formatChinese = function (date) { 
+    var formatChinese = function (date) { //注意这里传入的不是text对象
         var myyear = date.getFullYear(); 
         var mymonth = date.getMonth()+1; 
         var myweekday = date.getDate(); 
-
         // if(mymonth < 10){ 
         //     mymonth = "0" + mymonth; 
         // } 
         // if(myweekday < 10){ 
         //     myweekday = "0" + myweekday; 
         // } 
-
         return (/*myyear + "年" +*/ mymonth + "月" + myweekday + '日');         
     } 
+    var textToChinese = function(text){
+        var day = new Date(text);
+        var myday = day.getDate();
+        var mymonth = day.getMonth() + 1;
+        var myyear = day.getYear();
+        myyear += (myyear < 2000) ? 1900 : 0; 
+        return mymonth + "月" + myday + "日";
+    }
 
     //获得某月的天数 
     var getMonthDays = function (myMonth){ 
@@ -70,8 +75,16 @@
     } 
 
     //获得一周
-    var wholeWeek = function (now) { 
-        var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+    var wholeWeek = function (text) { 
+        var now = new Date(text);
+        var nowDayOfWeek = now.getDay(); //今天本周的第几天 默认周日是第一天 所以要改         
+        // 把周日为第一天变成周一为第一天
+        if(nowDayOfWeek ==0 || nowDayOfWeek==6){
+            if (nowDayOfWeek == 0){nowDayOfWeek = 6} else if (nowDayOfWeek == 6){nowDayOfWeek = 0}            
+        }else{
+            nowDayOfWeek-=1;            
+        }
+
         var nowDay = now.getDate(); //当前日 
         var nowMonth = now.getMonth(); //当前月 
         var nowYear = now.getYear(); //当前年 
@@ -79,13 +92,12 @@
         var result = [];
         for(var i=0;i<7;i++){
             result.push({
-                date:formatDate(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i + 1)),
-                dateInChinese:formatChinese(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i + 1))+' 周'+(i+1)
-                });
+                date:formatDate(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i )),
+                dateInChinese:formatChinese(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i ))+' 周'+(i+1)
+            });
         }
         return result;
     }
- 
 
     //获得本周的开端日期 
     var getWeekStartDate = function () { 
@@ -102,6 +114,9 @@
     var getCertainWeekStartDate = function (text) { 
         var now = new Date(text); //当前日期 
         var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+        // 把周日为第一天变成周一为第一天
+        if (nowDayOfWeek == 0){nowDayOfWeek = 6}else if (nowDayOfWeek == 6){nowDayOfWeek = 0}
+
         var nowDay = now.getDate(); //当前日 
         var nowMonth = now.getMonth(); //当前月 
         var nowYear = now.getYear(); //当前年 
@@ -200,12 +215,26 @@
         var finalDate = new Date(nowYear, nowMonth, nowDay  + addNum); 
         return formatDate(finalDate); 
     }
+    var getNowDate = function(){
+        var today = new Date();
+        var myday = today.getDate();
+        var mymonth = today.getMonth() + 1;
+        var myyear = today.getYear();
+        myyear += (myyear < 2000) ? 1900 : 0; 
+
+        if(mymonth < 10){ 
+            mymonth = "0" + mymonth; 
+        } 
+        if(myday < 10){ 
+            myday = "0" + myday; 
+        } 
+        return myyear + "-" + mymonth + "-" + myday ;
+    }
+
     module.exports={
         getYearWeek:getYearWeek,
         wholeWeek:wholeWeek,
-        // wholeWeekInChinese:wholeWeekInChinese,
-        // WeekStartTime:getWeekStartTime,
-        // WeekEndTime:getWeekEndTime,
+        textToChinese:textToChinese,
         WeekStart:getWeekStartDate,
         WeekEnd:getWeekEndDate,
         MonthStart:getMonthStartDate,
@@ -215,5 +244,6 @@
         getCertainWeekStartDate:getCertainWeekStartDate,
         getCertainWeekEndDate:getCertainWeekEndDate,
         dateAdd:dateAdd,
+        getNowDate:getNowDate,
     };
 

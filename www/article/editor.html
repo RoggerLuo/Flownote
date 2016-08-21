@@ -1,0 +1,134 @@
+<ion-view view-title="Editor"  hide-tabs="true" >
+    <ion-nav-back-button ng-click="finish()">
+    </ion-nav-back-button>
+
+    <ion-nav-buttons side="secondary">
+        <button class="button" ng-click="doSomething()">
+        button
+        </button>
+    </ion-nav-buttons>
+    <div style="overflow:scroll;height:100%;">
+
+    <div style="height:43px;width:100%;"></div>
+        <textarea 
+            class="padding"
+            placeholder="可以把 到期的提醒 展示在这里 随机展示" 
+            style="
+                padding-bottom:63px;
+                width:100%;
+                font-size:16px;
+                border:0px;
+                height:100%;
+                line-height: 1.75;
+                "
+            ng-model="article.content"
+        ></textarea>                
+
+    </div>
+    <div>
+    <div 
+        ng-show="show"
+        keyboard-attach ng-click="stopPro($event)" 
+        class="keyboard-attach"
+        style="
+            position:fixed;right:0px;bottom:0px;
+            height:30px;width:30px;line-height: 30px;
+            z-index: 99999;
+            text-align: center;
+        ">
+        <i class="icon ion-checkmark"></i>
+        </div>
+
+    </div>    
+    <div class="tabs tabs-icon-left">
+      <a class="tab-item">
+        <i class="icon ion-home"></i>
+        Home
+      </a>
+      <a class="tab-item">
+        <i class="icon ion-star"></i>
+        Favorites
+      </a>
+      <a class="tab-item">
+        <i class="icon ion-gear-a"></i>
+        Settings
+      </a>
+    </div>   
+    <!-- <ion-footer-bar align-title="left" class="bar-assertive">
+      <div class="buttons">
+        <button class="button">Left Button</button>
+      </div>
+      <h1 class="title">Title!</h1>
+      <div class="buttons" ng-click="doSomething()">
+        <button class="button">Right Button</button>
+      </div>
+    </ion-footer-bar> -->
+    <!-- 
+        background-color:red;
+
+    <ion-footer-bar 
+        align-title="right" 
+        keyboard-attach 
+        class="bar-light" 
+        style="
+            background-color: rgba(255, 255, 255, 0);
+            border: 0;
+            "
+        >
+
+        <h1 class="title icon ion-checkmark"></h1>
+    </ion-footer-bar> -->
+</ion-view>
+
+<!-- 
+style="
+    font-size:16px;
+    border:0px;
+    height:450px;
+    line-height: 1.75;
+    background-color: gold;
+    "
+ng-model="item.content"
+
+
+<ion-content>
+    <ion-list>
+        <ion-toggle  ng-model="settings.enableFriends">
+            Enable Friendsddabbcbdd123dddd
+        </ion-toggle>
+        <label class="item-input">
+            <textarea 
+                placeholder="一看就没更新" 
+            ></textarea>                
+        </label>
+
+    </ion-list>
+</ion-content>
+
+
+
+<ion-content>
+        <ion-toggle  ng-model="settings.enableFriends">
+            Enable Friendsddabbcbdd123dddd
+        </ion-toggle>
+        <ion-toggle  ng-model="settings.enableFriends">
+            Enable Friendsddabbcbdd123dddd
+        </ion-toggle>
+        <ion-toggle  ng-model="settings.enableFriends">
+            Enable Friendsddabbcbdd123dddd
+        </ion-toggle>
+
+        <label class="item-input">
+            <textarea 
+                placeholder="一看就没更新" 
+                style="
+                    font-size:16px;
+                    border:0px;
+                    height:450px;
+                    line-height: 1.75;
+                    background-color: gold;"
+            ></textarea>                
+        </label>
+</ion-content>
+
+ -->

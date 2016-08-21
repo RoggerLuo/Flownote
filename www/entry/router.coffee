@@ -77,11 +77,28 @@ module.exports = angular.module('app.router',[])
                   controller: 'calendarMonth'
 
       .state 'tab.articlelist', 
-          url: '/articlelist/:week'
+          url: '/articlelist/:day'
           cache:false
           views: 
               'calendar': 
                   templateUrl: 'starter/article-list.html'
-                  controller: 'articleList'
+                  controller: 'articleListByDay'
+
+      .state 'tab.editor', # 改 editor 
+          url: '/editor'
+          cache:false
+          views: 
+              'calendar': 
+                  templateUrl: 'article/editor.html'
+                  controller: 'editorCtrl'
+
+      .state 'tab.new', # 增 editor 
+          url: '/new'
+          cache:false
+          views: 
+              'calendar': 
+                  templateUrl: 'article/editor.html'
+                  controller: 'newCtrl'
+
 
   $urlRouterProvider.otherwise '/tab/calendarDay/'

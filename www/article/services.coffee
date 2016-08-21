@@ -19,10 +19,11 @@ module.exports=angular.module 'article.services',[]
     #     ,(res)->
     #         console.log 'get_item失败'
     # execute
+
 .factory 'CreateArticle',(Resource)->
     execute = (content)->
         date_and_time=Date.parse(new Date())/1000
-        item=
+        item =
             content:content
             date_and_time:date_and_time
             item_id:date_and_time.toString()
@@ -31,16 +32,15 @@ module.exports=angular.module 'article.services',[]
             type:'0'
             type2:'0'
             thread_id:'0'
-
         item_id=item.item_id
         content=item.content
         date_and_time=item.date_and_time
-
         promise = Resource.query({method:'item_create',content:content,item_id:item_id,date_and_time:date_and_time}).$promise
         promise.then (res)->
             console.log 'CreateArticle成功'
         ,(res)->
             console.log 'CreateArticle失败'
+
     execute
 
 .factory 'DeleteArticle',(Resource)->

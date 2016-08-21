@@ -5,12 +5,12 @@
     </ion-nav-buttons>
 
     <ion-nav-buttons side="secondary">
-        <button ng-click="redirect('tab/calendarDay/')" class="button button-icon icon ion-android-add"></button>
+        <button ng-click="redirectWithHistory('tab/new')" class="button button-icon icon ion-android-add"></button>
     </ion-nav-buttons>
     <ion-content > <!-- class="padding" -->
         <a 
             ng-repeat="day in days"  
-            href="#/tab/threadtabs/plan"            
+            href="#/tab/articlelist/{{day.date}}"            
             class="button button-full button-large button-dark " 
             style="line-height:1.75;margin:3px 3px;" 
             >
