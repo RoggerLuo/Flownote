@@ -77,7 +77,7 @@ module.exports = angular.module('app.router',[])
                   controller: 'calendarMonth'
 
       .state 'tab.articlelist', 
-          url: '/articlelist/:week'
+          url: '/articlelist/:day'
           cache:false
           views: 
               'calendar': 

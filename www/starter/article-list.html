@@ -1,16 +1,15 @@
-
-
-  
-
-<ion-view view-title="Common Article">
+<ion-view view-title="{{dateInChinese}}">
     <!-- <ion-nav-bar class="bar-stable"> -->
-        <ion-nav-buttons side="primary">
+    <!--<ion-nav-buttons side="primary">
              <a href="#/tab/thread" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
-        </ion-nav-buttons>
+        </ion-nav-buttons>-->    
     <!-- </ion-nav-bar> -->
-
+    
     <ion-content>
         <ion-list>
+            <label class="item item-input">
+                <textarea placeholder="Make A Summary~" rows="5" style="font-size:17px;line-height:1.25;"></textarea>
+            </label>
             <ion-item ng-click="openModal(article)" class="item-remove-animate item-avatar item-icon-right" ng-repeat="article in articles" type="item-text-wrap" >
                 <div style="display: inline-block;
                     position: absolute;
@@ -34,5 +33,6 @@
             distance="1%"
             ng-if="moreDataCanBeLoaded()">
         </ion-infinite-scroll>
+
     </ion-content> 
 </ion-view>
