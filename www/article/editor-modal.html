@@ -1,0 +1,60 @@
+<ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-stable">
+        <button ng-click="closeModal()" href="#/tab/articles" class="button light icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;完成</button>
+        <h1 class="title">article variable</h1>
+        <button class="button button-clear button-primary" >notAllocate</button>
+    </ion-header-bar>
+  
+    <div style="overflow:scroll;height:100%;">
+
+        <div style="height:43px;width:100%;"></div>
+        <textarea 
+            class="padding"
+            placeholder="可以把 到期的提醒 展示在这里 随机展示" 
+            style="
+                padding-bottom:63px;
+                width:100%;
+                font-size:16px;
+                border:0px;
+                height:500px;
+                line-height: 1.75;
+                "
+            ng-model="article.content"
+        ></textarea>                
+
+    </div>
+    
+    <div>
+        <div 
+            ng-show="show"
+            keyboard-attach ng-click="stopPro($event)" 
+            class="keyboard-attach"
+            style="
+                position:fixed;right:0px;bottom:0px;
+                height:30px;width:30px;line-height: 30px;
+                z-index: 99999;
+                text-align: center;
+            "
+        >
+            <i class="icon ion-checkmark"></i>
+        </div>
+    </div>   
+
+    <div class="tabs tabs-icon-left">
+      <a class="tab-item">
+        <i class="icon ion-home"></i>
+        Home
+      </a>
+      <a class="tab-item">
+        <i class="icon ion-star"></i>
+        Favorites
+      </a>
+      <a class="tab-item">
+        <i class="icon ion-gear-a"></i>
+        Settings
+      </a>
+    </div>   
+</ion-modal-view>
+
+
+    

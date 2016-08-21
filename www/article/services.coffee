@@ -1,4 +1,21 @@
 module.exports=angular.module 'article.services',[]
+.factory 'addDecimal',()->
+    storage = window.localStorage 
+    execute = (data)->
+        data.forEach (el,index,arr)->
+            decimal=(Date.parse(new Date()) - Date.parse(new Date(el.date_and_time*1000)))/(el.remind_time*1000-el.date_and_time*1000)              
+            style = 'button-stable' 
+            if decimal >= 1
+                style = 'button-positive' 
+            if decimal >= 2 
+                style = 'button-energized' 
+            if decimal >= 3
+                style = 'button-assertive'
+            arr[index]['buttonStyle'] = style
+            arr[index]['decimal'] = decimal
+        data
+    execute
+
 .factory 'GetArticles',(Resource)->
     (data)->
         thread = ''

@@ -34,7 +34,7 @@ module.exports = angular.module('starter.controller',[])
     $scope.show = true
     $scope.article = GlobalVar.article
     originContent = $scope.article.content
-    # 增 add
+    
     $scope.$on "$ionicView.beforeLeave", (event, data)-> #为了后退的时候能够保存
         if $scope.article.content isnt originContent
             SaveArticle($scope.article.content,$scope.article.item_id)
@@ -49,12 +49,12 @@ module.exports = angular.module('starter.controller',[])
 
     timer = require './timerParser.js'     
     $scope.dateInChinese =  timer.textToChinese($stateParams.day)#当前日期,传入当前 时间会错，有时候浏览器的时区不对，###统一传入text###
-    $scope.redirect = (article)->
+    $scope.redirectWithArticle = (article)->
         GlobalVar.article = article
         $location.path 'tab/editor'
     $scope.redirectWithHistory = (addr)-> # 为了新建编辑页的 返回功能 保存历史
         $location.path addr
-    $scope.remove = (article)->
+    $scope.remove = (article)-> # 删
         r = confirm "确定要删除"+article.content.slice(0,10)+"?"
         if r
             DeleteArticle(article.item_id)
@@ -78,11 +78,14 @@ module.exports = angular.module('starter.controller',[])
         $location.path addr
     $scope.redirectWithHistory = (addr)-> # 为了新建编辑页的 返回功能 保存历史
         $location.path addr
-    
+    $scope.redirectWithArticle = (article)->
+        GlobalVar.article = article
+        $location.path 'tab/editor'
+
     #article
     weekStart = timer.getCertainWeekStartDate(now) #获取这周起始日期 
     GetArticles(week:weekStart).then (res)->
-        $scope.articles=res.data
+        $scope.articles=res.data.reverse()
         console.log 'index get_item成功'
     ,(res)->
         console.log 'index get_item失败'

@@ -41,6 +41,14 @@ module.exports = angular.module('app.router',[])
               'common': 
                   templateUrl: 'article/common.html'
                   controller: 'commonCtrl'
+      # .state 'tab.threadtabs.editor', # 改 editor 
+      #     url: '/editor'
+      #     cache:false
+      #     views: 
+      #         'hover': 
+      #             templateUrl: 'article/editor.html'
+      #             controller: 'editorCtrl'
+
       .state 'tab.setting', 
           url: '/setting'
           views: 

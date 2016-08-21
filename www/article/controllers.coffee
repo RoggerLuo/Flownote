@@ -1,15 +1,44 @@
 module.exports = angular.module('article.controller',[])
 
-
-.controller 'planCtrl',($scope,GetArticles,GlobalVar)-> 
+.controller 'planCtrl',($scope,GetArticles,GlobalVar,$ionicLoading)-> 
     $scope.$on '$ionicView.enter', (e)->
+        $ionicLoading.show template: 'Loading...'
         GetArticles(GlobalVar.thread_id,1).then (res)->
             $scope.articles=res.data
+            $ionicLoading.hide()
 
-.controller 'hoverCtrl',($scope,GetArticles,GlobalVar)-> 
+.controller 'hoverCtrl',($scope,GetArticles,GlobalVar,addDecimal,$location,$ionicModal,$ionicLoading)-> 
     $scope.$on '$ionicView.enter', (e)->
+        $ionicLoading.show template: 'Loading...'
         GetArticles(GlobalVar.thread_id,2).then (res)->
-            $scope.articles=res.data
+            data = addDecimal res.data
+            data.sort (a,b)->
+                -(a["decimal"] - b["decimal"])
+            $scope.articles = data
+            $ionicLoading.hide()
+
+    # /* ionicModal */
+    $ionicModal.fromTemplateUrl 'article/editor-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }
+    .then (modal) ->
+        $scope.modal = modal
+    
+    $scope.openModal = (article) ->
+        $scope.modal.show()
+        $scope.article = article
+    $scope.closeModal = ->
+        $scope.modal.hide()
+    # Cleanup the modal when we're done with it!
+    $scope.$on '$destroy', ->
+        $scope.modal.remove()
+    # Execute action on hide modal
+    $scope.$on 'modal.hidden', ->
+        # Execute action
+    # Execute action on remove modal
+    $scope.$on 'modal.removed', ->
+        # Execute action
 
 .controller 'commonCtrl',($scope,GetArticles,GlobalVar)-> 
     $scope.$on '$ionicView.enter', (e)->
@@ -26,7 +55,19 @@ module.exports = angular.module('article.controller',[])
     (input)->
         if input < 1008122669
             input = 1451577600
-        new Date(input*1000).toLocaleDateString()
+        now = new Date(input*1000)
+        myyear = now.getFullYear()
+        mymonth = now.getMonth()+1 
+        myweekday = now.getDate() 
+        hour = now.getHours() 
+        min = now.getMinutes() 
+        if hour < 10
+            hour = "0" + hour
+        
+        if min < 10
+            min = "0" + min 
+        
+        myyear + "年" + mymonth + "月" + myweekday + '日 ' + hour + ':' + min
 
 
 .filter 'switchReminder', ->
@@ -86,7 +127,7 @@ module.exports = angular.module('article.controller',[])
             if hours>=6
                 if hours>=8
                     if hours>=11
-                        if hours>=14 #//大于等于才行
+                        if hours>=14 ##大于等于才行
                             if hours>=18
                                 if hours>=23
                                     phase= '深夜'
@@ -111,7 +152,7 @@ module.exports = angular.module('article.controller',[])
         else
             phase= '凌晨1点前后'
         
-        # // return days+'的'+phase
+        # # return days+'的'+phase
         output=days
         output
     

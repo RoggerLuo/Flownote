@@ -6,11 +6,8 @@ module.exports = angular.module('thread.controller',[])
     ThreadsHandler (data)->
         $scope.bricks=data
 
-.controller 'test',-> true
-
 .controller 'settingCtrl', ($scope)->
     true
-
 
 .controller 'threadEditor', ($scope,ThreadsHandler,$ionicModal,CreateThread,ModifyThread,ThreadDelete)->
     # data
@@ -29,8 +26,6 @@ module.exports = angular.module('thread.controller',[])
     ###########
     ## Modal ##
     ###########
-
-
     # Modal data and logic
     $scope.originalData = {}
     $scope.editData =
