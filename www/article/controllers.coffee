@@ -1,38 +1,69 @@
 module.exports = angular.module('article.controller',[])
-.controller 'planCtrl',($scope,GetArticles,GlobalVar,$ionicLoading,EditorModal)->
+.controller 'planCtrl',($scope,GetArticles,GlobalVar,$ionicLoading,EditorModal,EditorThreadModal)->
+    $scope.title = GlobalVar.thread.thread_text
+    $scope.category = $scope.title
     $scope.$on '$ionicView.enter', (e)->
         $ionicLoading.show template: 'Loading...'
-        GetArticles({thread:GlobalVar.thread_id,type:1}).then (res)->
+        GetArticles({thread:GlobalVar.thread.thread_id,type:1}).then (res)->
             $scope.articles=res.data
-            $ionicLoading.hide()    
-    EditorModal $scope #用modal，封装了公共函数
+            GlobalVar.thread.type1=$scope.articles.length
+            $ionicLoading.hide()
 
-.controller 'commonCtrl',($scope,GetArticles,GlobalVar,$ionicLoading,EditorModal)->    
+    EditorModal $scope #用modal，封装了公共函数
+    EditorThreadModal $scope
+
+.controller 'commonCtrl',($scope,GetArticles,GlobalVar,$ionicLoading,EditorModal,EditorThreadModal)->    
+    $scope.title = GlobalVar.thread.thread_text
+    $scope.category = $scope.title
     $scope.$on '$ionicView.enter', (e)->
         $ionicLoading.show template: 'Loading...'
-        GetArticles({thread:GlobalVar.thread_id,type:0}).then (res)->
+        GetArticles({thread:GlobalVar.thread.thread_id,type:0}).then (res)->
             $scope.articles=res.data
+            GlobalVar.thread.type0=$scope.articles.length
             $ionicLoading.hide()
     EditorModal $scope
+    EditorThreadModal $scope
 
-.controller 'hoverCtrl',($scope,GetArticles,GlobalVar,addDecimal,$location,$ionicLoading,EditorModal)->
+.controller 'hoverCtrl',($scope,GetArticles,GlobalVar,addDecimal,$location,$ionicLoading,EditorModal,EditorThreadModal)->
+    $scope.title=GlobalVar.thread.thread_text
+    $scope.category = $scope.title
+    
     $scope.$on '$ionicView.enter', (e)->
         $ionicLoading.show template: 'Loading...'
-        GetArticles({thread:GlobalVar.thread_id,type:2}).then (res)->
+        GetArticles({thread:GlobalVar.thread.thread_id,type:2}).then (res)->
             data = addDecimal res.data
             data.sort (a,b)->
                 -(a["decimal"] - b["decimal"])
             $scope.articles = data
+            GlobalVar.thread.type2=$scope.articles.length
             $ionicLoading.hide()
     EditorModal $scope
+    EditorThreadModal $scope
 
-
+.filter 'typeDescrip',->
+    (input)->
+        if !input?
+            return "__"
+        if input < 10
+            input = "0" + input
+            return input
+        if input >= 10
+            return input
 .filter 'TimestampToHour', ->
     (input)->
         if input < 1008122669
             input = 1451577600
         now = new Date(input*1000)
-        now.getHours() + ':' + now.getMinutes() 
+        hour = now.getHours()
+        min = now.getMinutes() 
+
+        if hour < 10
+            hour = "0" + hour
+        
+        if min < 10
+            min = "0" + min 
+
+        hour + ':' + min
 .filter 'interpretTimestamp', ->
     (input)->
         if input < 1008122669

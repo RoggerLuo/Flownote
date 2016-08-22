@@ -1,0 +1,25 @@
+<ion-modal-view>    
+    <ion-header-bar class="bar bar-header bar-positive">
+        <button ng-click="closeThreadModal()" class="button light icon-left ion-ios-arrow-back button-clear">取消</button>
+        <h1 class="title">Select Thread</h1>
+        <button class="button button-clear button-primary" >notAllocate</button>
+    </ion-header-bar>
+
+    <ion-content class="padding">
+        <a
+            ng-repeat="brick in bricks"  
+            ng-click="setRelation(brick)"
+            class="button {{brick.color}}"
+            ng-class="{'button-outline':!brick.stuff}" 
+            style="line-height:1.75;margin:3px 3px;" 
+            >
+            {{brick.thread_text}}
+            <br>
+            20 14 3
+        </a>
+    </ion-content>
+
+</ion-modal-view>
+
+
+    

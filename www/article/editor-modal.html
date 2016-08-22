@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-header-bar class="bar bar-header bar-stable">
         <button ng-click="closeModal()" href="#/tab/articles" class="button light icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;完成</button>
-        <h1 class="title">article variable</h1>
+        <h1 class="title">{{category}}</h1>
         <button class="button button-clear button-primary" >notAllocate</button>
     </ion-header-bar>
   
@@ -41,17 +41,17 @@
     </div>   
 
     <div class="tabs tabs-icon-left">
-      <a class="tab-item">
+      <a class="tab-item" ng-click="openThreadModal()">
         <i class="icon ion-home"></i>
-        Home
+        {{category||'Category'}}
       </a>
       <a class="tab-item">
         <i class="icon ion-star"></i>
-        Favorites
+        Type
       </a>
       <a class="tab-item">
         <i class="icon ion-gear-a"></i>
-        Settings
+        Hover
       </a>
     </div>   
 </ion-modal-view>

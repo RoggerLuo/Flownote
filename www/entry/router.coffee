@@ -92,6 +92,14 @@ module.exports = angular.module('app.router',[])
                   templateUrl: 'starter/article-list.html'
                   controller: 'articleListByDay'
 
+      .state 'tab.dataarticlelist', 
+          url: '/dataarticlelist/:type' 
+          cache:false
+          views: 
+              'setting': 
+                  templateUrl: 'setting/data-article-list.html'
+                  controller: 'dataArticleList'
+
       .state 'tab.editor', # 改 editor 
           url: '/editor'
           cache:false

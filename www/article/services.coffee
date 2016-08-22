@@ -1,5 +1,33 @@
 module.exports=angular.module 'article.services',[]
+.factory 'EditorThreadModal',($ionicModal,ThreadsHandler,SetRelation)->
+    #还没修改完
+    execute = ($scope)->
+        $ionicModal.fromTemplateUrl 'article/editor-threadmodal.html', 
+            scope: $scope,
+            animation: 'slide-in-up'
+        .then (modal)->
+            $scope.threadmodal = modal
+        $scope.openThreadModal = ->
+            $scope.threadmodal.show()
+            ThreadsHandler (data)->
+                $scope.bricks=data
+        $scope.closeThreadModal = ->
+            $scope.threadmodal.hide()
+        # Cleanup the modal when we're done with it!
+        $scope.$on '$destroy', ->
+            $scope.threadmodal.remove()
+        # Execute action on hide modal
+        $scope.$on 'modal.hidden', ->
+            # Execute action
+        # Execute action on remove modal
+        $scope.$on 'modal.removed', ->
+            # Execute action
+        $scope.setRelation = (thread)->
+            SetRelation $scope.article.item_id,thread.thread_id
+            $scope.category = thread.thread_text
+            $scope.threadmodal.hide()
 
+    execute
 .factory 'EditorModal',($ionicModal,RemoveFunc,SaveArticle,DeleteArticle)->
     execute = ($scope)->
         # /* ionicModal */
@@ -42,8 +70,25 @@ module.exports=angular.module 'article.services',[]
         $scope.stopPro = ($event)->
             cordova.plugins.Keyboard.close()
 
+.factory 'DecimalFilter',->
+    execute = (data)->
+        data.forEach (el,index,arr)->
+            decimal=(Date.parse(new Date()) - Date.parse(new Date(el.date_and_time*1000)))/(el.remind_time*1000-el.date_and_time*1000)              
+            style = 'button-stable' 
+            if decimal >= 1
+                style = 'button-positive' 
+            if decimal >= 2 
+                style = 'button-energized' 
+            if decimal >= 3
+                style = 'button-assertive'
+            arr[index]['buttonStyle'] = style
+            arr[index]['decimal'] = decimal
+            if decimal < 1
+                arr.splice index, 1
+        data
+    execute
+
 .factory 'addDecimal',->
-    storage = window.localStorage 
     execute = (data)->
         data.forEach (el,index,arr)->
             decimal=(Date.parse(new Date()) - Date.parse(new Date(el.date_and_time*1000)))/(el.remind_time*1000-el.date_and_time*1000)              
