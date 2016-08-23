@@ -27,33 +27,30 @@
     <div>
         <div 
             ng-show="show"
+            keyboard-attach ng-click="openThreadModal()" 
+            class="keyboard-attach"
+            style="
+                position:fixed;left:0px;bottom:0px;
+                height:40px;width:40px;line-height: 40px;
+                text-align: center;
+            "
+        >
+            <i class="icon ion-grid"></i>
+        </div>
+        <div 
+            ng-show="show"
             keyboard-attach ng-click="stopPro($event)" 
             class="keyboard-attach"
             style="
                 position:fixed;right:0px;bottom:0px;
                 height:30px;width:30px;line-height: 30px;
-                z-index: 99999;
                 text-align: center;
             "
         >
             <i class="icon ion-checkmark"></i>
         </div>
     </div>   
-
-    <div class="tabs tabs-icon-left">
-      <a class="tab-item" ng-click="openThreadModal()">
-        <i class="icon ion-home"></i>
-        {{category||'Category'}}
-      </a>
-      <a class="tab-item">
-        <i class="icon ion-star"></i>
-        Type
-      </a>
-      <a class="tab-item">
-        <i class="icon ion-gear-a"></i>
-        Hover
-      </a>
-    </div>   
+    <editor-footer></editor-footer>
 </ion-modal-view>
 
 

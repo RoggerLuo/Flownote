@@ -1,0 +1,17 @@
+<div class="tabs tabs-icon-left">
+  <a class="tab-item" ng-click="openThreadModal()" ng-class="{'active':category!='Category'}">
+    <i class="icon ion-grid"></i>
+    {{category||'Category'}}
+  </a>
+  <a class="tab-item" ng-click="setPlan()" ng-class="{'active':article.type==1}">
+    <i class="icon ion-star"></i>
+    Plan
+  </a>
+  <a class="tab-item" ng-click="showPopup()" ng-class="{'active':article.type==2}">
+    <i class="icon ion-ios-clock"></i>
+    Hover
+  </a>
+</div>   
+
+
+    

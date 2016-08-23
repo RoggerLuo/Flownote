@@ -8,8 +8,7 @@ module.exports = angular.module('starter.controller',[])
 # 这里需要分开
 # 新建的 专门封装一个函数
 # 删除 、 编辑的专门封装一个函数
-
-.controller 'dataArticleList', ($scope,$stateParams,GetArticles,$ionicHistory,GlobalVar,$location,DeleteArticle,RemoveFunc,$ionicLoading,DecimalFilter)-> # 增 
+.controller 'dataArticleList', ($scope,$stateParams,GetArticles,$ionicHistory,GlobalVar,$location,DeleteArticle,RemoveFunc,$ionicLoading,DecimalFilter,EditorModal,EditorThreadModal)-> # 增 
     if $stateParams.type is '0'
         $scope.title = 'Raw'
     if $stateParams.type is '1'
@@ -60,7 +59,9 @@ module.exports = angular.module('starter.controller',[])
         if r
             DeleteArticle(article.item_id)
             RemoveFunc.call $scope.articles,article    
-
+    
+    EditorModal $scope
+    EditorThreadModal $scope
   
 .controller 'newCtrl', ($scope,CreateArticle,EditorThreadModal)-> # 增 
     element=document.querySelector('.keyboard-attach')

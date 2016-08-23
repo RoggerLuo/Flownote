@@ -1,5 +1,5 @@
 module.exports=angular.module 'start.services',[]
-.factory 'GlobalVar', ->{thread_id:0,number:{}}
+.factory 'GlobalVar', ->{thread:{},number:{}}
 .factory 'Resource',($resource)->
     $resource 'http://alice0115.applinzi.com/index.php/ngflow/:method',
         method:'@method',

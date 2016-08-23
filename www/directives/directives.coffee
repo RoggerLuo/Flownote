@@ -8,5 +8,12 @@ module.exports = angular.module('app.directives',[])
                     $rootScope.hideTabs = value
             scope.$on '$ionicView.beforeLeave', ->
                 $rootScope.hideTabs = false
+    }
 
+.directive 'editorFooter', ->
+    {
+        restrict: 'EA'
+        templateUrl:'directives/editor-footer.html'
+        controller: ($scope, $element,EditorFunction)->
+            EditorFunction $scope
     }

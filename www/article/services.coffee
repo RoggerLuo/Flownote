@@ -1,80 +1,16 @@
 module.exports=angular.module 'article.services',[]
-.factory 'EditorThreadModal',($ionicModal,ThreadsHandler,SetRelation)->
-    #还没修改完
-    execute = ($scope)->
-        $ionicModal.fromTemplateUrl 'article/editor-threadmodal.html', 
-            scope: $scope,
-            animation: 'slide-in-up'
-        .then (modal)->
-            $scope.threadmodal = modal
-        $scope.openThreadModal = ->
-            $scope.threadmodal.show()
-            ThreadsHandler (data)->
-                $scope.bricks=data
-        $scope.closeThreadModal = ->
-            $scope.threadmodal.hide()
-        # Cleanup the modal when we're done with it!
-        $scope.$on '$destroy', ->
-            $scope.threadmodal.remove()
-        # Execute action on hide modal
-        $scope.$on 'modal.hidden', ->
-            # Execute action
-        # Execute action on remove modal
-        $scope.$on 'modal.removed', ->
-            # Execute action
-        $scope.setRelation = (thread)->
-            SetRelation $scope.article.item_id,thread.thread_id
-            $scope.category = thread.thread_text
-            $scope.threadmodal.hide()
-
-    execute
-.factory 'EditorModal',($ionicModal,RemoveFunc,SaveArticle,DeleteArticle)->
-    execute = ($scope)->
-        # /* ionicModal */
-        originContent = ''
-        $ionicModal.fromTemplateUrl 'article/editor-modal.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }
-        .then (modal) ->
-            $scope.modal = modal
-        
-        $scope.openModal = (article) ->
-            $scope.modal.show()
-            $scope.article = article
-            $scope.show = true
-            originContent = $scope.article.content        
-            
-            element=document.querySelector('.keyboard-attach')
-            element.addEventListener "touchstart", (e)->
-                e.preventDefault()
-
-        $scope.closeModal = ->
-            if $scope.article.content isnt originContent
-                SaveArticle($scope.article.content,$scope.article.item_id)
-            $scope.modal.hide()
-        # Cleanup the modal when we're done with it!
-        $scope.$on '$destroy', ->
-            $scope.modal.remove()
-        # Execute action on hide modal
-        $scope.$on 'modal.hidden', ->
-            # Execute action
-        # Execute action on remove modal
-        $scope.$on 'modal.removed', ->
-            # Execute action
-        $scope.remove = (article)-> # 删
-            r = confirm "确定要删除"+article.content.slice(0,10)+"?"
-            if r
-                DeleteArticle(article.item_id)
-                RemoveFunc.call $scope.articles,article        
-        $scope.stopPro = ($event)->
-            cordova.plugins.Keyboard.close()
-
 .factory 'DecimalFilter',->
     execute = (data)->
         data.forEach (el,index,arr)->
-            decimal=(Date.parse(new Date()) - Date.parse(new Date(el.date_and_time*1000)))/(el.remind_time*1000-el.date_and_time*1000)              
             style = 'button-stable' 
+            decimal = 0
+            distance = Date.parse(new Date()) - el.remind_time*1000
+            if distance > 0 
+                decimal = 1
+            if distance > 24*60*60*3 
+                decimal = 2
+            if distance > 24*60*60*7
+                decimal = 3
             if decimal >= 1
                 style = 'button-positive' 
             if decimal >= 2 
@@ -83,16 +19,24 @@ module.exports=angular.module 'article.services',[]
                 style = 'button-assertive'
             arr[index]['buttonStyle'] = style
             arr[index]['decimal'] = decimal
-            if decimal < 1
-                arr.splice index, 1
+            # if decimal < 1
+                # arr.splice index, 1
         data
     execute
 
 .factory 'addDecimal',->
     execute = (data)->
         data.forEach (el,index,arr)->
-            decimal=(Date.parse(new Date()) - Date.parse(new Date(el.date_and_time*1000)))/(el.remind_time*1000-el.date_and_time*1000)              
             style = 'button-stable' 
+            decimal = 0
+            distance = Date.parse(new Date()) - el.remind_time*1000
+            if distance > 0 
+                decimal = 1
+            if distance > 24*60*60*3 
+                decimal = 2
+            if distance > 24*60*60*7
+                decimal = 3
+        
             if decimal >= 1
                 style = 'button-positive' 
             if decimal >= 2 
@@ -145,7 +89,6 @@ module.exports=angular.module 'article.services',[]
             console.log 'CreateArticle成功'
         ,(res)->
             console.log 'CreateArticle失败'
-
     execute
 
 .factory 'DeleteArticle',(Resource)->
@@ -182,13 +125,13 @@ module.exports=angular.module 'article.services',[]
 
 
 .factory 'SetType',(Resource)->
-    execute = (item_id,type)->
-        item_id=item_id.toString()#转换成字符串
+    execute = (item_obj,type)->
+        item_id=item_obj.item_id.toString()#转换成字符串
         promise = Resource.query({method:'change_type',item_id:item_id,type:type}).$promise
         promise.then (res)->
-            console.log 'SetRelation成功'
+            console.log 'SetType成功'
         ,(res)->
-            console.log 'SetRelation失败'
+            console.log 'SetType失败'
     execute
 
 .factory 'Reclock',(Resource)->
@@ -210,7 +153,7 @@ module.exports=angular.module 'article.services',[]
 .factory 'SetClock',(Resource)->
     execute = (item_obj,seconds)->
         item_id=item_obj.item_id
-        item_obj.remind_time=(item_obj.date_and_time-0)+(seconds-0)
+        item_obj.remind_time=Date.parse(new Date())/1000 + (seconds-0)
         words=item_obj.remind_text
         promise = Resource.query({method:'set_timer',item_id:item_id,seconds:seconds,words:words}).$promise
         promise.then (res)->

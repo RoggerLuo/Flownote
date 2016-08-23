@@ -7,13 +7,13 @@ module.exports = angular.module 'app', [
     'ionic', 
     require('./router.coffee').name, #名字当作依赖，顺便加载
     require('./platform.coffee').name,
-    require('./directives.coffee').name,
+    require('./filter.coffee').name,
+    require('../directives/directives.coffee').name,
     require('../article/article.coffee').name,
     require('../thread/thread.coffee').name,
-    require('../starter/starter.coffee').name
+    require('../starter/starter.coffee').name,
+    require('../editor/editor.coffee').name
     ]
-
-
 
 #entry
 #require './router.coffee'
