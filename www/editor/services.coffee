@@ -2,18 +2,18 @@ module.exports=angular.module 'editor.services',[]
 
 .factory 'EditorModal',($ionicModal,EditorFunction,CreateArticle,SaveArticle)->
     whenOpenModal = ($scope,article)->
-        element=document.querySelector('.keyboard-attach')
-        element.addEventListener "touchstart", (e)->
-            e.preventDefault()
-        window.addEventListener('native.keyboardshow', keyboardShowHandler)
-        window.addEventListener('native.keyboardhide', keyboardHideHandler)
-        keyboardHideHandler = (e)->
-            $scope.show = false
-        keyboardShowHandler = (e)->
-            $scope.show = true
-        $scope.stopPro = ($event)->
-            cordova.plugins.Keyboard.close()
-        $scope.show = true
+        # element=document.querySelector('.keyboard-attach')
+        # element.addEventListener "touchstart", (e)->
+        #     e.preventDefault()
+        # window.addEventListener('native.keyboardshow', keyboardShowHandler)
+        # window.addEventListener('native.keyboardhide', keyboardHideHandler)
+        # keyboardHideHandler = (e)->
+        #     $scope.show = false
+        # keyboardShowHandler = (e)->
+        #     $scope.show = true
+        # $scope.stopPro = ($event)->
+        #     cordova.plugins.Keyboard.close()
+        # $scope.show = true
         if article is 'new'
             $scope.article = {
                 content:''
@@ -26,12 +26,30 @@ module.exports=angular.module 'editor.services',[]
         else 
             $scope.article = article
         $scope.originContent = $scope.article.content
-        $scope.$on "$ionicView.beforeLeave", (event, data)-> #为了后退的时候能够保存
+        # $scope.$on "$ionicView.beforeLeave", (event, data)-> #为了后退的时候能够保存
+
+        element = document.querySelector('.keyboard-attach')
+        element.addEventListener "touchstart", (e)->
+            e.preventDefault()
+        element2 = document.querySelector('.keyboard-attach2')
+        element2.addEventListener "touchstart", (e)->
+            e.preventDefault()
+
+        # window.addEventListener('native.keyboardshow', keyboardShowHandler)
+        # window.addEventListener('native.keyboardhide', keyboardHideHandler)
+        # keyboardHideHandler = (e)->
+        #     $scope.show = false
+        # keyboardShowHandler = (e)->
+        #     $scope.show = true
+        # $scope.show = true
+        $scope.showSE = false
+
 
     whenCloseModal = ($scope)->
+        $scope.showSE = true
         if $scope.article.item_id is "new"
             if $scope.article.content isnt ""
-                CreateArticle($scope.article.content)
+                CreateArticle($scope.article)
         else
             if $scope.article.content isnt $scope.originContent
                 SaveArticle($scope.article.content,$scope.article.item_id)
@@ -59,16 +77,17 @@ module.exports=angular.module 'editor.services',[]
         # Execute action on remove modal
         $scope.$on 'modal.removed', ->
             # Execute action
+        
+
     execute
 
 .factory 'EditorFunction',(EditorThreadModal,SetRelation,SetClock,SetType,$ionicPopup,$timeout,SaveArticle,CreateArticle)->
     execute = ($scope)->
         EditorThreadModal $scope
-
-        $scope.preSave = ->
+        $scope.preSave =->
             if $scope.article.item_id is "new"
-                if article.content isnt ""
-                    CreateArticle(article.content)
+                if $scope.article.content isnt ""
+                    CreateArticle($scope.article.content)
                     return 'ready'
             else 
                 if $scope.article.content isnt $scope.originContent
@@ -145,7 +164,7 @@ module.exports=angular.module 'editor.services',[]
 .factory 'CreateArticle',(Resource)->
     execute = (article)->
         article.date_and_time=Date.parse(new Date())/1000
-        article.item_id = date_and_time.toString()        
+        article.item_id = article.date_and_time.toString()        
         promise = Resource.query({method:'item_create',content:article.content,item_id:article.item_id,date_and_time:article.date_and_time}).$promise
         promise.then (res)->
             console.log 'CreateArticle成功'

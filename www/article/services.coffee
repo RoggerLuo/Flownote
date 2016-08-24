@@ -1,11 +1,10 @@
 module.exports=angular.module 'article.services',[]
-.factory 'TimeKit',->
-    require '../starter/timerParser.js'
+
 .factory 'FillScopeArticles',($ionicLoading,GetArticles,ArticleListMethod)->
     execute = ($scope,params,callback='default')->
         ArticleListMethod $scope
         $scope.$on '$ionicView.enter', (e)-> #为了从编辑器后退的时候能够马上捕捉到刚才更新的或者增加的文章
-            $ionicLoading.show template: 'Loading...'
+            # $ionicLoading.show template: 'Loading...'
             GetArticles(params).then (res)->
                 
                 if callback isnt 'default'
@@ -33,7 +32,7 @@ module.exports=angular.module 'article.services',[]
                 #lazyload end
 
 
-                $ionicLoading.hide()
+                # $ionicLoading.hide()
                 console.log 'index get_item成功'
             ,(res)->
                 console.log 'index get_item失败'

@@ -50,7 +50,7 @@
 
 	__webpack_require__(12);
 
-	module.exports = angular.module('app', ['ionic', __webpack_require__(13).name, __webpack_require__(14).name, __webpack_require__(15).name, __webpack_require__(16).name, __webpack_require__(17).name, __webpack_require__(18).name, __webpack_require__(23).name, __webpack_require__(26).name, __webpack_require__(29).name, __webpack_require__(32).name]);
+	module.exports = angular.module('app', ['ionic', __webpack_require__(13).name, __webpack_require__(14).name, __webpack_require__(15).name, __webpack_require__(16).name, __webpack_require__(17).name, __webpack_require__(18).name, __webpack_require__(23).name, __webpack_require__(26).name, __webpack_require__(30).name, __webpack_require__(33).name]);
 
 
 /***/ },
@@ -68191,6 +68191,7 @@
 	    number: {},
 	    calendar: {
 	      weekArr: {},
+	      weekly: {},
 	      config: {}
 	    }
 	  };
@@ -68401,6 +68402,33 @@
 	    templateUrl: 'directives/editor-footer.html',
 	    controller: function($scope, $element, EditorFunction) {
 	      return EditorFunction($scope);
+	    }
+	  };
+	}).directive('keyboardAttachment', function() {
+	  return {
+	    restrict: 'EA',
+	    templateUrl: 'directives/keyboard-attachment.html',
+	    controller: function($scope, $element) {
+	      $scope.stopPro = function($event) {
+	        return cordova.plugins.Keyboard.close();
+	      };
+	      return $scope.show = true;
+	    }
+	  };
+	}).directive('keyboardAttachmentse', function() {
+	  return {
+	    restrict: 'EA',
+	    templateUrl: 'directives/keyboard-attachment-se.html',
+	    controller: function($scope, $element) {
+	      var element;
+	      element = document.querySelector('.keyboard-attachse');
+	      element.addEventListener("touchstart", function(e) {
+	        return e.preventDefault();
+	      });
+	      $scope.stopKP = function($event) {
+	        return cordova.plugins.Keyboard.close();
+	      };
+	      return $scope.showSE = true;
 	    }
 	  };
 	});
@@ -69341,11 +69369,9 @@
 
 /***/ },
 /* 22 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	module.exports = angular.module('article.services', []).factory('TimeKit', function() {
-	  return __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../starter/timerParser.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	}).factory('FillScopeArticles', function($ionicLoading, GetArticles, ArticleListMethod) {
+	module.exports = angular.module('article.services', []).factory('FillScopeArticles', function($ionicLoading, GetArticles, ArticleListMethod) {
 	  var execute;
 	  execute = function($scope, params, callback) {
 	    if (callback == null) {
@@ -69353,9 +69379,6 @@
 	    }
 	    ArticleListMethod($scope);
 	    return $scope.$on('$ionicView.enter', function(e) {
-	      $ionicLoading.show({
-	        template: 'Loading...'
-	      });
 	      return GetArticles(params).then(function(res) {
 	        var end, start;
 	        if (callback !== 'default') {
@@ -69379,7 +69402,6 @@
 	        $scope.doRefresh = function() {
 	          return $scope.$broadcast('scroll.refreshComplete');
 	        };
-	        $ionicLoading.hide();
 	        return console.log('index get_item成功');
 	      }, function(res) {
 	        return console.log('index get_item失败');
@@ -69867,12 +69889,14 @@
 	      });
 	    }
 	  });
-	}).controller('calendarDay', function($scope, $stateParams, FillScopeArticles, EditorModal, TimeKit, GetDailySummary, GlobalVar) {
-	  var now, weekArr, weekStart, weekstart;
+	}).controller('calendarDay', function($scope, $stateParams, FillScopeArticles, EditorModal, TimeKit, GetDailySummary, GlobalVar, GetWeeklySummary, UpdateWeeklySummary) {
+	  var currentWeek, now, weekArr, weekStart, weekstart;
 	  now = TimeKit.getNowDate();
 	  if ($stateParams.week === '') {
+	    currentWeek = TimeKit.getYearWeek(now);
 	    weekstart = TimeKit.getCertainWeekStartDate(now);
 	  } else {
+	    currentWeek = TimeKit.getYearWeek($stateParams.week);
 	    weekstart = $stateParams.week;
 	  }
 	  if (GlobalVar.calendar.weekstart !== weekstart) {
@@ -69898,6 +69922,22 @@
 	  } else {
 	    $scope.days = GlobalVar.calendar.weekArr;
 	  }
+	  $scope.weeksummaryObj = {};
+	  GetWeeklySummary(currentWeek, currentWeek).then(function(res) {
+	    if (res.data[0] != null) {
+	      $scope.weeksummaryObj.summary = res.data[0].summary;
+	      return $scope.weekorigin = res.data[0].summary;
+	    }
+	  });
+	  $scope.$on("$ionicView.beforeLeave", function(event, data) {
+	    if ($scope.weeksummaryObj.summary !== $scope.weekorigin) {
+	      return UpdateWeeklySummary(currentWeek, $scope.weeksummaryObj.summary).then(function(res) {
+	        return console.log("updateWeelySummary成功");
+	      }, function(res) {
+	        return console.log("updateWeelySummary失败");
+	      });
+	    }
+	  });
 	  weekStart = TimeKit.getCertainWeekStartDate(now);
 	  FillScopeArticles($scope, {
 	    week: weekStart
@@ -69923,9 +69963,10 @@
 	  return $scope.redirect = function(addr) {
 	    return $location.path(addr);
 	  };
-	}).controller('calendarWeek', function($scope, $stateParams, EditorModal, TimeKit, $location) {
-	  var data, firstWeek, firstWeekNum, i, lastWeekNum, monthEndDate, monthStartDate, now, nowMonth, nowMonthRealWorld, thistime, weekArr;
+	}).controller('calendarWeek', function($scope, $stateParams, EditorModal, TimeKit, ArticleListMethod, GetWeeklySummary) {
+	  var firstWeek, firstWeekNum, i, lastWeekNum, monthEndDate, monthStartDate, now, nowMonth, nowMonthRealWorld, thistime, weekArr, weekRawArr;
 	  EditorModal($scope);
+	  ArticleListMethod($scope);
 	  if ($stateParams.month === '') {
 	    thistime = new Date();
 	    nowMonthRealWorld = thistime.getMonth() + 1;
@@ -69939,12 +69980,12 @@
 	  firstWeekNum = TimeKit.getYearWeek(monthStartDate[0]);
 	  lastWeekNum = TimeKit.getYearWeek(monthEndDate[0]);
 	  i = firstWeekNum;
-	  weekArr = (function() {
+	  weekRawArr = (function() {
 	    var results;
 	    results = [];
 	    while (i <= lastWeekNum) {
 	      results.push({
-	        weekNum: i++,
+	        weekNum: 1 + i++,
 	        startDate: TimeKit.dateAdd(firstWeek, (i - firstWeekNum) * 7),
 	        endDate: TimeKit.dateAdd(firstWeek, 6 + (i - firstWeekNum) * 7)
 	      });
@@ -69952,21 +69993,30 @@
 	    return results;
 	  })();
 	  now = TimeKit.getNowDate();
-	  data = weekArr.filter(function(el) {
+	  weekArr = weekRawArr.filter(function(el, index, arr) {
 	    return Date.parse(new Date(now)) >= Date.parse(new Date(el.startDate));
 	  }).reverse();
-	  $scope.weeks = data;
-	  return $scope.redirect = function(addr) {
-	    return $location.path(addr);
-	  };
+	  $scope.weeks = weekArr;
+	  return GetWeeklySummary(firstWeekNum, lastWeekNum).then(function(res) {
+	    var tempData;
+	    tempData = {};
+	    res.data.forEach(function(el, index, arr) {
+	      return tempData[el.weeknumber] = el.summary;
+	    });
+	    return weekArr.forEach(function(el, index, arr) {
+	      return arr[index].summary = tempData[el.weekNum];
+	    });
+	  });
 	});
 
 
 /***/ },
 /* 28 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = angular.module('calendar.services', []).factory('GetDailySummary', function(Resource) {
+	module.exports = angular.module('calendar.services', []).factory('TimeKit', function() {
+	  return __webpack_require__(29);
+	}).factory('GetDailySummary', function(Resource) {
 	  var execute;
 	  execute = function(startweek) {
 	    return Resource.query({
@@ -69985,20 +70035,289 @@
 	    }).$promise;
 	  };
 	  return execute;
+	}).factory('GetWeeklySummary', function(Resource) {
+	  var execute;
+	  execute = function(weeknumber, end_weeknumber) {
+	    return Resource.query({
+	      method: 'get_week_summary',
+	      weeknumber: weeknumber,
+	      end_weeknumber: end_weeknumber
+	    }).$promise;
+	  };
+	  return execute;
+	}).factory('UpdateWeeklySummary', function(Resource) {
+	  var execute;
+	  execute = function(weeknumber, content) {
+	    return Resource.query({
+	      method: 'update_week_summary',
+	      weeknumber: weeknumber,
+	      content: content
+	    }).$promise;
+	  };
+	  return execute;
 	});
 
 
 /***/ },
 /* 29 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	__webpack_require__(19);
+	/** 
+	* 获取本周、本季度、本月、上月的开端日期、停止日期 
+	*/ 
+	    var now = new Date(); //当前日期 
+	    var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+	    var nowDay = now.getDate(); //当前日 
+	    var nowMonth = now.getMonth(); //当前月 
+	    var nowYear = now.getYear(); //当前年 
+	    nowYear += (nowYear < 2000) ? 1900 : 0; // 
 
-	module.exports = angular.module('setting', ['ngResource', __webpack_require__(30).name, __webpack_require__(31).name]);
+	    var lastMonthDate = new Date(); //上月日期 
+	    lastMonthDate.setDate(1); 
+	    lastMonthDate.setMonth(lastMonthDate.getMonth()-1); 
+	    var lastYear = lastMonthDate.getYear(); 
+	    var lastMonth = lastMonthDate.getMonth(); 
+
+	    //格局化日期：yyyy-MM-dd 
+	    var formatDate = function (date) { 
+	        var myyear = date.getFullYear(); 
+	        var mymonth = date.getMonth()+1; 
+	        var myweekday = date.getDate(); 
+	        if(mymonth < 10){ 
+	            mymonth = "0" + mymonth; 
+	        } 
+	        if(myweekday < 10){ 
+	            myweekday = "0" + myweekday; 
+	        } 
+	        return (myyear + "-" + mymonth + "-" + myweekday); 
+	    } 
+	    var formatChinese = function (date) { //注意这里传入的不是text对象
+	        var myyear = date.getFullYear(); 
+	        var mymonth = date.getMonth()+1; 
+	        var myweekday = date.getDate(); 
+	        return (/*myyear + "年" +*/ mymonth + "月" + myweekday + '日');         
+	    } 
+	    var textToChinese = function(text){
+	        var day = new Date(text);
+	        var myday = day.getDate();
+	        var mymonth = day.getMonth() + 1;
+	        var myyear = day.getYear();
+	        myyear += (myyear < 2000) ? 1900 : 0; 
+	        return mymonth + "月" + myday + "日";
+	    }
+
+	    //获得某月的天数 
+	    var getMonthDays = function (myMonth){ 
+	        var monthStartDate = new Date(nowYear, myMonth, 1); 
+	        var monthEndDate = new Date(nowYear, myMonth + 1, 1); 
+	        var days = (monthEndDate - monthStartDate)/(1000 * 60 * 60 * 24); 
+	        return days; 
+	    } 
+
+	    //获得本季度的开端月份 
+	    var getQuarterStartMonth = function (){ 
+	        var quarterStartMonth = 0; 
+	        if(nowMonth<3){ 
+	        quarterStartMonth = 0; 
+	        } 
+	        if(2<nowMonth && nowMonth<6){ 
+	        quarterStartMonth = 3; 
+	        } 
+	        if(5<nowMonth && nowMonth<9){ 
+	        quarterStartMonth = 6; 
+	        } 
+	        if(nowMonth>8){ 
+	        quarterStartMonth = 9; 
+	        } 
+	        return quarterStartMonth; 
+	    } 
+
+	    //获得一周
+	    var wholeWeek = function (text) { 
+	        var now = new Date(text);
+	        var nowDayOfWeek = now.getDay(); //今天本周的第几天 默认周日是第一天 所以要改         
+	        // 把周日为第一天变成周一为第一天
+	        if(nowDayOfWeek ==0 || nowDayOfWeek==6){
+	            if (nowDayOfWeek == 0){nowDayOfWeek = 6} else if (nowDayOfWeek == 6){nowDayOfWeek = 0}            
+	        }else{
+	            nowDayOfWeek-=1;            
+	        }
+
+	        var nowDay = now.getDate(); //当前日 
+	        var nowMonth = now.getMonth(); //当前月 
+	        var nowYear = now.getYear(); //当前年 
+	        nowYear += (nowYear < 2000) ? 1900 : 0; // 
+	        var result = [];
+	        for(var i=0;i<7;i++){
+	            result.push({
+	                date:formatDate(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i )),
+	                dateInChinese:formatChinese(new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + i ))+' 周'+(i+1)
+	            });
+	        }
+	        return result;
+	    }
+
+	    //获得本周的开端日期 
+	    var getWeekStartDate = function () { 
+	        var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek); 
+	        return [formatDate(weekStartDate),formatChinese(weekStartDate)]; 
+	    } 
+
+	    //获得本周的停止日期 
+	    var getWeekEndDate = function () { 
+	        var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)); 
+	        return [formatDate(weekEndDate),formatChinese(weekEndDate)]; 
+	    } 
+	    //获得指定周的开端日期 
+	    var getCertainWeekStartDate = function (text) { 
+	        var now = new Date(text); //当前日期 
+	        var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+	        // 把周日为第一天变成周一为第一天
+	        if (nowDayOfWeek == 0){nowDayOfWeek = 6}else if (nowDayOfWeek == 6){nowDayOfWeek = 0}
+
+	        var nowDay = now.getDate(); //当前日 
+	        var nowMonth = now.getMonth(); //当前月 
+	        var nowYear = now.getYear(); //当前年 
+	        nowYear += (nowYear < 2000) ? 1900 : 0; // 
+	        var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + 1); 
+	        return formatDate(weekStartDate); 
+	    } 
+
+	    //获得指定周的停止日期 
+	    var getCertainWeekEndDate = function (text) { 
+	        var now = new Date(text); //当前日期 
+	        var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+	        var nowDay = now.getDate(); //当前日 
+	        var nowMonth = now.getMonth(); //当前月 
+	        var nowYear = now.getYear(); //当前年 
+	        nowYear += (nowYear < 2000) ? 1900 : 0; // 
+
+	        var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek) + 1); 
+	        return formatDate(weekEndDate); 
+	    }
+
+	    //获得本月的开端日期 
+	    var getMonthStartDate = function (){ 
+	        var monthStartDate = new Date(nowYear, nowMonth, 1); 
+	        return [formatDate(monthStartDate),formatChinese(monthStartDate)]; 
+	    } 
+
+	    //获得本月的停止日期 
+	    var getMonthEndDate = function (){ 
+	        var monthEndDate = new Date(nowYear, nowMonth, getMonthDays(nowMonth)); 
+	        return [formatDate(monthEndDate),formatChinese(monthEndDate)]; 
+	    } 
+	    
+	    
+	    //获得指定月的开端日期 
+	    var getCertainMonthStartDate = function (certainMonth){ 
+	        var monthStartDate = new Date(nowYear, certainMonth, 1); 
+	        return [formatDate(monthStartDate),formatChinese(monthStartDate)]; 
+	    } 
+	    
+	    //获得指定月的停止日期 
+	    var getCertainMonthEndDate = function (certainMonth){ 
+	        var monthEndDate = new Date(nowYear, certainMonth, getMonthDays(certainMonth)); 
+	        return [formatDate(monthEndDate),formatChinese(monthEndDate)]; 
+	    }
+
+
+	    //获得上月开端时候 
+	    var getLastMonthStartDate = function (){ 
+	        var lastMonthStartDate = new Date(nowYear, lastMonth, 1); 
+	        return [formatDate(lastMonthStartDate),formatChinese(lastMonthStartDate)]; 
+	    } 
+
+	    //获得上月停止时候 
+	    var getLastMonthEndDate = function (){ 
+	        var lastMonthEndDate = new Date(nowYear, lastMonth, getMonthDays(lastMonth)); 
+	        return [formatDate(lastMonthEndDate),formatChinese(lastMonthEndDate)]; 
+	    } 
+
+	    //获得本季度的开端日期 
+	    var getQuarterStartDate = function (){ 
+
+	        var quarterStartDate = new Date(nowYear, getQuarterStartMonth(), 1); 
+	        return [formatDate(quarterStartDate),formatChinese(quarterStartDate)]; 
+	    } 
+
+	    //或的本季度的停止日期 
+	    var getQuarterEndDate = function (){ 
+	        var quarterEndMonth = getQuarterStartMonth() + 2; 
+	        var quarterStartDate = new Date(nowYear, quarterEndMonth, getMonthDays(quarterEndMonth)); 
+	        return [formatDate(quarterStartDate),formatChinese(quarterStartDate)]; 
+	    }
+
+	    //当前的周数
+	    var getYearWeek=function (text){  
+	        var date = new Date(text);
+	        var date2=new Date(date.getFullYear(), 0, 1);  
+	        var day1=date.getDay();  
+	        if(day1==0) day1=7;  
+	        var day2=date2.getDay();  
+	        if(day2==0) day2=7;  
+	        d = Math.round((date.getTime() - date2.getTime()+(day2-day1)*(24*60*60*1000)) / 86400000);    
+	        return Math.ceil(d /7)+1;   
+	    }  
+
+	    //当月第一天所在周 startweek 和当月最后一天所在周 endweek
+	    // for(var i=startweek ; i<=endweek;i++){
+
+	    // }
+	    var dateAdd = function (dateText,addNum) { 
+	        var now = new Date(dateText); //当前日期 
+	        var nowDay = now.getDate(); //当前日 
+	        var nowMonth = now.getMonth(); //当前月 
+	        var nowYear = now.getYear(); //当前年 
+	        nowYear += (nowYear < 2000) ? 1900 : 0; // 
+	        var finalDate = new Date(nowYear, nowMonth, nowDay  + addNum); 
+	        return formatDate(finalDate); 
+	    }
+	    var getNowDate = function(){
+	        var today = new Date();
+	        var myday = today.getDate();
+	        var mymonth = today.getMonth() + 1;
+	        var myyear = today.getYear();
+	        myyear += (myyear < 2000) ? 1900 : 0; 
+
+	        if(mymonth < 10){ 
+	            mymonth = "0" + mymonth; 
+	        } 
+	        if(myday < 10){ 
+	            myday = "0" + myday; 
+	        } 
+	        return myyear + "-" + mymonth + "-" + myday ;
+	    }
+
+	    module.exports={
+	        getYearWeek:getYearWeek,
+	        wholeWeek:wholeWeek,
+	        textToChinese:textToChinese,
+	        WeekStart:getWeekStartDate,
+	        WeekEnd:getWeekEndDate,
+	        MonthStart:getMonthStartDate,
+	        MonthEnd:getMonthEndDate,
+	        getCertainMonthStartDate:getCertainMonthStartDate,
+	        getCertainMonthEndDate:getCertainMonthEndDate,
+	        getCertainWeekStartDate:getCertainWeekStartDate,
+	        getCertainWeekEndDate:getCertainWeekEndDate,
+	        dateAdd:dateAdd,
+	        getNowDate:getNowDate,
+	    };
+
 
 
 /***/ },
 /* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(19);
+
+	module.exports = angular.module('setting', ['ngResource', __webpack_require__(31).name, __webpack_require__(32).name]);
+
+
+/***/ },
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = angular.module('setting.controller', []).controller('settingCtrl', function($scope, $stateParams, GetArticles, $ionicHistory, GlobalVar, $location, DeleteArticle, RemoveFunc, $ionicLoading) {
@@ -70032,52 +70351,36 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = angular.module('setting.services', []);
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(19);
 
-	module.exports = angular.module('editor', ['ngResource', __webpack_require__(33).name, __webpack_require__(34).name]);
-
-
-/***/ },
-/* 33 */
-/***/ function(module, exports) {
-
-	module.exports = angular.module('editor.controller', []);
+	module.exports = angular.module('editor', ['ngResource', __webpack_require__(34).name, __webpack_require__(35).name]);
 
 
 /***/ },
 /* 34 */
 /***/ function(module, exports) {
 
+	module.exports = angular.module('editor.controller', []);
+
+
+/***/ },
+/* 35 */
+/***/ function(module, exports) {
+
 	module.exports = angular.module('editor.services', []).factory('EditorModal', function($ionicModal, EditorFunction, CreateArticle, SaveArticle) {
 	  var execute, whenCloseModal, whenOpenModal;
 	  whenOpenModal = function($scope, article) {
-	    var element, keyboardHideHandler, keyboardShowHandler;
-	    element = document.querySelector('.keyboard-attach');
-	    element.addEventListener("touchstart", function(e) {
-	      return e.preventDefault();
-	    });
-	    window.addEventListener('native.keyboardshow', keyboardShowHandler);
-	    window.addEventListener('native.keyboardhide', keyboardHideHandler);
-	    keyboardHideHandler = function(e) {
-	      return $scope.show = false;
-	    };
-	    keyboardShowHandler = function(e) {
-	      return $scope.show = true;
-	    };
-	    $scope.stopPro = function($event) {
-	      return cordova.plugins.Keyboard.close();
-	    };
-	    $scope.show = true;
+	    var element, element2;
 	    if (article === 'new') {
 	      $scope.article = {
 	        content: '',
@@ -70091,12 +70394,21 @@
 	      $scope.article = article;
 	    }
 	    $scope.originContent = $scope.article.content;
-	    return $scope.$on("$ionicView.beforeLeave", function(event, data) {});
+	    element = document.querySelector('.keyboard-attach');
+	    element.addEventListener("touchstart", function(e) {
+	      return e.preventDefault();
+	    });
+	    element2 = document.querySelector('.keyboard-attach2');
+	    element2.addEventListener("touchstart", function(e) {
+	      return e.preventDefault();
+	    });
+	    return $scope.showSE = false;
 	  };
 	  whenCloseModal = function($scope) {
+	    $scope.showSE = true;
 	    if ($scope.article.item_id === "new") {
 	      if ($scope.article.content !== "") {
-	        return CreateArticle($scope.article.content);
+	        return CreateArticle($scope.article);
 	      }
 	    } else {
 	      if ($scope.article.content !== $scope.originContent) {
@@ -70133,8 +70445,8 @@
 	    EditorThreadModal($scope);
 	    $scope.preSave = function() {
 	      if ($scope.article.item_id === "new") {
-	        if (article.content !== "") {
-	          CreateArticle(article.content);
+	        if ($scope.article.content !== "") {
+	          CreateArticle($scope.article.content);
 	          return 'ready';
 	        }
 	      } else {
@@ -70223,7 +70535,7 @@
 	  execute = function(article) {
 	    var promise;
 	    article.date_and_time = Date.parse(new Date()) / 1000;
-	    article.item_id = date_and_time.toString();
+	    article.item_id = article.date_and_time.toString();
 	    promise = Resource.query({
 	      method: 'item_create',
 	      content: article.content,
