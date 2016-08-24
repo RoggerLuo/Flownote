@@ -11,7 +11,7 @@
     <ion-content class="padding">
         <a 
             ng-repeat="brick in bricks"  
-            href="#/tab/threadtabs/plan"            
+            href="#/tab/threadtabs/common"            
             ng-class="{'button-outline':!brick.stuff}"  
             ng-click="assign(brick)"
             class="button  {{brick.color}}" 
@@ -20,7 +20,7 @@
             
             {{brick.thread_text}}
             <br>
-            {{brick.type1|typeDescrip}} {{brick.type2|typeDescrip}} {{brick.type0|typeDescrip}}
+            {{brick.type0|typeDescrip}} {{brick.type1|typeDescrip}} {{brick.type2|typeDescrip}} 
         </a>
     </ion-content>
 </ion-view>

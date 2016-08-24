@@ -5,9 +5,15 @@
     </ion-nav-buttons>
 
     <ion-nav-buttons side="secondary">
-        <button ng-click="redirectWithHistory('tab/new')" class="button button-icon icon ion-android-add"></button>
+        <!-- <button ng-click="refresh()" class="button button-icon icon ion-ios-loop-strong"></button> -->
+        <button ng-click="openModal('new')" class="button button-icon icon ion-android-add"></button>
     </ion-nav-buttons>
-    <ion-content > <!-- class="padding" -->
+
+    <ion-content >
+        <label class="item item-input">
+            <textarea ng-model="weeksummaryObj.summary" placeholder="Make A Summary~" rows="5" style="font-size:17px;line-height:1.25;"></textarea>
+        </label>
+
         <a 
             ng-repeat="day in days"  
             href="#/tab/articlelist/{{day.date}}"            
@@ -15,7 +21,7 @@
             style="line-height:1.75;margin:3px 3px;" 
             >
 
-            summary text
+            {{day.summary}}
             
             <br>
 
@@ -25,13 +31,20 @@
             本周笔记
         </div>
         <ion-list>
-            <ion-item ng-click="redirectWithArticle(article)" class="item-remove-animate item-avatar item-icon-right" ng-repeat="article in articles" type="item-text-wrap" >
-                <div style="display: inline-block;
-                    position: absolute;
-                    left: 0;"
+            <ion-item 
+                ng-repeat="article in articles"
+                ng-click="openModal(article)" 
+                class="item-remove-animate item-avatar item-icon-right"  
+                type="item-text-wrap" 
+                >
+                <div 
+                    style="
+                        display: inline-block;
+                        position: absolute;
+                        left: 0;"
                 >
                     <button class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:0;">
-                        {{article.date_and_time|TimestampToHour}}
+                        {{article.date_and_time|TimeToDate}}
                     </button>
                 </div>
 
@@ -43,5 +56,11 @@
                 </ion-option-button>
             </ion-item>
         </ion-list>
+        <ion-infinite-scroll
+            on-infinite="loadMore()"
+            distance="1%"
+            ng-if="moreDataCanBeLoaded()">
+        </ion-infinite-scroll>
+
     </ion-content>
 </ion-view>

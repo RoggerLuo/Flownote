@@ -28,8 +28,14 @@
                 </div>
                 <h2>{{article.content}}</h2>
                 <p>{{article.content.slice(20)||"&nbsp;"}}</p>
-                <p>{{article.content.slice(40)||"&nbsp;"}}</p>
-
+                <!-- <p>{{article.content.slice(40)||"&nbsp;"}}</p> -->
+                <p style="
+                    font-size: 13px;
+                    margin: 0 0 -6px 0;
+                    color: #AAB2B9;;
+                    ">
+                    {{article.date_and_time|interpretTimestamp}}
+                </p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
 
                 <ion-option-button class="button-assertive" ng-click="remove(article)">

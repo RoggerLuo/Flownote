@@ -4,9 +4,9 @@
         <button ng-click="redirect('tab/calendarDay/')" class="button button-icon">Today</button>
     </ion-nav-buttons>
     <ion-nav-buttons side="secondary">
-        <button ng-click="redirectWithHistory('tab/new')" class="button button-icon icon ion-android-add"></button>
+        <button ng-click="openModal('new')" class="button button-icon icon ion-android-add"></button>
     </ion-nav-buttons>
-    <ion-content class="padding" > <!-- style="text-align:center;" -->
+    <ion-content class="padding" >
         <!-- <a 
             ng-repeat="week in weeks"  
             href="#/tab/calendarDay/{{week.startDate}}"            
@@ -26,25 +26,29 @@
             ng-repeat="week in weeks"
             ng-click="redirect('tab/calendarDay/{{week.startDate}}')"
         >
-          <div class="item item-avatar">
+          <div class="item item-text-wrap">
+            <h2>{{week.weekNum+"周"}}</h2>
+            <p style="color: #AAB2B9;">{{week.startDate}} 至 {{week.endDate}}</p>
+            <p style="font-size:16px;">
+                {{week.summary}}
+            </p>
+          </div>
+          <!--<div class="item item-avatar">
             <img src="mcfly.jpg" alt="待添加">
             <h2>{{week.weekNum+"周"}}</h2>
             <p>{{week.startDate}} 至 {{week.endDate}}</p>
-          </div>
+          </div>-->
 
-          <div class="item item-body">
+          <!--<div class="item item-body">
             <img class="full-image" src="delorean.jpg" alt="待添加">
             <p>
-              This is a "Facebook" styled Card. The header is created from a Thumbnail List item,
-              the content is from a card-body consisting of an image and paragraph text. The footer
-              consists of tabs, icons aligned left, within the card-footer.
+                {{week.summary}}
             </p>
             <p>
               <a href="#" class="subdued">15 条笔记</a>
               <a href="#" class="subdued">25 次修改 </a>
             </p>
-          </div>
-
+          </div>-->
         </div>
     </ion-content>
 </ion-view>

@@ -8,6 +8,7 @@ module.exports = angular.module('app.filter',[])
             return input
         if input >= 10
             return input
+
 .filter 'TimestampToHour', ->
     (input)->
         if input < 1008122669
@@ -15,14 +16,25 @@ module.exports = angular.module('app.filter',[])
         now = new Date(input*1000)
         hour = now.getHours()
         min = now.getMinutes() 
-
         if hour < 10
             hour = "0" + hour
-        
         if min < 10
             min = "0" + min 
-
         hour + ':' + min
+.filter 'TimeToDate', ->
+    (input)->
+        if input < 1008122669
+            input = 1451577600
+        now = new Date(input*1000)
+        myyear = now.getFullYear()
+        mymonth = now.getMonth()+1 
+        myweekday = now.getDate() 
+        if mymonth < 10
+            mymonth = "0" + mymonth
+        if myweekday < 10
+            myweekday = "0" + myweekday 
+        mymonth + "-" + myweekday
+
 .filter 'interpretTimestamp', ->
     (input)->
         if input < 1008122669

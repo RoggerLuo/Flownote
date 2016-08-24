@@ -1,7 +1,61 @@
 module.exports=angular.module 'article.services',[]
+.factory 'TimeKit',->
+    require '../starter/timerParser.js'
+.factory 'FillScopeArticles',($ionicLoading,GetArticles,ArticleListMethod)->
+    execute = ($scope,params,callback='default')->
+        ArticleListMethod $scope
+        $scope.$on '$ionicView.enter', (e)-> #为了从编辑器后退的时候能够马上捕捉到刚才更新的或者增加的文章
+            $ionicLoading.show template: 'Loading...'
+            GetArticles(params).then (res)->
+                
+                if callback isnt 'default'
+                    $scope.lazyloadData=callback res.data.reverse()
+                else
+                    $scope.lazyloadData=res.data.reverse()
+                
+                #lazyload
+                start=0
+                end=20
+                $scope.articles=[]
+                $scope.articles.push.apply($scope.articles,$scope.lazyloadData.slice(start,end) )
+
+                $scope.loadMore = () ->
+                    start+=20
+                    end+=20
+                    $scope.articles.push.apply($scope.articles,$scope.lazyloadData.slice(start,end) )
+                    $scope.$broadcast('scroll.infiniteScrollComplete')
+
+                $scope.moreDataCanBeLoaded=()->
+                    $scope.lazyloadData.length>end
+
+                $scope.doRefresh = () ->
+                    $scope.$broadcast('scroll.refreshComplete')
+                #lazyload end
+
+
+                $ionicLoading.hide()
+                console.log 'index get_item成功'
+            ,(res)->
+                console.log 'index get_item失败'
+    execute
+.factory 'ArticleListMethod',(RemoveFunc,DeleteArticle,$ionicHistory,$location)->
+    execute = ($scope)->
+        $scope.remove = (article)-> # 删
+            r = confirm "确定要删除"+article.content.slice(0,10)+"?"
+            if r
+                DeleteArticle(article.item_id)
+                RemoveFunc.call $scope.articles,article
+
+        $scope.redirect = (addr)-> #为了日期单位 前后切换的时候不会搞乱返回关系
+            $ionicHistory.nextViewOptions disableBack: true
+            $location.path addr
+
+    
+    execute
+
 .factory 'DecimalFilter',->
     execute = (data)->
-        data.forEach (el,index,arr)->
+        finalData = data.filter (el,index,arr)->
             style = 'button-stable' 
             decimal = 0
             distance = Date.parse(new Date()) - el.remind_time*1000
@@ -11,6 +65,7 @@ module.exports=angular.module 'article.services',[]
                 decimal = 2
             if distance > 24*60*60*7
                 decimal = 3
+            
             if decimal >= 1
                 style = 'button-positive' 
             if decimal >= 2 
@@ -19,9 +74,12 @@ module.exports=angular.module 'article.services',[]
                 style = 'button-assertive'
             arr[index]['buttonStyle'] = style
             arr[index]['decimal'] = decimal
-            # if decimal < 1
+            if decimal < 1
                 # arr.splice index, 1
-        data
+                return false
+            else
+                return true
+        finalData
     execute
 
 .factory 'addDecimal',->
@@ -69,27 +127,6 @@ module.exports=angular.module 'article.services',[]
     #         console.log 'get_item失败'
     # execute
 
-.factory 'CreateArticle',(Resource)->
-    execute = (content)->
-        date_and_time=Date.parse(new Date())/1000
-        item =
-            content:content
-            date_and_time:date_and_time
-            item_id:date_and_time.toString()
-            remind_time:'0'
-            remind_text:''
-            type:'0'
-            type2:'0'
-            thread_id:'0'
-        item_id=item.item_id
-        content=item.content
-        date_and_time=item.date_and_time
-        promise = Resource.query({method:'item_create',content:content,item_id:item_id,date_and_time:date_and_time}).$promise
-        promise.then (res)->
-            console.log 'CreateArticle成功'
-        ,(res)->
-            console.log 'CreateArticle失败'
-    execute
 
 .factory 'DeleteArticle',(Resource)->
     execute=(item_id)->

@@ -6,7 +6,7 @@ module.exports = angular.module('app.router',[])
       .state 'tab', 
           url: '/tab'
           abstract: true
-          templateUrl: 'starter/tabs.html'
+          templateUrl: 'entry/tabs.html'
       .state 'tab.thread', 
           url: '/thread'
           views: 
@@ -67,21 +67,21 @@ module.exports = angular.module('app.router',[])
           cache:false
           views: 
               'calendar': 
-                  templateUrl: 'starter/calendarDay.html'
+                  templateUrl: 'calendar/calendarDay.html'
                   controller: 'calendarDay'
       .state 'tab.calendarWeek', 
           cache:false
           url: '/calendarweek/:month'
           views: 
               'calendar': 
-                  templateUrl: 'starter/calendar-week.html'
+                  templateUrl: 'calendar/calendar-week.html'
                   controller: 'calendarWeek'
       .state 'tab.calendarMonth', 
           cache:false
           url: '/calendarmonth'
           views: 
               'calendar': 
-                  templateUrl: 'starter/calendar-month.html'
+                  templateUrl: 'calendar/calendar-month.html'
                   controller: 'calendarMonth'
 
       .state 'tab.articlelist', 
@@ -89,7 +89,7 @@ module.exports = angular.module('app.router',[])
           cache:false
           views: 
               'calendar': 
-                  templateUrl: 'starter/article-list.html'
+                  templateUrl: 'calendar/article-list-by-day.html'
                   controller: 'articleListByDay'
 
       .state 'tab.dataarticlelist', 
@@ -99,22 +99,5 @@ module.exports = angular.module('app.router',[])
               'setting': 
                   templateUrl: 'setting/data-article-list.html'
                   controller: 'dataArticleList'
-
-      .state 'tab.editor', # 改 editor 
-          url: '/editor'
-          cache:false
-          views: 
-              'calendar': 
-                  templateUrl: 'article/editor.html'
-                  controller: 'editorCtrl'
-
-      .state 'tab.new', # 增 editor 
-          url: '/new'
-          cache:false
-          views: 
-              'calendar': 
-                  templateUrl: 'article/editor.html'
-                  controller: 'newCtrl'
-
 
   $urlRouterProvider.otherwise '/tab/calendarDay/'
