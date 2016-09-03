@@ -1,4 +1,12 @@
 module.exports = angular.module('app.filter',[])
+.filter 'countDown',->
+    (input)->
+        if input > 0 
+            return "Ready"
+        else
+            input = -input
+            return (input / 1000 /60/60/24).toFixed(1) + '天'
+
 .filter 'typeDescrip',->
     (input)->
         if !input?

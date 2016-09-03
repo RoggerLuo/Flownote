@@ -1,9 +1,11 @@
 <ion-view view-title="{{title}}">
-    <!-- <ion-nav-bar class="bar-stable"> -->
-        <ion-nav-buttons side="primary">
-             <a href="#/tab/thread" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
-        </ion-nav-buttons>
-    <!-- </ion-nav-bar> -->
+    <ion-nav-buttons side="primary">
+         <a href="#/tab/thread" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="secondary">
+        <button ng-click="openThreadViewModalDelegate()" class="button button-icon icon ion-more"></button>
+        <button ng-click="openModal('new')" class="button button-icon icon ion-android-add"></button>
+    </ion-nav-buttons>
 
     <ion-content>
         <ion-list>
@@ -13,7 +15,7 @@
                     left: 0;"
                 >
                     <button class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:6px 0px;">
-                        {{article.date_and_time | switchReminder}}
+                        {{article.date_and_time|TimeToDate}}
                     </button>
                 </div>
 

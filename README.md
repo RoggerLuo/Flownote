@@ -1,63 +1,11 @@
-####Augest 17th
+#V1.0.1 
+* Augest 29th 2016 *
+- 使用版本号，并针对每个版本的修改做简单记录
+- 把一些本来放在data(setting)标签页的东西，放回模块所属页面，方便操作，比如thread的名称和样式修改
 
+#V1.0.0
 
-
-
-####Augest 16th
-
-touch之后300ms会自动触发click事件，很诡异
-全局禁止touch之后的click事件  
-``` javascript
-window.addEventListener("touchstart", function(e){
-    e.preventDefault();
-});
-```  
-
-angular获取DOM元素
-``` javascript
-var element=angular.element(document.querySelector('.keyboard-attach'))[0];
-```  
-
-就说之前为什么controller只能激活一次，好烦
-
-With the new view caching in Ionic, Controllers are only called
-when they are recreated or on app start, instead of every page change.
-To listen for when this page is active (for example, to refresh data),
-listen for the $ionicView.enter event:
-``` javascript
-$scope.$on('$ionicView.enter', function(e) {
-});
-```  
-
-监听键盘
-``` javascript
-// 监听键盘事件
-window.addEventListener('native.keyboardshow', keyboardShowHandler);
-window.addEventListener('native.keyboardhide', keyboardHideHandler);
-$scope.show=true;
-function keyboardHideHandler(e){
-    $scope.show=false;
-}
-function keyboardShowHandler(e){
-    $scope.show=true;
-}
-//关键盘
-cordova.plugins.Keyboard.close();
-```  
-
-'$ionicView.beforeEnter'和'$ionicView.beforeLeave'事件
-在进入之前赋值，离开之前还原  
-
-ui-router不能连续嵌套两个abstact路由
-直接把<ion-nav-view>标签换成html代码就可以了  
-
->是这样调用根作用域里面的变量的？：  $root.hideTabs，下一步仔细看看directive  
->什么时候在directive里面用watch?  
-
-
-####Augest 15th 
-git pull, fetch, checkout and branch command
-
-####Augest 14th
-Build new ionic app : try to learn git, webpack, angular, markdown etc
-
+* article调整分类（thread）之后，articleList无法同步，需要重新加载本页才能刷新视图
+* 每个thread的文章数量统计也无法及时更新，必须访问articleList才能更新
+* 没有身份校验，没有分帐号
+* textarea在ios上无法滚动

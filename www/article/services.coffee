@@ -1,41 +1,35 @@
 module.exports=angular.module 'article.services',[]
-
-.factory 'FillScopeArticles',($ionicLoading,GetArticles,ArticleListMethod)->
+.factory 'FillScopeArticles',($ionicLoading,ArticleListMethod,GetArtListWithLazy)->
     execute = ($scope,params,callback='default')->
         ArticleListMethod $scope
         $scope.$on '$ionicView.enter', (e)-> #为了从编辑器后退的时候能够马上捕捉到刚才更新的或者增加的文章
-            # $ionicLoading.show template: 'Loading...'
-            GetArticles(params).then (res)->
-                
-                if callback isnt 'default'
-                    $scope.lazyloadData=callback res.data.reverse()
-                else
-                    $scope.lazyloadData=res.data.reverse()
-                
-                #lazyload
-                start=0
-                end=20
-                $scope.articles=[]
-                $scope.articles.push.apply($scope.articles,$scope.lazyloadData.slice(start,end) )
-
-                $scope.loadMore = () ->
-                    start+=20
-                    end+=20
-                    $scope.articles.push.apply($scope.articles,$scope.lazyloadData.slice(start,end) )
-                    $scope.$broadcast('scroll.infiniteScrollComplete')
-
-                $scope.moreDataCanBeLoaded=()->
-                    $scope.lazyloadData.length>end
-
-                $scope.doRefresh = () ->
-                    $scope.$broadcast('scroll.refreshComplete')
-                #lazyload end
-
-
-                # $ionicLoading.hide()
-                console.log 'index get_item成功'
-            ,(res)->
-                console.log 'index get_item失败'
+            GetArtListWithLazy $scope,params,callback
+    execute
+.factory 'GetArtListWithLazy',(GetArticles,Lazyload)->
+    execute=($scope,params,callback)->
+        GetArticles(params).then (res)->
+            if callback isnt 'default'
+                lazyloadData=callback res.data.reverse()
+            else
+                lazyloadData=res.data.reverse()
+            Lazyload $scope,lazyloadData
+            console.log 'index get_item成功'
+        ,(res)->
+            console.log 'index get_item失败'
+    execute    
+.factory 'Lazyload',->
+    execute=($scope,lazyloadData,start=0,end=20)->
+        $scope.articles=[]
+        $scope.articles.push.apply($scope.articles,lazyloadData.slice(start,end))
+        $scope.loadMore = () ->
+            start+=20
+            end+=20
+            $scope.articles.push.apply($scope.articles,lazyloadData.slice(start,end))
+            $scope.$broadcast('scroll.infiniteScrollComplete')
+        $scope.moreDataCanBeLoaded=()->
+            lazyloadData.length > end
+        $scope.doRefresh = () ->
+            $scope.$broadcast('scroll.refreshComplete')
     execute
 .factory 'ArticleListMethod',(RemoveFunc,DeleteArticle,$ionicHistory,$location)->
     execute = ($scope)->
@@ -48,34 +42,25 @@ module.exports=angular.module 'article.services',[]
         $scope.redirect = (addr)-> #为了日期单位 前后切换的时候不会搞乱返回关系
             $ionicHistory.nextViewOptions disableBack: true
             $location.path addr
-
-    
     execute
-
 .factory 'DecimalFilter',->
     execute = (data)->
         finalData = data.filter (el,index,arr)->
             style = 'button-stable' 
             decimal = 0
             distance = Date.parse(new Date()) - el.remind_time*1000
+            decimal = distance
             if distance > 0 
-                decimal = 1
-            if distance > 24*60*60*3 
-                decimal = 2
-            if distance > 24*60*60*7
-                decimal = 3
-            
-            if decimal >= 1
                 style = 'button-positive' 
-            if decimal >= 2 
+            if distance > 24*60*60*3 
                 style = 'button-energized' 
-            if decimal >= 3
+            if distance > 24*60*60*7
                 style = 'button-assertive'
             arr[index]['buttonStyle'] = style
             arr[index]['decimal'] = decimal
             if decimal < 1
                 # arr.splice index, 1
-                return false
+                return true
             else
                 return true
         finalData
@@ -87,18 +72,12 @@ module.exports=angular.module 'article.services',[]
             style = 'button-stable' 
             decimal = 0
             distance = Date.parse(new Date()) - el.remind_time*1000
+            decimal = distance
             if distance > 0 
-                decimal = 1
-            if distance > 24*60*60*3 
-                decimal = 2
-            if distance > 24*60*60*7
-                decimal = 3
-        
-            if decimal >= 1
                 style = 'button-positive' 
-            if decimal >= 2 
+            if distance > 24*60*60*3 
                 style = 'button-energized' 
-            if decimal >= 3
+            if distance > 24*60*60*7
                 style = 'button-assertive'
             arr[index]['buttonStyle'] = style
             arr[index]['decimal'] = decimal
@@ -120,12 +99,6 @@ module.exports=angular.module 'article.services',[]
         if data.week?
             week = data.week
         Resource.query({method:'get_item',thread_id:thread,type:type,day:day,week:week}).$promise
-    #     promise.then (res)->
-    #         console.log 'get_item成功'
-    #     ,(res)->
-    #         console.log 'get_item失败'
-    # execute
-
 
 .factory 'DeleteArticle',(Resource)->
     execute=(item_id)->

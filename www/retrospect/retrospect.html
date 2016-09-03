@@ -1,0 +1,54 @@
+<ion-view view-title="Retrospect">
+    <ion-nav-buttons side="secondary">
+        <button ng-click="openModal('new')" class="button button-icon icon ion-android-add"></button>
+    </ion-nav-buttons>
+
+	<ion-content>
+	    <ion-list>
+		    <!-- <div class="item item-divider">
+		        Articles
+		    </div> -->
+            <a class="item item-icon-left" href="#/tab/articleSEList/all">
+                <i class="icon ion-ios-paper-outline"></i>
+                    All
+                <span class="item-note" style="margin-right: 20px;font-size: 16px;">
+                    {{all}}
+                </span>
+            </a>
+	        <a class="item item-icon-left" href="#/tab/articleSEList/notallocated">
+	    		<i class="icon ion-ios-paper-outline"></i>
+	    			NotAllocated
+	    		<span class="item-note" style="margin-right: 20px;font-size: 16px;">
+	    			{{notallocated}}
+	    		</span>
+	        </a>
+
+            <a class="item item-icon-left" href="#/tab/articleSEList/rootthread">
+        		<i class="icon ion-ios-paper-outline"></i>
+        			RootThread
+        		<span class="item-note" style="margin-right: 20px;font-size: 16px;">
+        			{{rootthread}}
+        		</span>
+            </a>
+	        <a class="item item-icon-left" href="#/tab/articletypelist/0">
+	    		<i class="icon ion-ios-paper-outline"></i>
+	    			Raw
+	    		<span class="item-note" style="margin-right: 20px;font-size: 16px;">
+	    			{{type0}}
+	    		</span>
+	        </a>	        
+		    <a class="item item-icon-left" href="#/tab/articletypelist/1">
+		      	<i class="icon ion-ios-star-outline"></i>
+		      		Plan
+				<span class="item-note" style="margin-right: 20px;font-size: 16px;">
+					{{type1}}
+				</span>
+		    </a>
+	        <a class="item item-icon-left" href="#/tab/articletypelist/2">
+	    		<i class="icon ion-ios-clock-outline"></i>
+	    			Hover
+	    		<span ng-if="type2!='0'" class="badge badge-assertive">{{type2}}</span>
+	        </a>
+	    </ion-list>
+	</ion-content>
+</ion-view>

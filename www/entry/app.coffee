@@ -1,7 +1,7 @@
 #ionic assets
 require "../lib/ionic/css/ionic.css"
 require "../css/style.css"
-require "../lib/ionic/js/ionic.bundle.js"
+require "../lib/ionic/js/ionic.bundle.min.js"
 
 module.exports = angular.module 'app', [
     'ionic', 
@@ -15,6 +15,7 @@ module.exports = angular.module 'app', [
     require('../calendar/calendar.coffee').name,
     require('../setting/setting.coffee').name,
     require('../editor/editor.coffee').name
+    require('../retrospect/retrospect.coffee').name
     ]
 
 #entry

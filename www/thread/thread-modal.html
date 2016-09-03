@@ -1,0 +1,52 @@
+    <ion-modal-view>
+        <ion-header-bar>
+            <button class="button button-positive  button-clear button-large" ng-click="cancelThreadView();">Cancel</button>
+            <h1 class="title">Thread Editor</h1>
+            <button class="button button-positive  button-clear button-large" ng-click="createThread();threadViewModal.hide();">OK&nbsp;</button>
+        </ion-header-bar>
+        <ion-content>
+            <div class="list">
+                <div class="item item-divider">
+                    预览
+                </div>
+                <div class="padding">
+                    <a href="" ng-class="{'button-outline':!editData.stuff}" class=" button button-large {{editData.color}}" style="line-height:1.75;margin:3px 8px;">
+                        {{editData.thread_text}}
+                        <br>
+                        0 0 0
+                    </a>
+                </div>
+                <div class="item item-divider">
+                    填写
+                </div>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">分类名称</span>
+                    <input type="text" placeholder="工作" ng-model="editData.thread_text">
+                </label>
+                <!-- <label class="item item-input item-stacked-label" style="padding:0"> -->
+                    <div class="input-label" style="padding:15px">选择一款颜色</div>
+
+                    <div class="button-bar">
+                        <button ng-click="editData.color='button-light'" class="button button-light">light</button>
+                        <button ng-click="editData.color='button-stable'" class="button button-stable">stable</button>
+                        <button ng-click="editData.color='button-dark'" class="button button-dark">dark</button>
+                    </div>
+                    <div class="button-bar">
+                        <button ng-click="editData.color='button-positive'" class="button button-positive">positive</button>
+                        <button ng-click="editData.color='button-calm'" class="button button-calm">calm</button>
+                        <button ng-click="editData.color='button-balanced'" class="button button-balanced">balanced</button>
+                    </div>
+                    <div class="button-bar">
+                        <button ng-click="editData.color='button-energized'" class="button button-energized">energized</button>
+                        <button ng-click="editData.color='button-assertive'" class="button button-assertive">assertive</button>
+                        <button ng-click="editData.color='button-royal'" class="button button-royal">royal</button>
+                    </div>   
+                <!-- </label> -->
+
+                <ion-toggle  ng-model="editData.stuff">
+                    是否填色
+                </ion-toggle>
+
+            </div>
+        </ion-content>
+    </ion-modal-view>

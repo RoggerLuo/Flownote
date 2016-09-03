@@ -1,8 +1,8 @@
     <ion-modal-view>
         <ion-header-bar>
-            <button class="button button-positive  button-clear button-large" ng-click="cancel();">Cancel</button>
+            <button class="button button-positive  button-clear button-large" ng-click="cancelThread();">Cancel</button>
             <h1 class="title">Thread Editor</h1>
-            <button class="button button-positive  button-clear button-large" ng-click="create();modal.hide();">OK&nbsp;</button>
+            <button class="button button-positive  button-clear button-large" ng-click="createThread();threadViewModal.hide();">OK&nbsp;</button>
         </ion-header-bar>
         <ion-content>
             <div class="list">
@@ -46,7 +46,6 @@
                 <ion-toggle  ng-model="editData.stuff">
                     是否填色
                 </ion-toggle>
-
 
             </div>
         </ion-content>

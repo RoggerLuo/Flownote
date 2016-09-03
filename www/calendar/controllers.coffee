@@ -18,7 +18,15 @@ module.exports = angular.module('calendar.controller',[])
                 console.log "updateDailySummary失败"
             )
 
-.controller 'calendarDay',($scope,$stateParams,FillScopeArticles,EditorModal,TimeKit,GetDailySummary,GlobalVar,GetWeeklySummary,UpdateWeeklySummary)->
+.controller 'calendarDay',($scope,$stateParams,FillScopeArticles,EditorModal,TimeKit,GetDailySummary,GlobalVar,GetWeeklySummary,UpdateWeeklySummary,GetArtListWithLazy,DecimalFilter,GetArticles,$location,$ionicHistory)->
+    #编辑器Init
+    EditorModal $scope
+
+    $scope.redirect = (addr)-> #为了日期单位 前后切换的时候不会搞乱返回关系
+        $ionicHistory.nextViewOptions disableBack: true
+        $location.path addr
+
+
     now = TimeKit.getNowDate() #当前时间yyyy-mm-dd, 传入当前时间会错，有时候时区不对，统一传入不带小时的日期
     # 处理参数
     if $stateParams.week==''
@@ -28,32 +36,36 @@ module.exports = angular.module('calendar.controller',[])
         currentWeek = TimeKit.getYearWeek($stateParams.week)# 当前周
         weekstart = $stateParams.week #传入这个星期的第一天
     
-    if GlobalVar.calendar.weekstart isnt weekstart 
-        weekArr = TimeKit.wholeWeek(weekstart).filter (el)-> #统一传入text
-            Date.parse(now) >= Date.parse(new Date(el.date))
-        .reverse()
-        $scope.days = weekArr
-        GetDailySummary(weekstart).then((res)->
-            # 先做一个一个temp数组
-            tempData = {}
-            res.data.forEach (el,index,arr)->
-                tempData[el.date] = el.summary
-            weekArr.forEach (el,index,arr)->
-                arr[index].summary = tempData[arr[index].date]
-            
-            GlobalVar.calendar.weekArr = weekArr
-            GlobalVar.calendar.weekstart = weekstart
-            console.log "getDailySummary成功"
-        ,(res)->
-            console.log "getDailySummary失败"
-        )
-    else
-        $scope.days = GlobalVar.calendar.weekArr
-    
-    
-    # $scope.stuff = GlobalVar.calendar.config.stuff
-    # $scope.color = GlobalVar.calendar.config.color
-    
+    # if GlobalVar.calendar.weekstart isnt weekstart 
+    weekArr = TimeKit.wholeWeek(weekstart).filter (el)-> #统一传入text
+        Date.parse(now) >= Date.parse(new Date(el.date))
+    .reverse()
+
+    # if GlobalVar.summaryFilter
+    #     $scope.days = weekArr.slice 0,1
+    # else
+    $scope.days = weekArr
+    GetDailySummary(weekstart).then((res)->
+        # 先做一个一个temp数组
+        tempData = {}
+        res.data.forEach (el,index,arr)->
+            tempData[el.date] = el.summary
+        weekArr.forEach (el,index,arr)->
+            arr[index].summary = tempData[arr[index].date]
+        
+        GlobalVar.calendar.weekArr = weekArr
+        # GlobalVar.calendar.weekstart = weekstart
+        console.log "getDailySummary成功"
+    ,(res)->
+        console.log "getDailySummary失败"
+    )
+    # else
+        # if GlobalVar.summaryFilter
+        #     $scope.days = GlobalVar.calendar.weekArr.slice 0,1
+        # else
+        # $scope.days = GlobalVar.calendar.weekArr
+        
+
     # weekly数据
     $scope.weeksummaryObj={}
     GetWeeklySummary(currentWeek,currentWeek).then (res)->
@@ -71,11 +83,55 @@ module.exports = angular.module('calendar.controller',[])
 
 
     #Article
-    weekStart = TimeKit.getCertainWeekStartDate(now) #获取这周起始日期     
-    FillScopeArticles $scope,week:weekStart
+    # weekStart = weekstart
+    # FillScopeArticles $scope,week:weekStart,(data)->
+    #         if GlobalVar.rawFilter
+    #             newArr = data.filter (el,index,arr)->
+    #                 el.type is '0'
+    #         else
+    #             newArr = data
+    #         newArr
+
+
+    # filter控制
+    # $scope.summaryFilterToggle = GlobalVar.summaryFilter
+    # $scope.summaryFilterToggleClick = ->
+    #     GlobalVar.summaryFilter = !GlobalVar.summaryFilter
+    #     GetWeeklySummary(currentWeek,currentWeek).then (res)->
+    #         if res.data[0]?
+    #             $scope.weeksummaryObj.summary = res.data[0].summary
+    #             $scope.weekorigin = res.data[0].summary
+
+    # $scope.articleTodayFilter = ->
+    #     GlobalVar.rawFilter = !GlobalVar.rawFilter
+    #     if GlobalVar.rawFilter
+    #         $scope.articleTodayFilterMark = '(only raw)'
+    #     else
+    #         $scope.articleTodayFilterMark = ''
+    #     GetArtListWithLazy $scope,week:weekStart,(data)->
+    #         if GlobalVar.rawFilter
+    #             newArr = data.filter (el,index,arr)->
+    #                 el.type is '0'
+    #         else
+    #             newArr = data
+    #         newArr
+
+
+    # GetArticles type:2 
+    # .then (res)->
+    #     data = res.data
+    #     data = DecimalFilter data
+    #     i=0
+    #     data.forEach (el)->
+    #         if el.decimal>=1
+    #             i+=1
+
+    #     $scope.hoverNum = i
+    #     console.log 'get hoverNum success'
+
     
-    #编辑器Init
-    EditorModal $scope
+
+
 
 
 .controller 'calendarMonth',($scope,$location,$ionicHistory,EditorModal)->
@@ -91,7 +147,7 @@ module.exports = angular.module('calendar.controller',[])
     $scope.redirect = (addr)->
         $location.path addr
 
-.controller 'calendarWeek',($scope,$stateParams,EditorModal,TimeKit,ArticleListMethod,GetWeeklySummary)->
+.controller 'calendarWeek',($scope,$stateParams,EditorModal,TimeKit,ArticleListMethod,GetWeeklySummary,GlobalVar)->
     EditorModal $scope
     ArticleListMethod $scope
     # 处理参数，week获得一个月份，然后展示这个月份的 weeks
@@ -100,6 +156,7 @@ module.exports = angular.module('calendar.controller',[])
         nowMonthRealWorld = thistime.getMonth()+1 #为了给 month设定一个默认值
     else
         nowMonthRealWorld = $stateParams.month 
+    
     nowMonth = nowMonthRealWorld - 1 #机器识别的month比现实生活中的month小1，容易搞错
     
     monthStartDate = TimeKit.getCertainMonthStartDate nowMonth
@@ -116,13 +173,14 @@ module.exports = angular.module('calendar.controller',[])
             endDate:TimeKit.dateAdd firstWeek ,6+ (i-firstWeekNum)*7
         }
     now = TimeKit.getNowDate() # 当前日期,传入当前 时间会错，有时候浏览器的时区不对，###统一传入text###
-    weekArr = weekRawArr.filter (el,index,arr)->
-        Date.parse(new Date(now)) >= Date.parse(new Date(el.startDate))
-    .reverse()
+    # weekArr = weekRawArr.filter (el,index,arr)->
+    #     Date.parse(new Date(now)) >= Date.parse(new Date(el.startDate))
+    # .reverse()
+    weekArr = weekRawArr
     $scope.weeks = weekArr
     
-
     GetWeeklySummary(firstWeekNum,lastWeekNum).then (res)->
+
         tempData = {}
         res.data.forEach (el,index,arr)->
             tempData[el.weeknumber] = el.summary

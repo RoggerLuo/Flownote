@@ -18,38 +18,13 @@
                 border:0px;
                 height:500px;
                 line-height: 1.75;
+                overflow:scroll;
                 "
             ng-model="article.content"
         ></textarea>                
 
     </div>
-    
-  <!--   <div>
-        <div 
-            ng-show="show"
-            keyboard-attach ng-click="openThreadModal()" 
-            class="keyboard-attach"
-            style="
-                position:fixed;left:0px;bottom:0px;
-                height:40px;width:40px;line-height: 40px;
-                text-align: center;
-            "
-        >
-            <i class="icon ion-grid"></i>
-        </div>
-        <div 
-            ng-show="show"
-            keyboard-attach ng-click="stopPro($event)" 
-            class="keyboard-attach"
-            style="
-                position:fixed;right:0px;bottom:0px;
-                height:30px;width:30px;line-height: 30px;
-                text-align: center;
-            "
-        >
-            <i class="icon ion-checkmark"></i>
-        </div>
-    </div>    -->
+  
     <keyboard-attachment></keyboard-attachment>
     <editor-footer></editor-footer>
 </ion-modal-view>

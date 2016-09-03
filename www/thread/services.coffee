@@ -1,4 +1,78 @@
 module.exports=angular.module 'thread.services',[]
+.factory 'ThreadViewModel',($ionicModal,CreateThread,ModifyThread,ThreadDelete,GlobalVar)-> 
+    execute = ($scope)->
+        ###########
+        ## Modal ##
+        ###########
+        # Modal data and logic
+        $scope.originalThreadData = {}
+        $scope.editData =
+            thread_text:''
+            color:'button-stable'
+            stuff:'false'
+            thread_id:'new'
+
+        $scope.cancelThreadView = ->
+            $scope.editData.text=$scope.originalThreadData.text
+            $scope.editData.color=$scope.originalThreadData.color
+            $scope.editData.stuff=$scope.originalThreadData.stuff
+            $scope.threadViewModal.hide()
+            $scope.editData =
+                thread_text:''
+                color:'button-stable'
+                stuff:'false'
+                thread_id:'new'
+
+        $ionicModal.fromTemplateUrl 'thread/thread-modal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+            }
+        .then (modal) ->
+            $scope.threadViewModal = modal
+        
+        $scope.openThreadViewModal = (thread) ->
+            $scope.threadViewModal.show()
+            if thread?
+                $scope.editData = thread
+                $scope.originalThreadData = JSON.parse JSON.stringify thread 
+        
+        $scope.closeThreadViewModal = ->
+            $scope.threadViewModal.hide()
+
+
+        $scope.$on '$destroy', ->
+            $scope.threadViewModal.remove()
+        
+        $scope.$on 'modal.hidden', ->
+            true    
+        $scope.$on 'modal.removed', ->
+            true
+
+        $scope.createThread=->
+            if $scope.editData.thread_text ==""
+                return  false
+            if $scope.editData.thread_id == 'new'  # 增
+                obj = CreateThread $scope.editData
+                $scope.bricks.unshift obj                      
+            else                                 # 改
+                if $scope.originalThreadData.thread_text!=$scope.editData.thread_text||$scope.originalThreadData.color!=$scope.editData.color||$scope.originalThreadData.stuff!=$scope.editData.stuff
+                    ModifyThread $scope.editData
+            $scope.editData =
+                thread_text:''
+                color:'button-stable'
+                stuff:'false'
+                thread_id:'new'
+                
+        $scope.removeThread = (thread) -> # 删
+            r = confirm "请先清空分类下的文章,确定要删除"+thread.thread_text+"?"
+            if r
+                $scope.bricks.splice $scope.bricks.indexOf(thread), 1
+                ThreadDelete thread
+
+        $scope.openThreadViewModalDelegate = ->
+            $scope.openThreadViewModal GlobalVar.thread
+
+    execute
 .factory 'ThreadsHandler',(Resource,GlobalVar)->
     execute = (callback)->
         # 貌似一用storage就坏事
@@ -14,7 +88,10 @@ module.exports=angular.module 'thread.services',[]
             promise = Resource.query method:'download_thread' 
             .$promise
             promise.then (res)->
-                GlobalVar.bricks = res.data
+                if res.data?
+                    GlobalVar.bricks = res.data
+                else
+                    GlobalVar.bricks = []
                 GlobalVar.bricks.reverse()
                 GlobalVar.bricks.unshift
                     thread_text:'Roger'
@@ -26,6 +103,9 @@ module.exports=angular.module 'thread.services',[]
                     father_id:0
                 callback GlobalVar.bricks
                 # storeThread res.data
+            ,(res)->
+                # debugger
+                true
     execute
 
 .factory 'CreateThread',(Resource) -> #增
@@ -37,13 +117,6 @@ module.exports=angular.module 'thread.services',[]
             color:editData.color
             stuff:editData.stuff
             thread_id:date_and_time.toString()
-
-        # 更新单个thread的localstorage
-        storage.setItem "thread"+thread_obj.thread_id,JSON.stringify thread_obj
-
-        list=JSON.parse storage.getItem "all_threads_list"
-        list.push thread_obj.thread_id
-        storage.setItem "all_threads_list",JSON.stringify list
 
         thread_id=thread_obj.thread_id
         thread_text=thread_obj.thread_text
@@ -87,8 +160,6 @@ module.exports=angular.module 'thread.services',[]
 
     execute
 
-
-
 .factory 'ThreadDelete',(Resource,RemoveFunc) -> # 删
     storage=window.localStorage        
     execute = (thread_obj)->
@@ -108,70 +179,3 @@ module.exports=angular.module 'thread.services',[]
             true
         )
     execute    
-
-# .factory 'GetThreadsFromStorage', ->
-#     execute = ->
-        # storage=window.localStorage;
-        # all_threads_list=JSON.parse storage.getItem 'all_threads_list'
-        #
-        #threads=[];
-        #mapArray = all_threads_list.map (value,index,arr)->
-        #    JSON.parse storage.getItem 'thread'+all_threads_list[i]
-        
-        #使用原始方式实现
-        #threads=[];
-        #for (var i = 0; i < all_threads_list.length; i++) {
-        #    threads.unshift( JSON.parse(storage.getItem('thread'+all_threads_list[i])));
-        #}
-        #threads
-
-    #     getSubstance = (item) ->
-    #         JSON.parse storage.getItem 'thread'+item
-
-    #     newArray = (getSubstance item for item,i in all_threads_list)
-    #     newArray
-    # execute
-
-
-# .factory 'GetThreadList',($http)->
-#     $http 
-#         method:'JSONP'
-#         url:'http://alice0115.applinzi.com/index.php/ngflow/download_thread'
-#         params:
-#             callback: 'JSON_CALLBACK'
-
-
-
-
-
-# storage=window.localStorage        
-# storeThread = (data)-> #这个data是resource 返回的
-#     list=[]
-#     #####根brick####
-#     thread =
-#         thread_text:'Roger'
-#         color:'button-stable'
-#         stuff:false
-#         item_list:[]
-#         thread_id:0
-#         item_number:0
-#         father_id:0
-#     thread_obj=JSON.stringify(thread)
-#     storage.setItem "thread0",thread_obj
-#     list.push '0'
-#     #####根brick#####
-
-#     ###resolve data###
-#     data.forEach (element,index,arra)->
-#         if not storage.getItem "thread"+element.thread_id
-#             newThread=
-#                 thread_id:element.thread_id
-#                 stuff:element.stuff
-#                 thread_text:element.thread_text
-#                 color:element.color
-
-#             storage.setItem "thread"+element.thread_id,JSON.stringify newThread
-#             list.push(element.thread_id);
-
-#     storage.setItem "all_threads_list",JSON.stringify list
-

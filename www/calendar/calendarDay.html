@@ -5,9 +5,16 @@
     </ion-nav-buttons>
 
     <ion-nav-buttons side="secondary">
-        <!-- <button ng-click="refresh()" class="button button-icon icon ion-ios-loop-strong"></button> -->
         <button ng-click="openModal('new')" class="button button-icon icon ion-android-add"></button>
     </ion-nav-buttons>
+            <!-- <button ng-click="refresh()" class="button button-icon icon ion-ios-loop-strong"></button> -->
+    <!--         <label class="toggle">
+               <input type="checkbox" ng-model="summaryFilterToggle" ng-click="summaryFilterToggleClick()">
+               <div class="track">
+                 <div class="handle"></div>
+               </div>
+            </label> -->
+            <!-- <button class="button button-outline button-dark">{{hoverNum}}</button>&nbsp; -->
 
     <ion-content >
         <label class="item item-input">
@@ -27,8 +34,8 @@
 
             {{day.dateInChinese}}
         </a>
-        <div class="item item-divider">
-            本周笔记
+<!--         <div class="item item-divider" ng-click="articleTodayFilter()">
+            this week {{articleTodayFilterMark}}
         </div>
         <ion-list>
             <ion-item 
@@ -60,7 +67,7 @@
             on-infinite="loadMore()"
             distance="1%"
             ng-if="moreDataCanBeLoaded()">
-        </ion-infinite-scroll>
+        </ion-infinite-scroll> -->
     </ion-content>
     <keyboard-attachmentse></keyboard-attachmentse>
 </ion-view>

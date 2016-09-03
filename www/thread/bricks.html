@@ -1,13 +1,7 @@
 <ion-view view-title="Bricks">
-    <!-- <ion-nav-bar class="bar-stable"> -->
-        <!-- <ion-nav-buttons side="primary">
-            <a href="#/tab/thread" class="button button-icon icon ion-navicon"></a>
-        </ion-nav-buttons>
-
-        <ion-nav-buttons side="secondary">
-          <button class="button button-clear icon ion-android-add"  ng-click="doSomething()"></button>
-        </ion-nav-buttons> -->
-    <!-- </ion-nav-bar> -->
+    <ion-nav-buttons side="secondary">
+        <button ng-click="openModal('new')" class="button button-icon icon ion-android-add"></button>
+    </ion-nav-buttons>
     <ion-content class="padding">
         <a 
             ng-repeat="brick in bricks"  

@@ -3,6 +3,16 @@
 */ 
     var now = new Date(); //当前日期 
     var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+    if(nowDayOfWeek ==0 || nowDayOfWeek==6){
+        if (nowDayOfWeek == 0){
+            nowDayOfWeek = 6
+        } else{
+            nowDayOfWeek = nowDayOfWeek - 1 ;
+        } 
+    }else{
+        nowDayOfWeek-=1;            
+    }
+
     var nowDay = now.getDate(); //当前日 
     var nowMonth = now.getMonth(); //当前月 
     var nowYear = now.getYear(); //当前年 
@@ -71,13 +81,13 @@
     //获得一周
     var wholeWeek = function (text) { 
         var now = new Date(text);
+        
         var nowDayOfWeek = now.getDay(); //今天本周的第几天 默认周日是第一天 所以要改         
-        // 把周日为第一天变成周一为第一天
-        if(nowDayOfWeek ==0 || nowDayOfWeek==6){
-            if (nowDayOfWeek == 0){nowDayOfWeek = 6} else if (nowDayOfWeek == 6){nowDayOfWeek = 0}            
-        }else{
-            nowDayOfWeek-=1;            
-        }
+        if (nowDayOfWeek == 0){// 把周日为第一天变成周一为第一天
+            nowDayOfWeek = 6
+        } else{
+            nowDayOfWeek = nowDayOfWeek - 1 ;
+        } 
 
         var nowDay = now.getDate(); //当前日 
         var nowMonth = now.getMonth(); //当前月 
@@ -107,30 +117,42 @@
     //获得指定周的开端日期 
     var getCertainWeekStartDate = function (text) { 
         var now = new Date(text); //当前日期 
+
         var nowDayOfWeek = now.getDay(); //今天本周的第几天 
-        // 把周日为第一天变成周一为第一天
-        if (nowDayOfWeek == 0){nowDayOfWeek = 6}else if (nowDayOfWeek == 6){nowDayOfWeek = 0}
+        if (nowDayOfWeek == 0){        // 把周日为第一天变成周一为第一天
+            nowDayOfWeek = 6
+        } else{
+            nowDayOfWeek = nowDayOfWeek - 1 ;
+        } 
 
         var nowDay = now.getDate(); //当前日 
         var nowMonth = now.getMonth(); //当前月 
         var nowYear = now.getYear(); //当前年 
         nowYear += (nowYear < 2000) ? 1900 : 0; // 
-        var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + 1); 
+        var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek); 
         return formatDate(weekStartDate); 
     } 
 
-    //获得指定周的停止日期 
+    //获得指定周的停止日期  deprecated
     var getCertainWeekEndDate = function (text) { 
-        var now = new Date(text); //当前日期 
-        var nowDayOfWeek = now.getDay(); //今天本周的第几天 
-        var nowDay = now.getDate(); //当前日 
-        var nowMonth = now.getMonth(); //当前月 
-        var nowYear = now.getYear(); //当前年 
-        nowYear += (nowYear < 2000) ? 1900 : 0; // 
-
-        var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek) + 1); 
-        return formatDate(weekEndDate); 
     }
+    // var getCertainWeekEndDate = function (text) { 
+    //     var now = new Date(text); //当前日期 
+    //     var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+    //     if (nowDayOfWeek == 0){        // 把周日为第一天变成周一为第一天
+    //         nowDayOfWeek = 6
+    //     } else{
+    //         nowDayOfWeek = nowDayOfWeek - 1 ;
+    //     } 
+
+    //     var nowDay = now.getDate(); //当前日 
+    //     var nowMonth = now.getMonth(); //当前月 
+    //     var nowYear = now.getYear(); //当前年 
+    //     nowYear += (nowYear < 2000) ? 1900 : 0; // 
+
+    //     var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek) + 1); 
+    //     return formatDate(weekEndDate); 
+    // }
 
     //获得本月的开端日期 
     var getMonthStartDate = function (){ 
@@ -188,18 +210,39 @@
     var getYearWeek=function (text){  
         var date = new Date(text);
         var date2=new Date(date.getFullYear(), 0, 1);  
-        var day1=date.getDay();  
-        if(day1==0) day1=7;  
-        var day2=date2.getDay();  
-        if(day2==0) day2=7;  
+        //获取今年第一天 所在周的第一天 的date对象
+        var now = date2; //当前日期 
+        var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+        if (nowDayOfWeek == 0){        // 把周日为第一天变成周一为第一天
+            nowDayOfWeek = 6
+        } else{
+            nowDayOfWeek = nowDayOfWeek - 1 ;
+        } 
+        var nowDay = now.getDate(); //当前日 
+        var nowMonth = now.getMonth(); //当前月 
+        var nowYear = now.getYear(); //当前年 
+        nowYear += (nowYear < 2000) ? 1900 : 0; // 
+        var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek); 
+        date2 =  weekStartDate ;
+
+
+        var day1=date.getDay();
+        if (day1 == 0){        // 把周日为第一天变成周一为第一天
+            day1 = 6
+        } else{
+            day1 = day1 - 1 ;
+        } 
+        var day2 = 0 ;
+        // var day2=date2.getDay();  
+        // if (day1 == 0){        // 把周日为第一天变成周一为第一天
+        //     day1 = 6
+        // } else{
+        //     day1 = day1 - 1 ;
+        // } 
         d = Math.round((date.getTime() - date2.getTime()+(day2-day1)*(24*60*60*1000)) / 86400000);    
         return Math.ceil(d /7)+1;   
     }  
 
-    //当月第一天所在周 startweek 和当月最后一天所在周 endweek
-    // for(var i=startweek ; i<=endweek;i++){
-
-    // }
     var dateAdd = function (dateText,addNum) { 
         var now = new Date(dateText); //当前日期 
         var nowDay = now.getDate(); //当前日 

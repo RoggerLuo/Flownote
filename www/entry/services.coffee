@@ -2,13 +2,23 @@ module.exports=angular.module 'app.services',[]
 .factory 'GlobalVar', ->
     {
         thread:{}
-        number:{}
+        artNum:{}
         calendar:
             weekArr:{}
             weekly:{}
-            config:{}
+        # rawFilter : false
+        # summaryFilter : false
+        articles:{
+            all:[]
+            notAllocated:[]
+            hover:[]
+            plan:[]
+            rootThread:[]
+            raw:[]
+        }
     }
 .factory 'Resource',($resource)->
+    # $resource 'http://localhost:3001/api/:method',
     $resource 'http://alice0115.applinzi.com/index.php/ngflow/:method',
         method:'@method',
         {query: 
