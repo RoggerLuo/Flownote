@@ -134,18 +134,25 @@ module.exports = angular.module('calendar.controller',[])
 
 
 
-.controller 'calendarMonth',($scope,$location,$ionicHistory,EditorModal)->
+.controller 'calendarMonth',($scope,$location,$ionicHistory,EditorModal,GetArtNumOfMonth)->
+    GetArtNumOfMonth().then (res)->
+        res.data.forEach (el,index,arr)->
+            Ym = el.date.substring(el.date.length-2)
+            arr[index].date = Ym
+        $scope.months = res.data
+
     EditorModal $scope
 
-    now = new Date() #当前日期 2016
-    nowMonth = now.getMonth()+1 #当前月 
-    MonthArr = while nowMonth>0
-        nowMonth--
-    $scope.months = MonthArr
+    # now = new Date() #当前日期 2016
+    # nowMonth = now.getMonth()+1 #当前月 
+    # MonthArr = while nowMonth>0
+    #     nowMonth--
+    # $scope.months = MonthArr
 
     $ionicHistory.nextViewOptions disableBack: true #放在全局?
     $scope.redirect = (addr)->
         $location.path addr
+
 
 .controller 'calendarWeek',($scope,$stateParams,EditorModal,TimeKit,ArticleListMethod,GetWeeklySummary,GlobalVar)->
     EditorModal $scope

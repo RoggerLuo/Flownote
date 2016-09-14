@@ -7,6 +7,8 @@ module.exports = angular.module('app.router',[])
             url: '/tab'
             abstract: true
             templateUrl: 'entry/tabs.html'
+        
+        # thread相关页面
         .state 'tab.thread', 
             url: '/thread'
             views: 
@@ -41,13 +43,7 @@ module.exports = angular.module('app.router',[])
                 'common': 
                     templateUrl: 'article/common.html'
                     controller: 'commonCtrl'
-        # .state 'tab.threadtabs.editor', # 改 editor 
-        #     url: '/editor'
-        #     cache:false
-        #     views: 
-        #         'hover': 
-        #             templateUrl: 'article/editor.html'
-        #             controller: 'editorCtrl'
+        # retrospect
         .state 'tab.retrospect', 
             url: '/retrospect'
             views: 
@@ -60,16 +56,24 @@ module.exports = angular.module('app.router',[])
             cache:false
             views: 
                 'retrospect': 
-                    templateUrl: 'retrospect/article-list.html'
+                    templateUrl: 'article/article-list.html'
                     controller: 'articleTypeList'
+        .state 'tab.articleByMonth', 
+            url: '/articlebymonth/:month' 
+            cache:false
+            views: 
+                'retrospect': 
+                    templateUrl: 'article/article-list.html'
+                    controller: 'articleByMonth'
+
         .state 'tab.articleSEList', 
             url: '/articleSEList/:string' 
             cache:false
             views: 
                 'retrospect': 
-                    templateUrl: 'retrospect/article-list.html'
+                    templateUrl: 'article/article-list.html'
                     controller: 'articleSEList'
-        
+        # setting
         .state 'tab.setting', 
             url: '/setting'
             views: 
@@ -82,7 +86,18 @@ module.exports = angular.module('app.router',[])
                 'setting': 
                     templateUrl: 'setting/thread-list.html'
                     controller: 'threadEditor'
-        
+
+        # articles
+        .state 'tab.articles', 
+            url: '/articles'
+            cache:false
+            views: 
+                'articles': 
+                    templateUrl: 'article/article-list.html'
+                    controller: 'articlesCtrl'
+
+
+        # calendar
         .state 'tab.calendarDay', 
             url: '/calendarDay/:week'
             cache:false
@@ -110,9 +125,9 @@ module.exports = angular.module('app.router',[])
             cache:false
             views: 
                 'calendar': 
-                    templateUrl: 'calendar/article-list-by-day.html'
+                    templateUrl: 'article/article-list.html' #'calendar/article-list-by-day.html'
                     controller: 'articleListByDay'
 
         
 
-    $urlRouterProvider.otherwise '/tab/calendarDay/'
+    $urlRouterProvider.otherwise '/tab/retrospect'

@@ -7,31 +7,17 @@
         <button ng-click="openModal('new')" class="button button-icon icon ion-android-add"></button>
     </ion-nav-buttons>
     <ion-content class="padding">
-<!--         <a 
-            ng-repeat="month in months"  
-            href="#/tab/calendarweek/{{month}}"
-            class="button button-outline button-large button-dark" 
-            style="line-height:1.75;margin:3px 3px;" 
-            >
-            
-            summary text
-            
-            <br>
-            
-            {{month+"月"}}
-
-        </a> -->
         <div class="card"
             ng-repeat="month in months"  
-            ng-click="redirect('tab/calendarweek/{{month}}')"
+            ng-click="redirect('tab/calendarweek/{{parseInt(month.date)}}')"
             >
           <div class="item item-divider">
-            {{month+"月"}}
+            {{month.date+"月"}}
           </div>
           <div class="item item-text-wrap">
-            This is a basic Card with some text.
+            {{month.number}}篇文章
           </div>
-<!--           <div class="item item-divider">
+            <!--<div class="item item-divider">
             I'm a Footer in a Card!
           </div> -->
         </div>

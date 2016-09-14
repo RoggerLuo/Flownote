@@ -1,33 +1,44 @@
 <ion-view view-title="{{title}}">
-    <ion-nav-buttons side="primary">
-         <a href="#/tab/thread" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
-    </ion-nav-buttons>
     <ion-nav-buttons side="secondary">
-        <button ng-click="openThreadViewModalDelegate()" class="button button-icon icon ion-more"></button>
         <button ng-click="openModal('new')" class="button button-icon icon ion-compose"></button>
     </ion-nav-buttons>
 
     <ion-content>
         <ion-list>
-            <ion-item ng-click="openModal(article)" class="item-remove-animate item-avatar item-icon-right" ng-repeat="article in articles" type="item-text-wrap" >
+            <ion-item 
+                ng-repeat="article in articles"
+                ng-click="openModal(article)" 
+                class="item-remove-animate item-avatar item-icon-right" 
+                type="item-text-wrap" >
+                
                 <div style="display: inline-block;
                     position: absolute;
                     left: 0;"
                 >
-                    <button class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:6px 0px;">
-                        {{article.date_and_time|TimeToDate}}
+                    <button ng-if="article.type=='0'" class="button button-dark" style="margin: 0 0 0 10px;padding:0;">
+                        Raw
                     </button>
+
+                    <button ng-if="article.type=='1'" class="button button-balanced" style="margin: 0 0 0 10px;padding:0;">
+                        Plan
+                    </button>
+                    <button ng-if="article.type=='2'" class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:0;">
+                        {{article.decimal|countDown}} 
+                    </button>
+
                 </div>
 
                 <h2>{{article.content}}</h2>
-                <p>{{article.content.slice(20) || "&nbsp;" }}</p>
+                <p>{{article.content.slice(20)}}</p>
                 <p style="
                     font-size: 13px;
                     margin: 0 0 -6px 0;
-                    color: #AAB2B9;;
-                    ">
-                    {{article.date_and_time|interpretTimestamp}}
+                    color: #5e8ab1;;
+                    "
+                >
+                    {{article.thread_id|threadFilter}}&nbsp;{{article.date_and_time|interpretTimestamp}}
                 </p>
+
                 <i class="icon ion-chevron-right icon-accessory"></i>
                 <ion-option-button class="button-assertive" ng-click="remove(article)">
                     Delete
@@ -39,5 +50,7 @@
             distance="1%"
             ng-if="moreDataCanBeLoaded()">
         </ion-infinite-scroll>
+
     </ion-content> 
+
 </ion-view>

@@ -1,54 +1,102 @@
 <ion-view view-title="Retrospect">
+<!--     <ion-nav-buttons side="primary">
+        <button ng-click="toggleView()" class="button button-icon">{{toggleViewName}}</button>
+    </ion-nav-buttons>
+ -->
     <ion-nav-buttons side="secondary">
-        <button ng-click="openModal('new')" class="button button-icon icon ion-android-add"></button>
+        <button ng-click="openModal('new')" class="button button-icon icon ion-compose"></button>
     </ion-nav-buttons>
 
 	<ion-content>
 	    <ion-list>
-		    <!-- <div class="item item-divider">
-		        Articles
-		    </div> -->
-            <a class="item item-icon-left" href="#/tab/articleSEList/all">
-                <i class="icon ion-ios-paper-outline"></i>
+            <a class="item item-icon-left" href="#/tab/articleSEList/All">
+                <i class="icon ion-briefcase"></i>
                     All
                 <span class="item-note" style="margin-right: 20px;font-size: 16px;">
-                    {{all}}
+                    {{articleNumber.all}}
                 </span>
             </a>
-	        <a class="item item-icon-left" href="#/tab/articleSEList/notallocated">
-	    		<i class="icon ion-ios-paper-outline"></i>
-	    			NotAllocated
+	        <a class="item item-icon-left" href="#/tab/articleSEList/Untreated">
+	    		<i class="icon ion-planet"></i>
+	    			Untreated
 	    		<span class="item-note" style="margin-right: 20px;font-size: 16px;">
-	    			{{notallocated}}
+	    			{{articleNumber.untreated}}
 	    		</span>
 	        </a>
 
-            <a class="item item-icon-left" href="#/tab/articleSEList/rootthread">
-        		<i class="icon ion-ios-paper-outline"></i>
-        			RootThread
+            <a class="item item-icon-left" href="#/tab/articleSEList/Uncategorized">
+        		<i class="icon ion-ios-color-filter"></i>
+        			Uncategorized
         		<span class="item-note" style="margin-right: 20px;font-size: 16px;">
-        			{{rootthread}}
+        			{{articleNumber.uncategorized}}
         		</span>
             </a>
 	        <a class="item item-icon-left" href="#/tab/articletypelist/0">
-	    		<i class="icon ion-ios-paper-outline"></i>
+	    		<i class="icon ion-leaf"></i>
 	    			Raw
 	    		<span class="item-note" style="margin-right: 20px;font-size: 16px;">
-	    			{{type0}}
+	    			{{articleNumber.raw}}
 	    		</span>
 	        </a>	        
 		    <a class="item item-icon-left" href="#/tab/articletypelist/1">
-		      	<i class="icon ion-ios-star-outline"></i>
+		      	<i class="icon ion-android-locate"></i>
 		      		Plan
 				<span class="item-note" style="margin-right: 20px;font-size: 16px;">
-					{{type1}}
+					{{articleNumber.plan}}
 				</span>
 		    </a>
 	        <a class="item item-icon-left" href="#/tab/articletypelist/2">
-	    		<i class="icon ion-ios-clock-outline"></i>
+	    		<i class="icon ion-coffee"></i>
 	    			Hover
-	    		<span ng-if="type2!='0'" class="badge badge-assertive">{{type2}}</span>
+	    		<span ng-if="type2!='0'" class="badge badge-assertive">{{articleNumber.hover}}</span>
 	        </a>
+
+            <a
+                ng-repeat="month in months" 
+                class="item item-icon-left" 
+                href="#/tab/articlebymonth/{{month.date}}"
+            >
+                <i class="icon ion-ios-paper-outline"></i>
+                    {{month.date}}
+                <span class="item-note" style="margin-right: 20px;font-size: 16px;">
+                    {{month.number}}
+                </span>
+            </a>        
 	    </ion-list>
+        <!-- <div ng-if="toggleViewName==='Sort'">
+            <ion-list>
+                <ion-item 
+                    ng-repeat="article in articles"
+                    ng-click="openModal(article)" 
+                    class="item-remove-animate item-avatar item-icon-right" 
+                    type="item-text-wrap" >
+                    
+                    <div style="display: inline-block;
+                        position: absolute;
+                        left: 0;"
+                    >
+                        <button ng-if="article.type!='2'" class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:0;">
+                            {{article.date_and_time|TimeToDate}}
+                        </button>
+                        <button ng-if="article.type=='2'" class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:0;">
+                            {{article.decimal|countDown}} 
+                        </button>
+
+                    </div>
+
+                    <h2>{{article.content}}</h2>
+                    <p>{{article.content.slice(20)}}</p>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                    <ion-option-button class="button-assertive" ng-click="remove(article)">
+                        Delete
+                    </ion-option-button>
+                </ion-item>
+            </ion-list>
+            <ion-infinite-scroll
+                on-infinite="loadMore()"
+                distance="1%"
+                ng-if="moreDataCanBeLoaded()">
+            </ion-infinite-scroll>
+        </div>  -->
 	</ion-content>
 </ion-view>

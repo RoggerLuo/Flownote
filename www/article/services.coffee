@@ -1,17 +1,36 @@
 module.exports=angular.module 'article.services',[]
+.factory 'ListOperation',(RemoveFunc)->
+    # 先设置checkMatch,注意有两个参数
+    # 再trigger
+    return {
+        remove:{
+            thread:''
+            type:''
+            trigger:($scope,article,thread = '0',type = '0',oprt = '')->
+                if not this.checkMatch(thread,type,oprt)
+                    this.remove($scope,article)
+            checkMatch:->
+                true
+            remove:($scope,article)->
+                RemoveFunc.call $scope.articles,article
+        }
+    }
+
 .factory 'FillScopeArticles',($ionicLoading,ArticleListMethod,GetArtListWithLazy)->
     execute = ($scope,params,callback='default')->
         ArticleListMethod $scope
         $scope.$on '$ionicView.enter', (e)-> #为了从编辑器后退的时候能够马上捕捉到刚才更新的或者增加的文章
             GetArtListWithLazy $scope,params,callback
     execute
-.factory 'GetArtListWithLazy',(GetArticles,Lazyload)->
+
+.factory 'GetArtListWithLazy',(GetArticles,Lazyload,DecimalFilter)->
     execute=($scope,params,callback)->
         GetArticles(params).then (res)->
             if callback isnt 'default'
                 lazyloadData=callback res.data.reverse()
             else
                 lazyloadData=res.data.reverse()
+            lazyloadData = DecimalFilter lazyloadData
             Lazyload $scope,lazyloadData
             console.log 'index get_item成功'
         ,(res)->
@@ -90,6 +109,7 @@ module.exports=angular.module 'article.services',[]
         type = '' 
         day=''
         week=''
+        month=''
         if data.thread?
             thread = data.thread
         if data.type?
@@ -98,7 +118,10 @@ module.exports=angular.module 'article.services',[]
             day = data.day
         if data.week?
             week = data.week
-        Resource.query({method:'get_item',thread_id:thread,type:type,day:day,week:week}).$promise
+        if data.month?
+            month = data.month
+
+        Resource.query({method:'get_item',thread_id:thread,type:type,day:day,week:week,month:month}).$promise
 
 .factory 'DeleteArticle',(Resource)->
     execute=(item_id)->
@@ -121,13 +144,20 @@ module.exports=angular.module 'article.services',[]
     execute
 
 
-.factory 'SetRelation',(Resource)->
-    execute = (item_id,thread_id)->
+.factory 'SetRelation',(Resource,$ionicPopup,$timeout)->
+    execute = (item_id,thread)->
         item_id=item_id.toString()#转换成字符串
-        thread_id=thread_id.toString()#转换成字符串
+        thread_id=thread.thread_id.toString()#转换成字符串
         promise = Resource.query({method:'item_to_thread',thread_id:thread_id,item_id:item_id}).$promise
         promise.then (res)->
             console.log 'SetRelation成功'
+            alertPopup = $ionicPopup.show
+                title: 'Thread has changed to '+thread.thread_text+' successfully',
+                template: '&nbsp;&nbsp;&nbsp;&nbsp; Disappear ~ '
+            $timeout(()->
+                 alertPopup.close()  #close the popup after 3 seconds for some reason
+            , 700)
+
         ,(res)->
             console.log 'SetRelation失败'
     execute
@@ -170,3 +200,4 @@ module.exports=angular.module 'article.services',[]
         ,(res)->
            console.log 'SetClock失败'
     execute
+

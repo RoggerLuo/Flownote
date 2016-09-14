@@ -1,6 +1,8 @@
 module.exports=angular.module 'calendar.services',[]
 .factory 'TimeKit',->
     require './timerParser.js'
+
+
 .factory 'GetDailySummary', (Resource)->
     execute = (startweek)->
         Resource.query({method:'get_summary',start:startweek}).$promise

@@ -1,7 +1,7 @@
 module.exports=angular.module 'editor.services',[]
-
-.factory 'EditorModal',($ionicModal,EditorFunction,CreateArticle,SaveArticle)->
+.factory 'EditorModal',($ionicModal,EditorFunction,CreateArticle,SaveArticle,ListOperation)->
     whenOpenModal = ($scope,article)->
+        $scope.modal.show()
         if article is 'new'
             $scope.article = {
                 content:''
@@ -22,7 +22,6 @@ module.exports=angular.module 'editor.services',[]
         element2 = document.querySelector('.keyboard-attach2')
         element2.addEventListener "touchstart", (e)->
             e.preventDefault()
-
         $scope.showSE = false
 
     whenCloseModal = ($scope)->
@@ -34,7 +33,21 @@ module.exports=angular.module 'editor.services',[]
         else
             if $scope.article.content isnt $scope.originContent
                 SaveArticle($scope.article.content,$scope.article.item_id)
+        $scope.modal.hide()
 
+    whenNewModal = ($scope)->
+        $scope.showSE = true
+        $scope.category = ''
+        if $scope.article.item_id is "new"
+            if $scope.article.content isnt ""
+                CreateArticle($scope.article)
+        else
+            if $scope.article.content isnt $scope.originContent
+                SaveArticle($scope.article.content,$scope.article.item_id)
+        promise = $scope.modal.hide()
+        promise.then (res)->
+            $scope.modal.show()
+            whenOpenModal $scope,'new'
 
     execute = ($scope)->
         EditorFunction $scope
@@ -45,12 +58,12 @@ module.exports=angular.module 'editor.services',[]
         .then (modal) ->
             $scope.modal = modal
         $scope.openModal = (article) ->
-            $scope.modal.show()
             whenOpenModal $scope,article
         $scope.closeModal = ->
             whenCloseModal $scope            
-            $scope.modal.hide()
-
+        $scope.newModal = ->
+            whenNewModal $scope
+            
         # Cleanup the modal when we're done with it!
         $scope.$on '$destroy', ->
             $scope.modal.remove()
@@ -60,11 +73,9 @@ module.exports=angular.module 'editor.services',[]
         # Execute action on remove modal
         $scope.$on 'modal.removed', ->
             # Execute action
-        
-
     execute
 
-.factory 'EditorFunction',(EditorThreadModal,SetRelation,SetClock,SetType,$ionicPopup,$timeout,SaveArticle,CreateArticle)->
+.factory 'EditorFunction',(EditorThreadModal,SetRelation,SetClock,SetType,$ionicPopup,$timeout,SaveArticle,CreateArticle,ListOperation)->
     execute = ($scope)->
         EditorThreadModal $scope
         $scope.preSave =->
@@ -80,11 +91,11 @@ module.exports=angular.module 'editor.services',[]
         # setRelation
         $scope.setRelation = (thread)->
             return false if $scope.preSave() isnt 'ready'
-            cordova.plugins.Keyboard.close()
-            SetRelation $scope.article.item_id,thread.thread_id
+            # cordova.plugins.Keyboard.close()
+            SetRelation $scope.article.item_id,thread
             $scope.category = thread.thread_text
             $scope.threadmodal.hide()
-
+            ListOperation.remove.trigger($scope,$scope.article,thread)
 
         # 加载这个里面一起 popup with modal
         # setType2 hover
@@ -103,6 +114,7 @@ module.exports=angular.module 'editor.services',[]
                 if $scope.article.type isnt '2'
                     SetType $scope.article,'2'
                     $scope.article.type = '2'
+                ListOperation.remove.trigger($scope,$scope.article,'0','2','setPeriod')
                 myPopup.close()
         
         # setPlan
@@ -113,11 +125,13 @@ module.exports=angular.module 'editor.services',[]
                 template: '&nbsp;&nbsp;&nbsp;&nbsp; Success ! '
             $timeout(()->
                  alertPopup.close()  #close the popup after 3 seconds for some reason
-            , 1000)
+            , 700)
             SetType $scope.article,'1'
             $scope.article.type = '1'
+            ListOperation.remove.trigger($scope,$scope.article,'0','1')
 
     execute
+
 .factory 'EditorThreadModal',($ionicModal,ThreadsHandler)->
     execute = ($scope)->
         $ionicModal.fromTemplateUrl 'editor/threadmodal.html', 
@@ -142,8 +156,6 @@ module.exports=angular.module 'editor.services',[]
         $scope.$on 'modal.removed', ->
             # Execute action
     execute
-
-
 
 .factory 'CreateArticle',(Resource)->
     execute = (article)->

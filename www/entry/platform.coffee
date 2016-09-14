@@ -11,3 +11,9 @@ module.exports=angular.module 'app.platform',[]
         #全局禁止touch之后的click事件
         # window.addEventListener "touchstart", (e)->
         #     e.preventDefault()
+
+# 应该单独写一个出来，init event
+.run (ThreadsHandler)-> # 加载 thread数据
+    ThreadsHandler (data)->
+        true
+

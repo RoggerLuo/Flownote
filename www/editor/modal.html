@@ -2,7 +2,7 @@
     <ion-header-bar class="bar bar-header bar-stable">
         <button ng-click="closeModal()" href="#/tab/articles" class="button light icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;完成</button>
         <h1 class="title">{{category}}</h1>
-        <button class="button button-clear button-primary" >notAllocate</button>
+        <button ng-click="newModal()" class="button button-clear button-primary" >New</button>
     </ion-header-bar>
   
     <div style="overflow:scroll;height:100%;">
@@ -10,7 +10,7 @@
         <div style="height:63px;width:100%;"></div>
         <textarea 
             class="padding"
-            placeholder="可以把 到期的提醒 展示在这里 随机展示" 
+            placeholder="Life is beautiful..." 
             style="
                 padding-bottom:63px;
                 width:100%;

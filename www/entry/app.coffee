@@ -12,7 +12,7 @@ module.exports = angular.module 'app', [
     require('../directives/directives.coffee').name,
     require('../article/article.coffee').name,
     require('../thread/thread.coffee').name,
-    require('../calendar/calendar.coffee').name,
+    # require('../calendar/calendar.coffee').name,
     require('../setting/setting.coffee').name,
     require('../editor/editor.coffee').name
     require('../retrospect/retrospect.coffee').name

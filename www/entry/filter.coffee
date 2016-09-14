@@ -1,4 +1,12 @@
 module.exports = angular.module('app.filter',[])
+.filter 'threadFilter',(ThreadsHandler,GlobalVar)->
+    (input)->
+        rs = 'Root'
+        GlobalVar.bricks.some (el,index,arr)->
+            if el.thread_id == input
+                rs = el.thread_text
+                return true
+        rs
 .filter 'countDown',->
     (input)->
         if input > 0 

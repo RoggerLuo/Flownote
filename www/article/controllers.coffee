@@ -1,4 +1,9 @@
 module.exports = angular.module('article.controller',[])
+
+.controller 'articlesCtrl', ($scope,EditorModal,FillScopeArticles)-> 
+    EditorModal $scope
+    FillScopeArticles $scope,{}
+    
 .controller 'planCtrl',($scope,GlobalVar,EditorModal,FillScopeArticles,ThreadViewModel)->
     $scope.title = GlobalVar.thread.thread_text
     FillScopeArticles $scope,{thread:GlobalVar.thread.thread_id,type:1},(data)->
