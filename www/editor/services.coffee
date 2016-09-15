@@ -13,19 +13,17 @@ module.exports=angular.module 'editor.services',[]
             }
         else 
             $scope.article = article
+        
         $scope.originContent = $scope.article.content
-        # $scope.$on "$ionicView.beforeLeave", (event, data)-> #为了后退的时候能够保存
-
+        
         element = document.querySelector('.keyboard-attach')
         element.addEventListener "touchstart", (e)->
             e.preventDefault()
         element2 = document.querySelector('.keyboard-attach2')
         element2.addEventListener "touchstart", (e)->
             e.preventDefault()
-        $scope.showSE = false
 
     whenCloseModal = ($scope)->
-        $scope.showSE = true
         $scope.category = ''
         if $scope.article.item_id is "new"
             if $scope.article.content isnt ""
@@ -36,7 +34,6 @@ module.exports=angular.module 'editor.services',[]
         $scope.modal.hide()
 
     whenNewModal = ($scope)->
-        $scope.showSE = true
         $scope.category = ''
         if $scope.article.item_id is "new"
             if $scope.article.content isnt ""

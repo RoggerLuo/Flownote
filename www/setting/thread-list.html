@@ -8,7 +8,7 @@
                 <i class="icon ion-arrow-swap"></i><!-- Reorder -->
             </button>
             &nbsp;
-            <button class="button" ng-click="openModal()">
+            <button class="button" ng-click="openThreadViewModal()">
                 <i class="icon ion-plus"></i>
             </button>
         </ion-nav-buttons>
@@ -24,11 +24,7 @@
                 <h2>{{thread.thread_text}}</h2>
                 <p>{{thread.thread_id|switchReminder}}&nbsp;{{thread.thread_id|interpretTimestamp}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
-                <!--<ion-option-button class="button-calm"
-                                   ng-click="openPopover($event)">
-                  &nbsp;&nbsp;Edit&nbsp;&nbsp;
-                </ion-option-button>-->
-                <ion-option-button class="button-assertive" ng-click="remove(thread)">
+                <ion-option-button class="button-assertive" ng-click="removeThread(thread)">
                    Delete
                 </ion-option-button>
                 <ion-reorder-button class="ion-navicon" on-reorder="moveItem(thread, $fromIndex, $toIndex)"></ion-reorder-button>
