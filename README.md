@@ -1,9 +1,12 @@
+##v1.1.3
+- thread的排序可以保存，增加一个order_index字段
+
 ##v1.1.2
 - 把raw改成history
-- 修复thread不能删除的bug
 - 删除keyboardAttachmentSE
 - 给threadModal加上KBAttachment
 - 修改了threadList的是否填色的bug，
+- 残留localStorage代码让thread删除失效
 
 原因是对于toggle组件'false'和false是不同的,
 mysql会把true存成字符串

@@ -90,13 +90,6 @@ module.exports=angular.module 'thread.services',[]
     execute
 .factory 'ThreadsHandler',(Resource,GlobalVar)->
     execute = (callback)->
-        # 貌似一用storage就坏事
-        # if storage.getItem "all_threads_list"
-        #     data = GetThreadsFromStorage()
-        #     GlobalVar.bricks = data
-        #     callback data
-        # else
-
         if GlobalVar.bricks?
             callback GlobalVar.bricks
         else
@@ -166,18 +159,26 @@ module.exports=angular.module 'thread.services',[]
         promise.then((res)->
             #footer提醒
             console.log "修改thread成功"
-            true
         ,(res)->
             #warning提醒
             console.log "修改thread失败"
-            true
         )
 
     execute
 
 .factory 'ThreadDelete',(Resource,RemoveFunc) -> # 删
-    storage=window.localStorage        
     execute = (thread_obj)->
         thread_id=thread_obj.thread_id.toString()
         promise = Resource.query({method:'thread_delete',thread_id:thread_id}).$promise
+    execute    
+
+.factory 'SaveThreadOrder',(Resource) -> # 删
+    execute = (orderArr)->
+        promise = Resource.query({method:'thread_order',order:orderArr}).$promise
+        promise.then((res)->
+            console.log "保存thread order成功"
+        ,(res)->
+            console.log "保存thread order失败"
+        )
+
     execute    

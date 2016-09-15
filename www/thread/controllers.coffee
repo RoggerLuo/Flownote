@@ -10,7 +10,7 @@ module.exports = angular.module('thread.controller',[])
 .controller 'settingCtrl', ($scope)->
     true
 
-.controller 'threadListEditor', ($scope,ThreadsHandler,ThreadViewModel)->
+.controller 'threadListEditor', ($scope,ThreadsHandler,ThreadViewModel,SaveThreadOrder)->
     # data
     ThreadsHandler (data)->
         $scope.bricks = data
@@ -19,10 +19,10 @@ module.exports = angular.module('thread.controller',[])
     $scope.moveItem = (thread, fromIndex, toIndex)-> # reorder function
         $scope.bricks.splice fromIndex, 1
         $scope.bricks.splice toIndex, 0, thread
-        result=[]
-        for brick in $scope.bricks
-            result.unshift brick.thread_id 
-        # window.localStorage.setItem "all_threads_list",JSON.stringify result
+        orderArr = []
+        $scope.bricks.forEach (el,index)->
+            orderArr.push {index:index,thread_id:el.thread_id}
+        SaveThreadOrder JSON.stringify(orderArr)
 
     ThreadViewModel $scope
 
