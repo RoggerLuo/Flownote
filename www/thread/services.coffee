@@ -9,7 +9,7 @@ module.exports=angular.module 'thread.services',[]
         $scope.editData =
             thread_text:''
             color:'button-stable'
-            stuff:'false'
+            stuff: false
             thread_id:'new'
 
         $scope.cancelThreadView = ->
@@ -20,7 +20,7 @@ module.exports=angular.module 'thread.services',[]
             $scope.editData =
                 thread_text:''
                 color:'button-stable'
-                stuff:'false'
+                stuff: false
                 thread_id:'new'
 
         $ionicModal.fromTemplateUrl 'thread/thread-modal.html', {
@@ -31,11 +31,20 @@ module.exports=angular.module 'thread.services',[]
             $scope.threadViewModal = modal
         
         $scope.openThreadViewModal = (thread) ->
-            $scope.threadViewModal.show()
+            promise = $scope.threadViewModal.show()
             if thread?
                 $scope.editData = thread
+                if thread.stuff == 'true'
+                    $scope.editData.stuff = true
                 $scope.originalThreadData = JSON.parse JSON.stringify thread 
-        
+            promise.then ->
+                element = document.querySelector('.keyboard-attach')
+                element.addEventListener "touchstart", (e)->
+                    e.preventDefault()
+                element2 = document.querySelector('.keyboard-attach2')
+                element2.addEventListener "touchstart", (e)->
+                    e.preventDefault()
+
         $scope.closeThreadViewModal = ->
             $scope.threadViewModal.hide()
 
@@ -57,17 +66,23 @@ module.exports=angular.module 'thread.services',[]
             else                                 # 改
                 if $scope.originalThreadData.thread_text!=$scope.editData.thread_text||$scope.originalThreadData.color!=$scope.editData.color||$scope.originalThreadData.stuff!=$scope.editData.stuff
                     ModifyThread $scope.editData
+            # 还原初始状态
             $scope.editData =
                 thread_text:''
                 color:'button-stable'
-                stuff:'false'
+                stuff: false
                 thread_id:'new'
                 
         $scope.removeThread = (thread) -> # 删
             r = confirm "请先清空分类下的文章,确定要删除"+thread.thread_text+"?"
             if r
-                $scope.bricks.splice $scope.bricks.indexOf(thread), 1
-                ThreadDelete thread
+                promise = ThreadDelete thread
+                promise.then((res)->
+                    console.log "删除thread成功"
+                    $scope.bricks.splice $scope.bricks.indexOf(thread), 1
+                ,(res)->
+                    console.log "删除thread失败!"
+                )
 
         $scope.openThreadViewModalDelegate = ->
             $scope.openThreadViewModal GlobalVar.thread
@@ -164,18 +179,5 @@ module.exports=angular.module 'thread.services',[]
     storage=window.localStorage        
     execute = (thread_obj)->
         thread_id=thread_obj.thread_id.toString()
-        #删除thread_list
-        list=JSON.parse storage.getItem "all_threads_list"
-        RemoveFunc.call list,thread_id
-        storage.setItem "all_threads_list",JSON.stringify list
-
         promise = Resource.query({method:'thread_delete',thread_id:thread_id}).$promise
-        promise.then((res)->
-            console.log "删除thread成功"
-            true
-        ,(res)->
-            console.log "删除thread失败!"
-
-            true
-        )
     execute    

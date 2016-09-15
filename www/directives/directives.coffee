@@ -22,8 +22,9 @@ module.exports = angular.module('app.directives',[])
     {
         restrict: 'EA'
         templateUrl:'directives/keyboard-attachment.html'
-        controller: ($scope, $element)->
-            $scope.stopPro = ($event)->
+        link: (scope,el,attr)->
+            scope.stopPro = ->
                 cordova.plugins.Keyboard.close()
-            $scope.show = true
+            scope.KBAttShow = true
+
     }

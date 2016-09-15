@@ -25,5 +25,5 @@ module.exports = angular.module('thread.controller',[])
         # window.localStorage.setItem "all_threads_list",JSON.stringify result
 
     ThreadViewModel $scope
-        
+
 

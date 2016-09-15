@@ -19,10 +19,10 @@
             <ion-item ng-repeat="thread in bricks"  ng-click="openThreadViewModal(thread)" class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" >
                 <img ng-src="img/thread-avatar.png"
                     class="button {{thread.color}}" 
-                    ng-class="{'button-outline':!thread.stuff}"
+                    ng-class="{'button-outline':thread.stuff=='false'}"
                 >
                 <h2>{{thread.thread_text}}</h2>
-                <p>{{thread.thread_id|switchReminder}}&nbsp;{{thread.thread_id|interpretTimestamp}}</p>
+                <p>{{thread.thread_id|interpretTimestamp}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
                 <ion-option-button class="button-assertive" ng-click="removeThread(thread)">
                    Delete

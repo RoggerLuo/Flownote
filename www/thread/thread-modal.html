@@ -24,7 +24,7 @@
                     <input type="text" placeholder="工作" ng-model="editData.thread_text">
                 </label>
                 <!-- <label class="item item-input item-stacked-label" style="padding:0"> -->
-                    <div class="input-label" style="padding:15px">选择一款颜色</div>
+                    <div class="input-label" style="padding:15px">选择颜色</div>
 
                     <div class="button-bar">
                         <button ng-click="editData.color='button-light'" class="button button-light">light</button>
@@ -43,10 +43,11 @@
                     </div>   
                 <!-- </label> -->
 
-                <ion-toggle  ng-model="editData.stuff">
+                <ion-toggle ng-model="editData.stuff">
                     是否填色
                 </ion-toggle>
 
             </div>
         </ion-content>
+        <keyboard-attachment></keyboard-attachment>
     </ion-modal-view>

@@ -131,6 +131,7 @@ module.exports=angular.module 'editor.services',[]
 
 .factory 'EditorThreadModal',($ionicModal,ThreadsHandler)->
     execute = ($scope)->
+
         $ionicModal.fromTemplateUrl 'editor/threadmodal.html', 
             scope: $scope,
             animation: 'slide-in-up'
@@ -140,6 +141,7 @@ module.exports=angular.module 'editor.services',[]
             $scope.threadmodal.show()
             ThreadsHandler (data)->
                 $scope.bricks=data
+
         $scope.closeThreadModal = ->
             $scope.threadmodal.hide()
 

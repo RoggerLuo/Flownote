@@ -6,7 +6,7 @@
         <a 
             ng-repeat="brick in bricks"  
             href="#/tab/threadtabs/common"            
-            ng-class="{'button-outline':!brick.stuff}"  
+            ng-class="{'button-outline':brick.stuff=='false'}"
             ng-click="assign(brick)"
             class="button  {{brick.color}}" 
             style="line-height:1.75;margin:3px 3px;" 
