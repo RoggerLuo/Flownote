@@ -23,10 +23,6 @@ module.exports = angular.module('retrospect.controller',[])
             data = DecimalFilter data
             data.sort (a,b)->
                 -(a["decimal"] - b["decimal"])
-            i=0
-            data.forEach (el)->
-                if el.decimal>=1
-                    i+=1
         return data
 
 .controller 'articleTypeList', ($scope,$stateParams,GetArticles,GlobalVar,DecimalFilter,EditorModal,FillScopeArticles,$ionicHistory,ListOperation)-> # 增 
@@ -63,10 +59,26 @@ module.exports = angular.module('retrospect.controller',[])
     EditorModal $scope
     FillScopeArticles $scope,month:$stateParams.month
 
-.controller 'retrospect', ($scope,GetArticles,GlobalVar,EditorModal,GetArtNumOfMonth,FillScopeArticles,GetArtNumOfCate)-> 
+
+.controller 'retrospect', ($scope,DecimalFilter,GetArticles,GlobalVar,EditorModal,GetArtNumOfMonth,FillScopeArticles,GetArtNumOfCate)->     
     EditorModal $scope
-    # 获得每个分类的文章数量
+
     $scope.$on '$ionicView.enter', (e)-> 
+        finalArray = []
+        param1={thread:'0',type:'0'}
+        GetArticles(param1).then (res)->
+            finalArray=DecimalFilter(res.data.reverse())
+            param2={type:'2'}
+            GetArticles(param2)
+        .then (res)->
+            data = DecimalFilter res.data
+            data.sort (a,b)->
+                -(a["decimal"] - b["decimal"])
+            finalData = data.filter (el)->
+                el.decimal>=0
+            $scope.articles=finalArray.concat(finalData);
+
+        # 获得每个分类的文章数量
         GetArtNumOfMonth().then (res)->
             res.data.forEach (el,index,arr)->
                 Ym = el.date.substring(el.date.length-2)

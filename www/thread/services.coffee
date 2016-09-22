@@ -9,7 +9,7 @@ module.exports=angular.module 'thread.services',[]
         $scope.editData =
             thread_text:''
             color:'button-stable'
-            stuff: false
+            stuff: 'false'
             thread_id:'new'
 
         $scope.cancelThreadView = ->
@@ -20,7 +20,7 @@ module.exports=angular.module 'thread.services',[]
             $scope.editData =
                 thread_text:''
                 color:'button-stable'
-                stuff: false
+                stuff: 'false'
                 thread_id:'new'
 
         $ionicModal.fromTemplateUrl 'thread/thread-modal.html', {
@@ -31,12 +31,13 @@ module.exports=angular.module 'thread.services',[]
             $scope.threadViewModal = modal
         
         $scope.openThreadViewModal = (thread) ->
-            promise = $scope.threadViewModal.show()
             if thread?
                 $scope.editData = thread
-                if thread.stuff == 'true'
-                    $scope.editData.stuff = true
                 $scope.originalThreadData = JSON.parse JSON.stringify thread 
+            
+            $scope.toggleCtrl = $scope.editData.stuff=='true'; 
+
+            promise = $scope.threadViewModal.show()
             promise.then ->
                 element = document.querySelector('.keyboard-attach')
                 element.addEventListener "touchstart", (e)->
@@ -58,6 +59,11 @@ module.exports=angular.module 'thread.services',[]
             true
 
         $scope.createThread=->
+            if $scope.toggleCtrl
+                $scope.editData.stuff = 'false'
+            else
+                $scope.editData.stuff = 'true'
+            $scope.threadViewModal.hide();
             if $scope.editData.thread_text ==""
                 return  false
             if $scope.editData.thread_id == 'new'  # 增
@@ -70,9 +76,9 @@ module.exports=angular.module 'thread.services',[]
             $scope.editData =
                 thread_text:''
                 color:'button-stable'
-                stuff: false
+                stuff: 'false'
                 thread_id:'new'
-                
+            
         $scope.removeThread = (thread) -> # 删
             r = confirm "请先清空分类下的文章,确定要删除"+thread.thread_text+"?"
             if r

@@ -104,38 +104,4 @@ module.exports = angular.module('app.router',[])
                     templateUrl: 'article/article-list.html'
                     controller: 'articlesCtrl'
 
-
-        # calendar
-        # .state 'tab.calendarDay', 
-        #     url: '/calendarDay/:week'
-        #     cache:false
-        #     views: 
-        #         'calendar': 
-        #             templateUrl: 'calendar/calendarDay.html'
-        #             controller: 'calendarDay'
-        # .state 'tab.calendarWeek', 
-        #     cache:false
-        #     url: '/calendarweek/:month'
-        #     views: 
-        #         'calendar': 
-        #             templateUrl: 'calendar/calendar-week.html'
-        #             controller: 'calendarWeek'
-        # .state 'tab.calendarMonth', 
-        #     cache:false
-        #     url: '/calendarmonth'
-        #     views: 
-        #         'calendar': 
-        #             templateUrl: 'calendar/calendar-month.html'
-        #             controller: 'calendarMonth'
-
-        # .state 'tab.articlelist', 
-        #     url: '/articlelist/:day'
-        #     cache:false
-        #     views: 
-        #         'calendar': 
-        #             templateUrl: 'article/article-list.html' #'calendar/article-list-by-day.html'
-        #             controller: 'articleListByDay'
-
-        
-
     $urlRouterProvider.otherwise '/tab/retrospect'

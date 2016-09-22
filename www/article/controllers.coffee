@@ -15,7 +15,7 @@ module.exports = angular.module('article.controller',[])
 
 .controller 'commonCtrl',($scope,GlobalVar,EditorModal,FillScopeArticles,ThreadViewModel)->    
     $scope.title = GlobalVar.thread.thread_text
-    FillScopeArticles $scope,{thread:GlobalVar.thread.thread_id,type:0},(data)->
+    FillScopeArticles $scope,{thread:GlobalVar.thread.thread_id},(data)->
         $scope.articles=data
         GlobalVar.thread.type0=$scope.articles.length
         return data

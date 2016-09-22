@@ -1,3 +1,11 @@
+##v1.1.4
+- 修复thread填充颜色stuff属性显示错误
+- 在retropect页面增加显示部分articleList
+- raw分类的概念改成Cue
+
+>Sept. 22th
+
+
 ##v1.1.3
 - thread的排序可以保存，增加一个order_index字段
 

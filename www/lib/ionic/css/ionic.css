@@ -8625,8 +8625,9 @@ progress {
     margin-bottom: 10px; }
   .button.button-light {
     border-color: transparent;
-    background-color: #fff;
-    color: #444; }
+    background-color: #ddd;
+    color: #444;
+    }
     .button.button-light:hover {
       color: #444;
       text-decoration: none; }
@@ -8651,8 +8652,11 @@ progress {
         color: #fff; }
   .button.button-stable {
     border-color: transparent;
-    background-color: #f8f8f8;
-    color: #444; }
+    background-color: rgb(144, 144, 144);
+    color: #fff;
+/*    background-color: #f8f8f8;
+    color: #444;*/ 
+    }
     .button.button-stable:hover {
       color: #444;
       text-decoration: none; }
@@ -8703,7 +8707,7 @@ progress {
         color: #fff; }
   .button.button-calm {
     border-color: transparent;
-    background-color: #11c1f3;
+    background-color: #43b4ea;
     color: #fff; }
     .button.button-calm:hover {
       color: #fff;
@@ -8755,7 +8759,7 @@ progress {
         color: #fff; }
   .button.button-balanced {
     border-color: transparent;
-    background-color: #33cd5f;
+    background-color: #80da2e;
     color: #fff; }
     .button.button-balanced:hover {
       color: #fff;

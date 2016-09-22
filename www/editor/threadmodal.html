@@ -10,7 +10,7 @@
             ng-repeat="brick in bricks"  
             ng-click="setRelation(brick)"
             class="button {{brick.color}}"
-            ng-class="{'button-outline':!brick.stuff}" 
+            ng-class="{'button-outline':brick.stuff=='false'}" 
             style="line-height:1.75;margin:3px 3px;" 
             >
             {{brick.thread_text}}
