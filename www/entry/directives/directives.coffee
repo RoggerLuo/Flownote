@@ -10,18 +10,11 @@ module.exports = angular.module('app.directives',[])
                 $rootScope.hideTabs = false
     }
 
-.directive 'editorFooter', ->
-    {
-        restrict: 'EA'
-        templateUrl:'directives/editor-footer.html'
-        controller: ($scope, $element,EditorFunction)->
-            EditorFunction $scope
-    }
 
 .directive 'keyboardAttachment', ->
     {
         restrict: 'EA'
-        templateUrl:'directives/keyboard-attachment.html'
+        templateUrl:'entry/directives/keyboard-attachment.html'
         link: (scope,el,attr)->
             scope.stopPro = ->
                 cordova.plugins.Keyboard.close()

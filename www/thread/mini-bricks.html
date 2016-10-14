@@ -5,18 +5,17 @@
         <button class="button button-clear button-primary" >notAllocate</button>
     </ion-header-bar>
 
-    <ion-content class="padding">
-        <a
+    <ion-content>
+        <a 
             ng-repeat="brick in bricks"  
-            ng-click="setRelation(brick)"
-            class="button {{brick.color}}"
-            ng-class="{'button-outline':brick.stuff=='false'}" 
-            style="line-height:1.75;margin:3px 3px;" 
-            >
+            ng-class="{'button-outline':brick.stuff=='false'}"
+            ng-click="editor.setRelation(brick)"
+            class="button  {{brick.color}}" 
+            style="line-height:47px;margin:3px 3px;padding: 0px 5px;" 
+        >
             {{brick.thread_text}}
-            <br>
-            {{brick.type0|typeDescrip}} {{brick.type1|typeDescrip}} {{brick.type2|typeDescrip}} 
         </a>
+        
     </ion-content>
 </ion-modal-view>
 

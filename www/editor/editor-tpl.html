@@ -1,0 +1,44 @@
+<ion-modal-view>
+
+    <ion-header-bar class="bar bar-header bar-stable">
+        <button 
+            ng-click="editor.closeEditorModal()" 
+            href="#/tab/articles" 
+            class="button light icon-left ion-ios-arrow-back button-clear button-dark"
+        >
+            &nbsp;完成
+        </button>
+        <h1 class="title">{{category}}</h1>
+        <button ng-click="editor.newEditorModal()" class="button button-clear button-primary">New</button>
+    </ion-header-bar>
+
+    <ion-content style="overflow:hidden;">
+        <div style="height:100%;">
+            <textarea
+                ng-model="editor.note.content"
+                class="padding"
+                placeholder="Life is beautiful..." 
+                style="
+                    padding-bottom:63px;
+                    width:100%;
+                    font-size:16px;
+                    border:0px;
+                    height:230px;
+                    line-height: 1.25;
+                    overflow:scroll;
+                    border: 1px solid #CCC;
+                    border-radius: 0;
+                    "
+                autofocus
+            ></textarea>                
+        </div>
+    </ion-content>
+
+    <keyboard-attachment></keyboard-attachment>
+    
+    <editor-footer></editor-footer>
+
+</ion-modal-view>
+
+
+    

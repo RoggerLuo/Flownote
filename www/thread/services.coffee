@@ -29,12 +29,14 @@ module.exports=angular.module 'thread.services',[]
             }
         .then (modal) ->
             $scope.threadViewModal = modal
-        
+        $scope.clickToggle = ()->
+            $scope.toggleCtrl = !$scope.toggleCtrl
         $scope.openThreadViewModal = (thread) ->
             if thread?
                 $scope.editData = thread
                 $scope.originalThreadData = JSON.parse JSON.stringify thread 
             
+
             $scope.toggleCtrl = $scope.editData.stuff=='true'; 
 
             promise = $scope.threadViewModal.show()
@@ -58,11 +60,14 @@ module.exports=angular.module 'thread.services',[]
         $scope.$on 'modal.removed', ->
             true
 
+
         $scope.createThread=->
             if $scope.toggleCtrl
-                $scope.editData.stuff = 'false'
-            else
                 $scope.editData.stuff = 'true'
+
+            else
+                $scope.editData.stuff = 'false'
+
             $scope.threadViewModal.hide();
             if $scope.editData.thread_text ==""
                 return  false

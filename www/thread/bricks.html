@@ -1,20 +1,19 @@
-<ion-view view-title="Bricks">
+<ion-view view-title="分类">
     <ion-nav-buttons side="secondary">
-        <button ng-click="openModal('new')" class="button button-icon icon ion-compose"></button>
+        <button ng-click="editor.openEditorModal('new')" class="button button-icon icon ion-compose"></button>
     </ion-nav-buttons>
-    <ion-content class="padding">
+    <ion-content>
+        <div style="display:flex;flex-wrap:wrap;align-content:flex-end;">
         <a 
             ng-repeat="brick in bricks"  
-            href="#/tab/threadtabs/common"            
+            href="#/tab/threadtabs/common"
             ng-class="{'button-outline':brick.stuff=='false'}"
             ng-click="assign(brick)"
             class="button  {{brick.color}}" 
-            style="line-height:1.75;margin:3px 3px;" 
-            >
-            
+            style="line-height:47px;margin:3px 3px;padding: 0px 5px;" 
+        >
             {{brick.thread_text}}
-            <br>
-            {{brick.type0|typeDescrip}} {{brick.type1|typeDescrip}} {{brick.type2|typeDescrip}} 
         </a>
+        </div>
     </ion-content>
 </ion-view>

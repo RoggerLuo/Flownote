@@ -3,12 +3,11 @@ module.exports = {
     output :{
         path :'./www/build', //这个是以wabpack.config.js所在的根目录为路径
         filename :"bundle.js",
-        publicPath: "/mynote/www/build/" //貌似这个是以index为当前路径
-
-        //publicPath: "/www/build/"//"./www/build/" //貌似这个是以index为当前路径
+        // publicPath: "/mynote/www/build/" //貌似这个是以index为当前路径
     },
     module :{
         loaders :[
+            { test: /\.html$/, loader: 'raw' },
             {
                 test :/\.coffee$/,
                 loader :"coffee",

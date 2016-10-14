@@ -1,4 +1,7 @@
-module.exports=angular.module 'app.services',[]
+require 'angular-resource'
+
+module.exports=angular.module 'app.services',['ngResource']
+
 .factory 'GlobalVar', ->
     {
         thread:{}
@@ -26,6 +29,7 @@ module.exports=angular.module 'app.services',[]
             params: 
                 callback: 'JSON_CALLBACK'
             isArray:false}
+
 .factory 'RemoveFunc',->
     removeFunc = (val)->
         index = this.indexOf val

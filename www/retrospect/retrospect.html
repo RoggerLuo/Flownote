@@ -1,142 +1,74 @@
-<ion-view view-title="Retrospect">
+<ion-view view-title="回顾">
 <!--     <ion-nav-buttons side="primary">
         <button ng-click="toggleView()" class="button button-icon">{{toggleViewName}}</button>
     </ion-nav-buttons>
  -->
     <ion-nav-buttons side="secondary">
-        <button ng-click="openModal('new')" class="button button-icon icon ion-compose"></button>
+        <button ng-click="editor.openEditorModal('new')" class="button button-icon icon ion-compose"></button>
     </ion-nav-buttons>
 
 	<ion-content>
+    
+        <ion-refresher on-refresh="doRefresh()"  
+            pulling-text="下拉刷新..."   
+            refreshing-text="正在刷新!"  
+            refreshing-icon="ion-loading-b">        
+        </ion-refresher>  
+
 	    <ion-list>
-            <ion-item 
-                ng-repeat="article in articles"
-                ng-click="openModal(article)" 
-                class="item-remove-animate item-avatar item-icon-right" 
-                type="item-text-wrap" 
-            >
-                <div style="display: inline-block;
-                    position: absolute;
-                    left: 0;"
-                >
-                    <button ng-if="article.type=='0'" class="button button-dark" style="margin: 0 0 0 10px;padding:0;">
-                        Cue
-                    </button>
-
-                    <button ng-if="article.type=='1'" class="button button-balanced" style="margin: 0 0 0 10px;padding:0;">
-                        Plan
-                    </button>
-                    <button ng-if="article.type=='2'" class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:0;">
-                        {{article.decimal|countDown}} 
-                    </button>
-
-                </div>
-
-                <h2>{{article.content}}</h2>
-                <p>{{article.content.slice(20)}}</p>
-                <p style="
-                    font-size: 13px;
-                    margin: 0 0 -6px 0;
-                    color: #5e8ab1;;
-                    "
-                >
-                    {{article.thread_id|threadFilter}}&nbsp;{{article.date_and_time|interpretTimestamp}}
-                </p>
-
-                <i class="icon ion-chevron-right icon-accessory"></i>
-                <ion-option-button class="button-assertive" ng-click="remove(article)">
-                    Delete
-                </ion-option-button>
-            </ion-item>
-            
-            <a class="item item-icon-left" href="#/tab/articleSEList/All">
+            <a class="item item-icon-left" href="#/tab/noteListSpecial/All">
                 <i class="icon ion-briefcase"></i>
-                    All
+                    所有
                 <span class="item-note" style="margin-right: 20px;font-size: 16px;">
                     {{articleNumber.all}}
                 </span>
             </a>
-	        <a class="item item-icon-left" href="#/tab/articleSEList/Untreated">
+	        <a class="item item-icon-left" href="#/tab/noteListSpecial/Untreated">
 	    		<i class="icon ion-planet"></i>
-	    			Untreated
+	    			未处理
 	    		<span class="item-note" style="margin-right: 20px;font-size: 16px;">
 	    			{{articleNumber.untreated}}
 	    		</span>
 	        </a>
 
-            <a class="item item-icon-left" href="#/tab/articleSEList/Uncategorized">
+            <a class="item item-icon-left" href="#/tab/noteListSpecial/Uncategorized">
         		<i class="icon ion-ios-color-filter"></i>
-        			Uncategorized
+        			未分类别
         		<span class="item-note" style="margin-right: 20px;font-size: 16px;">
         			{{articleNumber.uncategorized}}
         		</span>
             </a>
-	        <a class="item item-icon-left" href="#/tab/articletypelist/0">
+	        <a class="item item-icon-left" href="#/tab/noteListByType/0">
 	    		<i class="icon ion-leaf"></i>
-	    			History
+	    			普通笔记
 	    		<span class="item-note" style="margin-right: 20px;font-size: 16px;">
 	    			{{articleNumber.raw}}
 	    		</span>
 	        </a>	        
-		    <a class="item item-icon-left" href="#/tab/articletypelist/1">
+		    <a class="item item-icon-left" href="#/tab/noteListByType/1">
 		      	<i class="icon ion-android-locate"></i>
-		      		Plan
+		      		计划
 				<span class="badge badge-balanced" >
 					{{articleNumber.plan}}
 				</span>
 		    </a>
-	        <a class="item item-icon-left" href="#/tab/articletypelist/2">
+	        <a class="item item-icon-left" href="#/tab/noteListByType/2">
 	    		<i class="icon ion-coffee"></i>
-	    			Hover
+	    			提醒
 	    		<span ng-if="type2!='0'" class="badge badge-assertive">{{articleNumber.hover}}</span>
 	        </a>
 
             <a
                 ng-repeat="month in months" 
                 class="item item-icon-left" 
-                href="#/tab/articlebymonth/{{month.date}}"
+                href="#/tab/noteListByMonth/{{month.date}}"
             >
                 <i class="icon ion-ios-paper-outline"></i>
-                    {{month.date}}
+                    {{month.date}}月
                 <span class="item-note" style="margin-right: 20px;font-size: 16px;">
                     {{month.number}}
                 </span>
             </a>        
 	    </ion-list>
-        <!-- <div ng-if="toggleViewName==='Sort'">
-            <ion-list>
-                <ion-item 
-                    ng-repeat="article in articles"
-                    ng-click="openModal(article)" 
-                    class="item-remove-animate item-avatar item-icon-right" 
-                    type="item-text-wrap" >
-                    
-                    <div style="display: inline-block;
-                        position: absolute;
-                        left: 0;"
-                    >
-                        <button ng-if="article.type!='2'" class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:0;">
-                            {{article.date_and_time|TimeToDate}}
-                        </button>
-                        <button ng-if="article.type=='2'" class="button {{article.buttonStyle}}" style="margin: 0 0 0 10px;padding:0;">
-                            {{article.decimal|countDown}} 
-                        </button>
-
-                    </div>
-
-                    <h2>{{article.content}}</h2>
-                    <p>{{article.content.slice(20)}}</p>
-                    <i class="icon ion-chevron-right icon-accessory"></i>
-                    <ion-option-button class="button-assertive" ng-click="remove(article)">
-                        Delete
-                    </ion-option-button>
-                </ion-item>
-            </ion-list>
-            <ion-infinite-scroll
-                on-infinite="loadMore()"
-                distance="1%"
-                ng-if="moreDataCanBeLoaded()">
-            </ion-infinite-scroll>
-        </div>  -->
 	</ion-content>
 </ion-view>

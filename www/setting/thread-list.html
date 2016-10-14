@@ -21,8 +21,8 @@
                     class="button {{thread.color}}" 
                     ng-class="{'button-outline':thread.stuff=='false'}"
                 >
-                <h2>{{thread.thread_text}}</h2>
-                <p>{{thread.thread_id|interpretTimestamp}}</p>
+                <h2 style="padding-left: 20px;">{{thread.thread_text}}</h2>
+                <p style="padding-left: 20px;">{{thread.thread_id|interpretTimestamp}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
                 <ion-option-button class="button-assertive" ng-click="removeThread(thread)">
                    Delete

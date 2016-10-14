@@ -66,8 +66,8 @@ module.exports = angular.module('app.filter',[])
         
         if min < 10
             min = "0" + min 
-        
-        myyear + "年" + mymonth + "月" + myweekday + '日 ' + hour + ':' + min
+        # myyear + "年" + 
+        mymonth + "月" + myweekday + '日 ' + hour + ':' + min
 
 
 .filter 'switchReminder', ->

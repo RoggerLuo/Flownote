@@ -53,10 +53,10 @@ module.exports=angular.module 'article.services',[]
 .factory 'ArticleListMethod',(RemoveFunc,DeleteArticle,$ionicHistory,$location)->
     execute = ($scope)->
         $scope.remove = (article)-> # 删
-            r = confirm "确定要删除"+article.content.slice(0,10)+"?"
-            if r
-                DeleteArticle(article.item_id)
-                RemoveFunc.call $scope.articles,article
+            # r = confirm "确定要删除"+article.content.slice(0,10)+"?"
+            # if r
+            DeleteArticle(article.item_id)
+            RemoveFunc.call $scope.articles,article
 
         $scope.redirect = (addr)-> #为了日期单位 前后切换的时候不会搞乱返回关系
             $ionicHistory.nextViewOptions disableBack: true
@@ -137,30 +137,12 @@ module.exports=angular.module 'article.services',[]
     execute = (content,item_id)->
         item_id=item_id.toString()#转换成字符串        
         promise = Resource.query({method:'item_saveContent',content:content,item_id:item_id}).$promise
-        promise.then (res)->
-            console.log 'SaveArticle成功'
-        ,(res)->
-            console.log 'SaveArticle失败'
+        # promise.then (res)->
+        #     console.log 'SaveArticle成功'
+        # ,(res)->
+        #     console.log 'SaveArticle失败'
     execute
 
-
-.factory 'SetRelation',(Resource,$ionicPopup,$timeout)->
-    execute = (item_id,thread)->
-        item_id=item_id.toString()#转换成字符串
-        thread_id=thread.thread_id.toString()#转换成字符串
-        promise = Resource.query({method:'item_to_thread',thread_id:thread_id,item_id:item_id}).$promise
-        promise.then (res)->
-            console.log 'SetRelation成功'
-            alertPopup = $ionicPopup.show
-                title: 'Thread has changed to '+thread.thread_text+' successfully',
-                template: '&nbsp;&nbsp;&nbsp;&nbsp; Disappear ~ '
-            $timeout(()->
-                 alertPopup.close()  #close the popup after 3 seconds for some reason
-            , 700)
-
-        ,(res)->
-            console.log 'SetRelation失败'
-    execute
 
 
 .factory 'SetType',(Resource)->

@@ -10,10 +10,8 @@
                     预览
                 </div>
                 <div class="padding">
-                    <a href="" ng-class="{'button-outline':!toggleCtrl}" class=" button button-large {{editData.color}}" style="line-height:1.75;margin:3px 8px;">
+                    <a href="" ng-class="{'button-outline':!toggleCtrl}" class=" button button-large {{editData.color}}" style="line-height:47px;margin:3px 8px;">
                         {{editData.thread_text}}
-                        <br>
-                        0 0 0
                     </a>
                 </div>
                 <div class="item item-divider">
@@ -43,7 +41,7 @@
                 </div>   
 
 
-                <ion-toggle ng-model="toggleCtrl">
+                <ion-toggle ng-model="toggleCtrl" ng-click="clickToggle()">
                     是否填色
                 </ion-toggle>
 

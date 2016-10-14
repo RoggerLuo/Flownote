@@ -4,9 +4,10 @@
         <h1 class="title">{{category}}</h1>
         <button ng-click="newModal()" class="button button-clear button-primary" >New</button>
     </ion-header-bar>
-  
-    <div style="overflow:scroll;height:100%;">
-        <div style="height:63px;width:100%;"></div>
+<ion-content style="overflow:hidden;">
+    <div style="height:100%;">
+        
+        <!-- <div style="height:63px;width:100%;"></div> -->
         <textarea 
             class="padding"
             placeholder="Life is beautiful..." 
@@ -15,15 +16,15 @@
                 width:100%;
                 font-size:16px;
                 border:0px;
-                height:500px;
+                height:230px;
                 line-height: 1.75;
                 overflow:scroll;
                 "
             ng-model="article.content"
         ></textarea>                
-
     </div>
-  
+</ion-content>
+
     <keyboard-attachment></keyboard-attachment>
     <editor-footer></editor-footer>
 </ion-modal-view>

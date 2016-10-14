@@ -1,16 +1,21 @@
-<ion-view view-title="Data">
+<ion-view view-title="数据和设置">
 	<ion-content>
 	    <ion-list>
 		    <div class="item item-divider">
-		        Threads
+		        分类
 		    </div>
 		    <a class="item item-icon-left" href="#/tab/thread-list-editor">
 				<i class="icon ion-grid"></i>
-				Edit Threads
+				编辑分类
 		    </a>
+	        <a class="item item-icon-left" ng-click="sync()">
+	    		<i class="icon ion-ios-reload"></i>
+	    		同步数据
+	        </a>
 		    <div class="item item-divider">
-		        Articles
+		        操作数折线图
 		    </div>
+			<canvas id="operation-chart"  width="600" height="600" style="background-color: white;padding-right: 12px;padding-left: 4px;margin:0px 0px 0px 0px;"></canvas>
 
 	    </ion-list>
 	</ion-content>

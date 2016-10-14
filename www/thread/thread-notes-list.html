@@ -1,0 +1,28 @@
+<ion-view view-title="{{title}}">
+    <ion-nav-buttons side="primary">
+         <a href="#/tab/thread" class="button icon-left ion-ios-arrow-back button-clear button-dark">&nbsp;Back</a>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="secondary">
+        <button ng-click="openThreadViewModalDelegate()" class="button button-icon icon ion-more"></button>
+        <button ng-click="editor.openEditorModal('new')" class="button button-icon icon ion-compose"></button>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <ion-refresher on-refresh="doRefresh()"  
+            pulling-text="下拉刷新..."   
+            refreshing-text="正在刷新!"  
+            refreshing-icon="ion-loading-b">        
+        </ion-refresher>  
+        
+        <ion-list>
+            <main-list></main-list>
+        </ion-list>
+
+        <ion-infinite-scroll
+            on-infinite="loadMore()"
+            distance="2%"
+            ng-if="moreDataCanBeLoaded()">
+        </ion-infinite-scroll>
+        
+    </ion-content> 
+</ion-view>
